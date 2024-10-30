@@ -13,6 +13,17 @@ La tercera se ve motivada por el _Big Data_, los dispositivos móviles, las arqu
     <img src="../../images/NoSQL/NoSQL01.png" alt="NoSQL" width="60%" />
 </div>
 
+---
+
+![NoSQL](../../images/NoSQL/NoSQL01.png){ width="25%" align=center}
+
+
+---
+
+<figure markdown="span" align="center">
+  ![Image title](../../images/NoSQL/NoSQL01.png){ width="25%"  }
+  <figcaption>Image caption</figcaption>
+</figure>
 
 La solución es el despliegue de las aplicaciones y sus datos en clústeres de servidores, distribuyendo el procesamiento en múltiples máquinas.
 
