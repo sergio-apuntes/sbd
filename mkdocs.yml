@@ -17,20 +17,20 @@ markdown_extensions:
   - admonition
   - pymdownx.details
   - pymdownx.superfences
-  # los siguientes son para los bloques de código
-  - pymdownx.highlight:
-      anchor_linenums: true
-      line_spans: __span
-      pygments_lang_class: true
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
   - attr_list
   - md_in_html
+  # los siguientes son para los bloques de código
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
 
 plugins:
   - glightbox
-
+  - search
 nav:
   - index.md
   - NoSQL: 
