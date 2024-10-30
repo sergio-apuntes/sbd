@@ -3,7 +3,7 @@ title: 4. Consistencia
 description: Revisión de la consistencia. Característica esencial de las bases de datos NoSQL
 ---
 
-## consistencia
+## Consistencia
 En un sistema consistente, las escrituras de una aplicación son visibles en siguientes consultas. Con una consistencia eventual, las escrituras no son visibles inmediatamente.
 
 Por ejemplo, en un sistema de control de stock, si el sistema es consistente, cada consulta obtendrá el estado real del inventario, mientras que si tiene consistencia eventual, puede que no sea el estado real en un momento concreto pero terminará siéndolo en breve.

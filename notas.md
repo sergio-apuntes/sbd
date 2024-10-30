@@ -4,6 +4,7 @@ For full documentation visit [mkdocs.org](https://www.mkdocs.org).
 
 
 - Web : https://squidfunk.github.io/mkdocs-material/getting-started/
+- Manual : https://squidfunk.github.io/mkdocs-material/reference/
 
 
 ## Commands
