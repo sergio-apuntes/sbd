@@ -1,4 +1,4 @@
-# Apuntes de Sistemas en Big Data
+# Introducción
 
 <div align="center">
     <img src="./images/logos/GVA-Conselleria-Educació-Universitats-Ocupació.png" alt="Logo GVA" width="27%" />
