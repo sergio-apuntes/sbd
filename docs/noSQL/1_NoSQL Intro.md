@@ -9,20 +9,10 @@ La tercera se ve motivada por el _Big Data_, los dispositivos móviles, las arqu
 
 *NoSQL* aparece como una necesidad debida al creciente volumen de datos sobre usuarios, objetos y productos que las empresas tienen que almacenar, así como la frecuencia con la que se accede a los datos. Los SGDB relacionales existentes no fueron diseñados teniendo en cuenta la escalabilidad ni la flexibilidad necesaria por las frecuentes modificaciones que necesitan las aplicaciones modernas; tampoco aprovechan que el almacenamiento a día de hoy es muy barato, ni el nivel de procesamiento que alcanzan las máquinas actuales.
 
-<div align="center">
-    <img src="../../images/NoSQL/NoSQL01.png" alt="NoSQL" width="60%" />
-</div>
-
----
-
-![NoSQL](../../images/NoSQL/NoSQL01.png){ width="25%" align=center}
-
-
----
 
 <figure markdown="span" align="center">
-  ![Image title](../../images/NoSQL/NoSQL01.png){ width="25%"  }
-  <figcaption>Image caption</figcaption>
+  ![Image title](../../images/NoSQL/NoSQL01.png){ width="75%"  }
+  <figcaption>Evolución del volumen de datos.</figcaption>
 </figure>
 
 La solución es el despliegue de las aplicaciones y sus datos en clústeres de servidores, distribuyendo el procesamiento en múltiples máquinas.
