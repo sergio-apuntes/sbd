@@ -1,4 +1,7 @@
-# Teorema de CAP
+---
+title: 5. Teprema de CAP
+description: Descripción del Teorema de CAP sobre las 3 caractarísticas deseables en una base de datos. Consistencia, Disponibilidad y tolerancia al Particionado
+---
 
 Propuesto por _Eric Brewer_ en el año 2000, prueba que podemos crear una base de datos distribuida que elija dos de las siguientes tres características:
 

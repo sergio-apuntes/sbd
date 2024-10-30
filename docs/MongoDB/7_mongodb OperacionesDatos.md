@@ -1,3 +1,9 @@
+---
+title: 7. Consulta de datos
+description: Descripción de las funciones y métodos que nos permiten realizar consultas sobre colecciones de datos
+---
+
+
 # 7. Operaciones con datos: Consultas y métodos
 
 Ahora que ya tenemos más herramientas y hemos visto las operaciones básicas de *MongoDB* vamos a profundizar sobre las consultas de los datos, aunque ya las hemos visto brevemente con anterioridad.
@@ -142,7 +148,9 @@ db.Movies.find({
 
 A partir de esta el `$or` es similar.
 
-> Nota: podemos utilizar `.count()` al final para hacer recuento y verificar que el resultado de las dos consultas anteriores son iguales.
+!!! nota
+
+    Podemos utilizar `.count()` al final para hacer recuento y verificar que el resultado de las dos consultas anteriores son iguales.
 
 - Buscar las películas que han recibido algún premio: En este caso debe existir la propiedad *awards*:
 

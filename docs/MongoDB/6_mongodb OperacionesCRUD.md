@@ -1,3 +1,9 @@
+---
+title: 6. Operaciones con datos CRUD
+description: Revisión de las operaciones básicas CRUD - Create, Read, Update and Delete
+---
+
+
 # 6. Operaciones con datos CRUD
 
 En *MongoDB* , las operaciones **CRUD** (*Crear*, *Leer*, *Actualizar*, *Eliminar*) se realizan utilizando métodos específicos. Aquí te muestro cómo realizar cada una de estas operaciones.
@@ -14,7 +20,8 @@ Para insertar documentos en una colección, se utiliza el método `insertOne()` 
 
 Ejemplos
 
-> Insertar un solo documento en la colección "usuarios"
+!!! Example  "Insertar un solo documento en la colección 'usuarios'"
+
 ```javascript
 db.usuarios.insertOne({
     nombre: "Juan",
@@ -23,12 +30,14 @@ db.usuarios.insertOne({
 });
 ```
 
-> En un única línea, y con comillas dobles, también... 
+!!! Example  "En un única línea, y con comillas dobles, también... "
+
 ```javascript
 db.usuarios.insertOne({ nombre: "Toni", edad: 15, ciudad: "Valencia"});
 ```
 
-> Insertar un solo documento en la colección "usuarios"
+!!! Example  "Insertar un solo documento en la colección 'usuarios'"
+
 ```javascript
 db.usuarios.insertOne({
     nombre: "Juan",
@@ -41,7 +50,8 @@ db.usuarios.insertOne({
 });
 ```
 
-> Insertar un documento con la fecha actual. Ojo con el último campo
+!!! Example  "Insertar un documento con la fecha actual. Ojo con el último campo"
+
 ```javascript
 db.usuarios.insertOne({
     nombre: "Dorotea",
@@ -50,7 +60,8 @@ db.usuarios.insertOne({
 });
 ```
 
-> Insertar un documento con una fecha específica  con campos que antes no estaban poniendo los campos entre comillas, que es totalmente indiferente pero si ponemos los número entre comillas se convierten en texto
+!!! Example  "Insertar un documento con una fecha específica  con campos que antes no estaban poniendo los campos entre comillas, que es totalmente indiferente pero si ponemos los número entre comillas se convierten en texto"
+
 ```javascript
 db.usuarios.insertOne({
     "nombre": "Filiberto",
@@ -77,7 +88,7 @@ Como se trata de una inserción de un conjunto de documentos, lo que hacemos en 
 
 Ejemplos: 
 
-> Insertar varios documentos en la colección "usuarios"
+!!! Example  "Insertar varios documentos en la colección 'usuarios'"
 ```javascript
 db.usuarios.insertMany([
     { nombre: "Ana", edad: 25, ciudad: "Madrid" },
@@ -85,7 +96,7 @@ db.usuarios.insertMany([
 ]);
 ```
 
-> Insertar varios documentos en la colección "usuarios"
+!!! Example  "Insertar varios documentos en la colección 'usuarios'"
 ```javascript
 db.usuarios.insertMany([
     { nombre: "Ana", edad: 25, ciudad: "Madrid", intereses: ["viajes"], fechaRegistro: new Date(), activo: false },
@@ -102,47 +113,49 @@ Uno de los aspectos más interesantes de las bases de datos es la capacidad para
 ### `find()`
 Para leer datos de una colección, se utiliza el método `find()`.
 
-> Leer todos los documentos de la colección "usuarios"
+!!! Example  "Leer todos los documentos de la colección 'usuarios'"
 ```javascript
 db.usuarios.find();
 ```
 
-> Leer todos los documentos de la colección "usuarios" y formatear la salida json
+!!! Example  "Leer todos los documentos de la colección 'usuarios' y formatear la salida json"
 ```javascript
 db.usuarios.find().pretty();
 ```
 
->Leer documentos que coincidan con un criterio específico
+!!! Example  "Leer documentos que coincidan con un criterio específico"
 ```javascript
 db.usuarios.find({ ciudad: "Barcelona" });
 ```
 
-> Leer documentos que coincidan con un criterio específico (por ejemplo, ciudad igual a "Barcelona" y activo igual a true)
+!!! Example  "Leer documentos que coincidan con un criterio específico (por ejemplo, ciudad igual a 'Barcelona' y activo igual a true)"
 ```javascript
 db.usuarios.find({ ciudad: "Barcelona", activo: true });
 ```
 
-> Leer documentos con proyección (seleccionar campos específicos)
+!!! Example  "Leer documentos con proyección (seleccionar campos específicos)"
 ```javascript
 db.usuarios.find({}, { nombre: 1, edad: 1 });
 ```
 
-> Leer documentos con proyección (seleccionar campos específicos)
+!!! Example  "Leer documentos con proyección (seleccionar campos específicos)"
 ```javascript
 db.usuarios.find({}, { nombre: 1, edad: 1, _id: 0 });
 ```
 
-> Leer todos los eventos que ocurrieron después de una fecha específica
+!!! Example  "Leer todos los eventos que ocurrieron después de una fecha específica"
 ```javascript
 db.eventos.find({ fecha: { $gt: new Date("2024-01-01") } });
 ```
 
-> Leer eventos que ocurrieron en un rango de fechas
+!!! Example  "Leer eventos que ocurrieron en un rango de fechas"
 ```javascript
 db.eventos.find({ fecha: { $gte: new Date("2024-01-01"), $lte: new Date("2024-12-31") } });
 ```
 
-**Nota**: No profundizamos más en las búsquedas porque más adelante dedicaremos un punto completo a explicar las búsquedas en más profundidad.
+!!! Nota
+
+    No profundizamos más en las búsquedas porque más adelante dedicaremos un punto completo a explicar las búsquedas en más profundidad.
 
 ## Actualizar:
 
@@ -162,7 +175,7 @@ db.collection.updateOne({}, {$set:{}});
 
 Veamos algunos ejemplos
 
-> Ejemplo de updateOne()
+!!! Example  "Ejemplo de `updateOne()` "
 ```javascript
 db.usuarios.updateOne(
     { nombre: "Juan" },
@@ -170,7 +183,7 @@ db.usuarios.updateOne(
 );
 ```
 
-> Cambiamos más de un valor
+!!! Example  "Cambiamos más de un valor"
 ```javascript
 db.usuarios.updateOne(
     { nombre: "Juan" },
@@ -178,7 +191,7 @@ db.usuarios.updateOne(
 );
 ```
 
-> Actualizar la fecha de un evento específico
+!!! Example  "Actualizar la fecha de un evento específico"
 ```javascript
 db.usuarios.updateOne(
     { nombre: "Alberto" },
@@ -206,7 +219,7 @@ Una vez realizada la actualización, *MongoDB* avisa:
 
 Por otro lado, el método `updateMany()` se utiliza para actualizar múltiples documentos que coincidan con un criterio específico. Todos los documentos que cumplan el criterio serán actualizados.
 
-> Ejemplo de `updateMany()`
+!!! Example  "Ejemplo de `updateMany()` "
 ```javascript
 db.usuarios.updateMany(
     { ciudad: "Játiva" },
@@ -225,8 +238,7 @@ O sea, `updateOne()` es útil cuando solo quieres actualizar un único documento
 
 Reemplazo completo de un documento. En este caso, al reemplazar el documento que encontramos por una nuevo, no necesitamos el comando `$set`
 
-Ejemplos
-
+!!! Example "Ejemplo donde reemplaza el primer registro qe encuentra con el filtro aplicado"
 ```js
 db.usuarios.replaceOne(
     { nombre: "Alberto" },
@@ -244,7 +256,7 @@ db.usuarios.replaceOne(
 En este caso, vamos a ver su ejecución, donde veremos incluso que al cambiar el nombre, este campo también cambia aunque se el utilizado para hacer la búsqueda:
 
 <div align="center">
-    <img src="../assets/images/MongoDB/MongoDB20.png" alt="MongoDB" width="50%" />
+    <img src="../../images/MongoDB/MongoDB20.png" alt="MongoDB" width="70%" />
 </div>
 
 ## Eliminar:
@@ -257,7 +269,7 @@ En *MongoDB*, tanto `deleteOne()` como `deleteMany()` son métodos utilizados pa
 
 El método `deleteOne()` se utiliza para eliminar un solo documento que coincida con un criterio específico. **Si hay varios documentos** que coinciden con el criterio, **solo se eliminará el primero** que se encuentre.
 
-> Ejemplo de `deleteOne()`
+!!! Example "Ejemplo de `deleteOne()`"
 ```javascript
 db.usuarios.deleteOne({ nombre: "Juan" });
 ```
@@ -268,36 +280,41 @@ En este ejemplo, se eliminará el primer documento de la colección "usuarios" q
 
 Por otro lado, el método `deleteMany()` se utiliza para eliminar varios documentos que coincidan con un criterio específico. Todos los documentos que cumplan el criterio serán eliminados.
 
-> Ejemplo de `deleteMany()`
+!!! Example "Ejemplo de `deleteMany()`"
 ```javascript
 db.usuarios.deleteMany({ activo: false });
 ```
+
 En este ejemplo, se eliminarán todos los documentos de la colección "usuarios" que tengan el campo `activo` igual a false.
 
 Otros ejemplos
 
-> Eliminar varios documentos que cumplan el criterio especificado
+!!! Example "Eliminar varios documentos que cumplan el criterio especificado"
 ```javascript
 db.usuarios.deleteMany({ ciudad: "Xàtiva" });
 ```
 
-> Eliminar eventos que ocurrieron antes de una fecha específica
+!!! Example "Eliminar eventos que ocurrieron antes de una fecha específica"
 ```javascript
 db.eventos.deleteMany({ fecha: { $lt: new Date("2024-03-01") } });
 ```
 
-**Cuidado**. Como siempre debemos tener cuidad a la hora de borrar, de echo si hacemos 
+!!! danger "Cuidado"
+    Como siempre debemos tener cuidad a la hora de borrar, de echo si hacemos 
 
-```js
-db.usuarios.deleteMany({});
-```
-Nos borrará **todos** los documentos de la colección.
+    ```js
+    db.usuarios.deleteMany({});
+    ```
+    Nos borrará **todos** los documentos de la colección.
 
-**Nota**: Siempre se debe pasar un json dentro de la condición, o sea, dentro de los paréntesis deben haber llaves:
-```js
-db.usuarios.deleteMany();     //error
-db.usuarios.deleteMany({});   //correcto: json vacío
-```
+!!! Nota
 
-Ahora que ya tenemos más herramientas y hemos visto las operaciones básicas de *MongoDB* vamos a profundizar sobre las consultas de los datos, aunque ya las hemos visto brevemente con anterioridad.
+    Siempre se debe pasar un json dentro de la condición, o sea, dentro de los paréntesis deben haber llaves:
+
+    ```js
+    db.usuarios.deleteMany();     //error
+    db.usuarios.deleteMany({});   //correcto: json vacío
+    ```
+
+Ahora que ya tenemos más herramientas y hemos visto las operaciones básicas de *MongoDB* en la siguiente sección vamos a profundizar sobre las consultas de los datos, aunque ya las hemos visto brevemente con anterioridad.
 

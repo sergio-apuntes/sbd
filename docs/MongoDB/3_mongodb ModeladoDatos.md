@@ -1,4 +1,7 @@
-# 3. Diseño de modelado de bases de datos. ***schemaless***
+---
+title: 3. Diseño de modelado de bases de datos. schemaless
+description: Debemos comprender el concepto de schemaless a la hora de trabajar con bases de datos noSQL documentales como mongoDB
+---
 
 ## Concepto de ***schemaless***
 

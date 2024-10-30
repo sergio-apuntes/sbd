@@ -1,4 +1,7 @@
-# 1. Introducción
+---
+title: 1. Introducción a MongoDB
+description: Introducción a la base de datos NoSQL MongoDB
+---
 
 En el mundo del Big Data, donde la cantidad de datos generados y procesados continúa creciendo exponencialmente, la elección de la tecnología adecuada para almacenar, gestionar y analizar estos datos es fundamental. **MongoDB**, una base de datos NoSQL de código abierto y orientada a documentos, ha emergido como una solución poderosa y versátil en este panorama en constante evolución.
 

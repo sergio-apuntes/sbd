@@ -1,4 +1,7 @@
-# Medelos de datos
+---
+title: 3. Modelos de datos
+description: Revisión de los diferentes modelos de datos noSQL.Documental, Clase-Valor, Basado en columnas y Grafos
+---
 
 ## Modelos de Datos
 

@@ -1,4 +1,46 @@
 site_name: Apuntes Sistemas en Big Data
 site_url: https://sergio-apuntes.github.io/sbd/
+
+
 theme:
   name: material
+  language: es
+  features:
+    - navigation.indexes
+    - navigation.instant
+    - navigation.instant.progress
+    - toc.follow
+    - navigation.top              # Muestra el botón para volver al principio
+    - content.code.copy           # Botón de copiar en bloques de código
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  # los siguientes son para los bloques de código
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+
+
+nav:
+  - index.md
+  - NoSQL: 
+    - noSQL/1_NoSQL Intro.md
+    - noSQL/2_NoSQL NoSoloSQL.md
+    - noSQL/3_NoSQL ModeloDatos.md
+    - noSQL/4_NoSQL Consistencia.md
+    - noSQL/5_NoSQL TeoremaCAP.md
+  - MongoDB: 
+    - MongoDB/1_mongodb Introducción..md
+    - MongoDB/2_mongodb MongoDB.md
+    - MongoDB/3_mongodb ModeladoDatos.md
+    - MongoDB/4_mongodb Instalación.md
+    - MongoDB/5_mongodb PrimerosPasos.md
+    - MongoDB/6_mongodb OperacionesCRUD.md
+    - MongoDB/7_mongodb OperacionesDatos.md
+  

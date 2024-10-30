@@ -1,3 +1,8 @@
+---
+title: 5. Primeros pasos
+description: Descripción de los primeros pasos a realizar tras instalar MongoDB. Operaciones básicas con bases de datos y colecciones.
+---
+
 # 5. Primeros pasos con *MongoDB*
 
 Una vez instalada la base de datos, vamos a interactuar desde su propia consola.

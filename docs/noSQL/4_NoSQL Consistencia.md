@@ -1,4 +1,7 @@
-# Consistencia
+---
+title: 4. Consistencia
+description: Revisión de la consistencia. Característica esencial de las bases de datos NoSQL
+---
 
 ## consistencia
 En un sistema consistente, las escrituras de una aplicación son visibles en siguientes consultas. Con una consistencia eventual, las escrituras no son visibles inmediatamente.

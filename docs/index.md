@@ -6,7 +6,7 @@
     <img src="./images/logos/FSE2col_val (Custom).png" alt="Logo UE" width="13%" />
 </div>
 
-Apuntes del módulo de **Sistemas de Big Data** en el *Curso de espacialización de Inteligencia Artificial y Big Data*
+En este espacio se presentan *algunos* apuntes del módulo de **Sistemas en Big Data** en el *Curso de espacialización de Inteligencia Artificial y Big Data* que se imparte en el I.E.S. Lluis Simarro de Xàtiva.
 
 - Elaboración: *Sergio Rey Martínez*
 - Colaboración : *Jorge Soro Domenech*

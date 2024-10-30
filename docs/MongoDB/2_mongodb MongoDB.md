@@ -1,4 +1,7 @@
-# 2. **MongoDB**
+---
+title: 2. MongoDB
+description: Descripción de aspectos esenciales de MongoDB
+---
 
 **MongoDB** es una base de datos NoSQL, de **código abierto** y **orientada a documentos**. En lugar de almacenar datos en tablas, como lo hace una base de datos relacional, **MongoDB** almacena datos en documentos similares a *JSON* con un formato llamado ***BSON*** (*Binary JSON*). *BSON* extiende el formato *JSON* para incluir tipos de datos adicionales como fechas y binarios, lo que lo hace más adecuado para representar datos complejos.
 

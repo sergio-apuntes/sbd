@@ -1,4 +1,7 @@
-# No Solo SQL
+---
+title: 2. No Solo SQL
+description: Concepto de No Solo SQL.
+---
 
 ## Definición **NoSQL**
 
