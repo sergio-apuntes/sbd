@@ -9,14 +9,22 @@ Una vez instalada la base de datos, vamos a interactuar desde su propia consola.
 
 ## Trabajando con *MongoDB* desde la consola
 
-Para acceder a la consola de *MongoDB* escribimos:
+En la máquina donde tenemos instalada la base de datos, podemos acceder a la consola de *MongoDB* escribimos:
 
 ```bash
 mongosh
 ```
+
 <div align="center">
     <img src="../../images/MongoDB/MongoDB10.png" alt="MongoDB" width="70%" />
 </div>
+
+O para acceder en ***MongoDB Compass***
+
+<div align="center">
+    <img src="../../images/MongoDB/MongoDB38.png" alt="MongoDB" width="80%" />
+</div>
+
 
 Algunas de las operaciones básicas que podemos realizar son : 
 
@@ -199,4 +207,6 @@ Aquí tienes un ejemplo de cómo se podría representar un documento en *MongoDB
 En este ejemplo, que ya hemos visto previamente para ilustrar qué es un *BSON*, el documento representa un usuario con campos como nombre, edad, activo, intereses, ubicación, fecha de registro y comentarios. Cada campo tiene un tipo de datos diferente, como string, number, boolean, array, object, date, etc.
 
 Más información sobre tipos de datos en [tutorialspoint *MongoDB*  - Datatypes](https://www.tutorialspoint.com/mongodb/mongodb_datatype.htm)
+
+
 

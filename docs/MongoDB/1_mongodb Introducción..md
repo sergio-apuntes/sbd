@@ -24,7 +24,7 @@ Ya sea que estés involucrado en el desarrollo de aplicaciones, la gestión de d
 
 <hr>
 
-!!! info ""Fuentes utilizadas"
+!!! info "Fuentes utilizadas"
 
     Las principales fuentes consultadas para la realización de esta sección han sido:
     

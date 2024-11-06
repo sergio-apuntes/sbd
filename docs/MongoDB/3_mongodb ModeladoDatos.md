@@ -37,7 +37,7 @@ Por ejemplo, supongamos que tenemos una colección que guarda datos sobre cursos
     id: 1,
     referencia: 'C0001',
     nombre: 'Curso de especialización de Inteligencia Artificial y Big Data',
-    fechaInicio: new Date("2023-10-01"),
+    fechaInicio: new Date("2024-10-01"),
     activo: true,
     asignaturas: [
         {
@@ -59,7 +59,7 @@ Por ejemplo, supongamos que tenemos una colección que guarda datos sobre cursos
         },
         {
             codAsig: 102,
-            nombre: 'Big Data aplicado',
+            nombre: 'Big Data Aplicado',
             horasSemana: 3,
             profesores: [
                 {

@@ -10,7 +10,7 @@ Es un sistema distribuido, Open Source y desarrollado por la ***Apache Software 
 
 `Apache NiFi` ofrece una gestión de flujos de datos complejos, con trazabilidad y control de los datos que se reciben, transforman, envían o descartan34.
 
-En la web del proyecto podemos encontrar la siguiente definición:
+!!! Info "En la web del proyecto podemos encontrar la siguiente definición"
 
     An easy to use, powerful, and reliable system to process and distribute data.
 
@@ -23,53 +23,139 @@ Aunque se pueda considerar una herramienta **ETL**, `NiFi` no está realmente op
 
 ## Instalación `Apache Nifi`
 
-Para la instalación de NiFi, descargamos la última versión desde la web; archivo binario.
+Para la instalación de NiFi, descargamos la última versión desde la [web de nifi](https://nifi.apache.org/download/); archivo binario.
 
-Lo descomprimimos y dejamos en la ubicación adecuada y ya podemos ejecutarlo.
+!!! Atención
+	Cuidado, si descargamos la version 2.0 necesitamos realizar una configuración más avanzada del servidor, incluidos ceertificados, por lo que nosotros vamos a trabajar con version 1.xxx
+
+	<figure markdown="span" align="center">
+		![Image title](../../images/NiFi/NIFI06.png){ width="50%"  }
+		<figcaption>Descargamos versión 1.xx para evitar problemas de configuración</figcaption>
+	</figure>
+
+
+Podemos descargar directamente desde la web mediante `wget`:
+
+```
+wget https://dlcdn.apache.org/nifi/1.28.0/nifi-1.28.0-bin.zip
+```
+Lo descomprimimos y ...
+
+```bash
+unzip nifi-1.28.0-bin.zip
+```
+!!! tip "si no tenemos instalado 'unzip' en nuestro sistema, recordad que para instalar"
+	```bash
+	sudo apt install unzip
+	```
+
+y lo dejamos en la ubicación adecuada y ya podemos ejecutarlo.
+
+```bash
+sudo mv nifi-1.28.0 /opt
+cd /opt/nifi-1.28.0/bin
+./nifi.sh start             # iniciamos nifi en background
+```
+
+!!! tip "El sistema debe tener instalada una máquina virtual de Java (JRE) para poder ejecutarse, asi que recordad que para instalar, por ejemplo:"
+	```bash
+	sudo apt install default-jre
+	```
 
 El usuario se puede crear vía comandos por cmd, o se puede coger el que genera automáticamente en el log NiFi, algo asi (fichero nifi-app.log):
 
 ```bash 
-$ cat logs/nifi-app.log | grep Generated
+$ cat ../logs/nifi-app.log | grep Generated
 Generated Username [80e91118-b222-4b47-8dab-63a8deb7905d]
 Generated Password [zavwbGlRcYeky51Bxc0zbVN8hj2bE61u]
 ```
 
-Y para establecer un usuario y contraseña, lo podemos hacer con el siguiente comando: 
+<figure markdown="span" align="center">
+  ![Image title](../../images/NiFi/NIFI03.png){ width="85%"  }
+  <figcaption>Iniciando nifi y obteniendo usuario y contraseña por defecto</figcaption>
+</figure>
 
-```bash
-./bin/nifi.sh set-single-user-credentials sergio sergiosergio  #usr y contraseña (de 12 caracteres mínimo)
-```
+!!! tip  "Para establecer un usuario y contraseña, lo podemos hacer con el siguiente comando" 
+	```bash
+	./bin/nifi.sh set-single-user-credentials sergio sergiosergio  
+	```
+	usuario que desees y contraseña de 12 caracteres mínimo
 
-Una vez establecida la contraseña, arrancamos: tenemos los comandos;
+Por último, comentar que hay diferentes forma de iniciar/operar con ***Apache Nifi***, arrancando NiFi cada vez que deseemos usarlo desde la línea de comandos o creando un servicio y que inicia de forma automática
+
+
+### Iniciando desde línea de comandos
+
+Si queremos iniciar Nifi desde la línea de comandos (recomendado sobre todo en nuestro primera arranque), tenemos los siguientes comandos:
 
 ```bash
 ./nifi.sh start   # ejecución en segundo plano
 ./nifi.sh run     # ejecución en primer plano
-./nifi.sh status
-./nifi.sh stop
+./nifi.sh status  # saber estado... si se esta ejecutando
+./nifi.sh stop    # para 
 ```
 
-Tarda un poco en ponerse en marcha, hasta 5 minutos.
+
+Dependiendo de la máquina donde la ejecutemos, puede tarda un poco en ponerse en marcha, hasta 5 minutos.
 
 Luego accedemos en `https://localhost:8443/nifi`
 
-> **Nota**: Para su funcionamiento **es necesaria una máquina Java**. En ocasiones hay problemas con *java* y es necesario establecer la ubicación de Java, esto se hace en el fichero `nano ` añadiendo antes de la definición de la variable `NIFI_HOME`
-> 
-> ```bash
-> # Instalar jre. Para nifi 2.0, debe ser jdk-21 o superior
-> sudo apt install openjdk-21-jre
-> 
-> # Insertamos (descomentamos y actualizamos) la línea al inicio del fichero `nifi-env.sh`
-> export JAVA_HOME=/lib/jvm/java-21-openjdk-amd64/
-> ```
+!!! Note
+
+	Si accedemos desde una máquina remota, entonces debemos cambiar la configuración del archivo **conf/nifi.properties**
+
+	Debemos cambiar las siguientes líneas:
+
+	```js
+	nifi.web.http.host=0.0.0.0
+	nifi.web.http.port=8080
+	```
+
+	<figure markdown="span" align="center">
+		![Image title](../../images/NiFi/NIFI04.png){ width="85%"  }
+		<figcaption>Iniciando nifi y obteniendo usuario y contraseña por defecto</figcaption>
+	</figure>
+
+### Iniciando como servicio
+
+Por último, si queremos que **Nifi** se instale como **servicio** y se inicie de forma automática cada vez que iniciamos el sistema, realizamos los suguientes pasos
+
+```bash
+sudo /opt/nifi/bin/nifi.sh install
+sudo systemctl daemon-reload
+sudo systemctl start nifi
+sudo systemctl enable nifi
+```
+
+<figure markdown="span" align="center">
+  ![Image title](../../images/NiFi/NIFI05.png){ width="85%"  }
+  <figcaption>Iniciando NiFi como servicio</figcaption>
+</figure>
+
+
 
 Más información en la [web de apache nifi](https://nifi.apache.org/docs/nifi-docs/html/getting-started.html#downloading-and-installing-nifi)
 
 
 ## Terminología NiFi
 
+
+### Los conceptos fundamentales de NiFi
+
 `Nifi` esta basado en FBP (Flow Based Programming), que es un paradigma de programación que define aplicación como cajas negras (procesos), los cuales intercambian datos entre conexiones predefinidas.
+
+A continuación se indican algunos de los conceptos principales de NiFi y cómo se mapean a FBP:
+
+
+| Término de NiFi | Término de FBP | Descripción |
+|-----------------|----------------|-------------|
+| **FlowFile**    | Paquete de Información | Un FlowFile representa cada objeto que se mueve a través del sistema y para cada uno, NiFi realiza un seguimiento de un mapa de pares clave/valor de atributos y su contenido asociado de cero o más bytes. |
+| **FlowFile Processor** | Caja Negra | Los procesadores realizan el trabajo. En términos de [eip], un procesador realiza alguna combinación de enrutamiento de datos, transformación o mediación entre sistemas. Los procesadores tienen acceso a los atributos de un FlowFile dado y su flujo de contenido. Los procesadores pueden operar en cero o más FlowFiles en una unidad de trabajo dada y ya sea comprometer ese trabajo o revertirlo. |
+| **Connection** | Búfer Acotado | Las conexiones proporcionan el enlace real entre procesadores. Actúan como colas y permiten que varios procesos interactúen a diferentes velocidades. Estas colas pueden priorizarse dinámicamente y pueden tener límites superiores de carga, lo que permite la retropresión. |
+| **Flow Controller** | Programador | El Flow Controller mantiene el conocimiento de cómo se conectan los procesos y gestiona los hilos y las asignaciones de los mismos que todos los procesos utilizan. El Flow Controller actúa como el intermediario que facilita el intercambio de FlowFiles entre procesadores. |
+| **Process Group** | Subred | Un Process Group es un conjunto específico de procesos y sus conexiones, que pueden recibir datos a través de puertos de entrada y enviar datos a través de puertos de salida. De esta manera, los grupos de procesos permiten la creación de componentes completamente nuevos simplemente mediante la composición de otros componentes. |
+
+
 Estas cajas negras (procesos) pueden ser combinados en dataflows. 
 
 ### DataFlow
@@ -421,3 +507,8 @@ Los cuales quedan configurados como sigue:
 </div>
 
 El servicio `JsonTreeReader` no es necesario modificarlo, y el `MongoDBControllerService` simplemente asignamos la propiedad de **Mongo URL**
+
+
+## Ejercicio en NiFi
+
+De la AEMET podemos recuperar el tiempo de Xàtiva : https://www.el-tiempo.net/api/json/v2/provincias/46/municipios/46145

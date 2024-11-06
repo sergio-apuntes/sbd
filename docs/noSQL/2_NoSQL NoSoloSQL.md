@@ -5,19 +5,18 @@ description: Concepto de No Solo SQL.
 
 ## Definición **NoSQL**
 
-Si definimos **NoSQL** formalmente, podemos decir que se trata de un conjunto de tecnologías que permiten el procesamiento rápido y eficiente de conjuntos de datos dando la mayor importancia al rendimiento, la fiabilidad y la agilidad.
+Si definimos **NoSQL** formalmente, podemos decir que se trata de un **conjunto de tecnologías** que permiten el procesamiento rápido y eficiente de conjuntos de datos dando la mayor importancia al **rendimiento**, la **fiabilidad** y la **agilidad**.
 
-Si nos basamos en el acrónimo, el término da la sensación que se refiere a cualquier almacén de datos que no sigue un modelo relacional, los datos no son relacionales y por tanto no utilizan SQL como lenguaje de consulta. Realmente implica que el _No_ hace referencia a _not only_, es decir, que los sistemas **NoSQL** se centran en sistemas complementarios a los SGBD relacionales, que **fijan sus prioridades en la escalabilidad y la disponibilidad en contra de la atomicidad y consistencia** de los datos.
+Si nos basamos en el acrónimo, el término da la sensación que se refiere a cualquier almacén de datos que no sigue un modelo relacional, los datos no son relacionales y por tanto no utilizan SQL como lenguaje de consulta. Realmente implica que el _No_ hace referencia a _**not only**_, es decir, que los sistemas **NoSQL** se centran en sistemas complementarios a los SGBD relacionales, que **fijan sus prioridades en la escalabilidad y la disponibilidad en contra de la atomicidad y consistencia** de los datos.
 
-Es decir, más que sustitutos de los sistemas relacionales, las soluciones **NoSQL** se plantean como alternativas y complementarias a los sistemas gestores de bases de datos relacionales.
+Es decir, más que sustitutos de los sistemas relacionales, las soluciones **NoSQL** se plantean como **alternativas y complementarias** a los sistemas gestores de bases de datos relacionales.
 
-> **ACID** 
-> 
-> Las ***bases de datos relacionales*** cumplen las características **ACID** para ofrecer transaccionalidad sobre los datos:
-> - **A**tomicidad: las transacciones implican que se realizan todas las operaciones o no se realiza ninguna.
-> - **C**onsistencia: la base de datos asegura que los datos pasan de un estado válido o otro también.
-> - **I**solation (Aislamiento): Una transacción no afecta a otras transacciones, de manera que la modificación de un registro / documento no es visible por otras lecturas.
-> - **D**urabilidad: La escritura de los datos asegura que una vez finalizada una operación, los datos no se perderán.
+!!! tip "**ACID**"  
+    Las ***bases de datos relacionales*** cumplen las características **ACID** para ofrecer transaccionalidad sobre los datos:  
+    - **A**tomicidad: las transacciones implican que se realizan todas las operaciones o no se realiza ninguna.  
+    - **C**onsistencia: la base de datos asegura que los datos pasan de un estado válido o otro también.  
+    - **I**solation (Aislamiento): Una transacción no afecta a otras transacciones, de manera que la modificación de un registro / documento no es visible por otras lecturas.  
+    - **D**urabilidad: La escritura de los datos asegura que una vez finalizada una operación, los datos no se perderán.  
 
 Los diferentes tipos de bases de datos *NoSQL* existentes se pueden **agrupar en cuatro categorías**:
 
@@ -60,7 +59,7 @@ Aunque lo veremos en profundidad en las siguientes sesiones, los modelos de dato
 
 ## Particionado
 
-Dado el modo en el que se estructuran las bases de datos relacionales, normalmente escalan verticalmente - un único servidor que almacena toda la base de datos para asegurar la disponibilidad continua de los datos. Esto se traduce en costes que se incrementan rápidamente, con un límites definidos por el propio hardware, y en un pequeño número de puntos críticos de fallo dentro de la infraestructura de datos.
+Dado el modo en el que se estructuran las bases de datos relacionales, normalmente escalan verticalmente mediante un único servidor que almacena toda la base de datos para asegurar la disponibilidad continua de los datos. Esto se traduce en costes que se incrementan rápidamente, con un límites definidos por el propio hardware, y en un pequeño número de puntos críticos de fallo dentro de la infraestructura de datos.
 
 La solución es escalar horizontalmente, añadiendo nuevos servidores en vez de concentrarse en incrementar la capacidad de un único servidor, lo que permite tratar con conjuntos de datos más grandes de lo que sería capaz cualquier máquina por sí sola. Este escalado horizontal se conoce como **_Sharding_** o Particionado.
 
@@ -154,7 +153,8 @@ La replicación de los datos se utiliza para alcanzar:
 - **disponibilidad**, ofreciendo tolerancia a fallos de hardware o corrupción de la base de datos. Al replicar los datos vamos a poder tener una copia de la base de datos, dar soporte a un servidor de datos agregados, o tener nodos a modo de copias de seguridad que pueden tomar el control en caso de fallo.
 - **aislamiento** (la i en ACID - _isolation_), entendido como la propiedad que define cuando y cómo al realizar cambios en un nodo se propagan al resto de nodos. Si replicamos los datos podemos crear copias sincronizadas para separar procesos de la base de datos de producción, pudiendo ejecutar informes, analítica de datos o copias de seguridad en nodos secundarios de modo que no tenga un impacto negativo en el nodo principal, así como ofrecer un sistema sencillo para separar el entorno de producción del de preproducción.
 
-> **Nota**: ***Replicación vs particionado***: No hay que confundir la replicación (copia de los datos en varias máquinas) con el particionado (cada máquina tiene un subconjunto de los datos). El entorno más seguro y con mejor rendimiento es aquel que tiene los datos particionados y replicados (cada máquina que tiene un subconjunto de los datos está replicada en 2 o más).
+!!! Note "Replicación vs Particionado"
+    No hay que confundir la replicación (copia de los datos en varias máquinas) con el particionado (cada máquina tiene un subconjunto de los datos). El entorno más seguro y con mejor rendimiento es aquel que tiene los datos particionados y replicados (cada máquina que tiene un subconjunto de los datos está replicada en 2 o más).
 
 
 ## Implantando *NoSQL*

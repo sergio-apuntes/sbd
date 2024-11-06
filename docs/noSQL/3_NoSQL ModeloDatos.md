@@ -59,9 +59,9 @@ Mientras que un segundo documento dentro de la misma colección podría ser:
 }
 ```
 
-Donde 
-  1.  Un objeto o subdocumento permite agrupar información similar a una relación ***1:1*** de un modelo relacional. De esta manera, no necesitamos una tabla `Direccion`.
-  2.  Un array puede contener valores o documentos, de manera que podríamos tener un array de documentos, permitiendo agrupar información similar a una relación ***1:N*** de un modelo relacional. De esta manera, no necesitamos una tabla `Proyectos`.
+Donde:   
+ 1.  Un objeto o subdocumento permite agrupar información similar a una relación ***1:1*** de un modelo relacional. De esta manera, no necesitamos una tabla `Direccion`.  
+ 2.  Un array puede contener valores o documentos, de manera que podríamos tener un array de documentos, permitiendo agrupar información similar a una relación ***1:N*** de un modelo relacional. De esta manera, no necesitamos una tabla `Proyectos`. 
 
 Normalmente, cada documento contiene **un elemento clave**, sobre el cual se puede obtener un documento de manera unívoca. De todos modos, las bases de datos documentales ofrecen un completo mecanismo de consultas, posibilitando obtener información por cualquier campo del documento. Algunos productos ofrecen opciones de indexado para optimizar las consultas, como pueden ser índices compuestos, dispersos, con tiempo de vida (TTL), únicos, de texto o geoespaciales.
 
@@ -196,7 +196,7 @@ En un formato columnar los datos del mismo tipo se agrupan, lo que permite codif
     <img src="../../images/NoSQL/NoSQL12.png" alt="NoSQL" width="70%" />
 </div>
 
-**Sin embargo, a medida que se incrementa la utilización de análisis de datos en memoria**, con soluciones como _Spark_, **los beneficios** relativos de la base de datos columnar comparados con los de las bases de datos orientadas a filas pueden llegar a ser **menos importantes**.
+**Sin embargo, a medida que se incrementa la utilización de análisis de datos en memoria**, con soluciones como _Spark_, **los beneficios** relativos de la base de datos basadas en columnas comparados con los de las bases de datos orientadas a filas pueden llegar a ser **menos importantes**.
 
 ### Representación
 
@@ -206,7 +206,8 @@ Un modelo basado en columnas se representa como una estructura agregada de dos n
     <img src="../../images/NoSQL/NoSQL13.png" alt="NoSQL" width="50%" />
 </div>s
 
-> **BigTable**:  Los modelos de datos basados en columnas se basan en la implementación de _Google_ de la tecnología _BigTable_ ([http://research.google.com/archive/bigtable.html](https://research.google.com/archive/bigtable.html)), la cual consiste en columnas separadas y sin esquema, a modo de mapa de dos niveles.
+!!! note  "BigTable"
+    Los modelos de datos basados en columnas se basan en la implementación de _Google_ de la tecnología _BigTable_ ([http://research.google.com/archive/bigtable.html](https://research.google.com/archive/bigtable.html)), la cual consiste en columnas separadas y sin esquema, a modo de mapa de dos niveles.
 
 Así pues, los almacenes basados en columnas utilizan un mapa ordenado multi-dimensional y distribuido para almacenar los datos. Están pensados para que cada fila tenga una gran número de columnas (del orden del millón), almacenando las diferentes versiones que tenga una fila (pudiendo almacenar del orden de miles de millones de filas).
 
@@ -296,7 +297,7 @@ A la hora de consultar los datos, éstos se pueden obtener por la clave primaria
 // Mediante Cassandra 
 GET Clientes['bruce-wayne'];            // familia 
 GET Clientes['bruce-wayne']['lugar'];   // columna
-````
+```
 
 Algunos productos ofrecen un soporte limitado para índices secundarios, pero con restricciones. Por ejemplo, _Cassandra_ ofrece el lenguaje CQL similar a SQL pero sin joins, ni subconsultas donde las restricciones de _where_ son sencillas:
 
@@ -333,7 +334,10 @@ Las bases de datos de grafos almacenan entidades y las relaciones entre estas en
 
 Los nodos se organizan mediante relaciones que facilitan encontrar patrones de información existente entre los nodos. Este tipo de organización permite almacenar los datos una vez e interpretar los datos de diferentes maneras dependiendo de sus relaciones.
 
-Los nodos son entidades que tienen propiedades, tales como el nombre. Por ejemplo, en el gráfico cada nodo tiene una propiedad `name`. También podemos ver que las relaciones tienen tipos, como `label`, `since`, etc…​ Estas propiedades permiten organizar los nodos. Las relaciones pueden tener múltiples propiedades, y además tienen dirección, con lo cual si queremos incluir bidireccionalidad tenemos que añadir dos relaciones en sentidos opuestos. Tanto los nodos como las relaciones tienen un atributo `id` que los identifica.
+- Los nodos son entidades que tienen propiedades, tales como el *nombre*. Por ejemplo, en el gráfico cada nodo tiene una propiedad `name`. 
+- También podemos ver que las relaciones tienen tipos, como `label`, `since`, etc…​ Estas propiedades permiten organizar los nodos. 
+- Las relaciones pueden tener múltiples propiedades, y además tienen dirección, con lo cual si queremos incluir bidireccionalidad tenemos que añadir dos relaciones en sentidos opuestos. 
+- Tanto los nodos como las relaciones tienen un atributo `id` que los identifica.
 
 Por ejemplo, podemos comenzar a crear el grafo anterior mediante Neo4J de la siguiente manera:
 
@@ -392,7 +396,7 @@ Los productos más destacados son:
 
 ## Diferencias entre los modelos
 
-| Aspecto                | Documental                | Clave-Valor           | Basado en Columnas     | Grafos                   |
+| Diferencias entre modelos | Documental                | Clave-Valor           | Basado en Columnas     | Grafos                   |
 |------------------------|---------------------------|-----------------------|-------------------------|--------------------------|
 | **Estructura de Datos**| Documentos JSON/BSON/XML  | Pares de Clave-Valor  | Columnas con familias  | Nodos y Relaciones       |
 | **Flexibilidad**       | Flexible                  | Variable              | Menos flexible          | Variable                |

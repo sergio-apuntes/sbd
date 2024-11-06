@@ -35,7 +35,7 @@ Características principales:
 Hay una serie de conceptos que conviene conocer antes de entrar en detalle:
 
 - *MongoDB* tienen el mismo concepto de base de datos que un RDMS. Dentro de una instancia de *MongoDB* podemos tener 0 o más bases de datos, actuando cada una como un contenedor de alto nivel.
-- Una base de datos tendrá 0 o más colecciones. Una colección es muy similar a lo que entendemos como tabla dentro de un RDMS. *MongoDB* ofrece diferentes tipos de colecciones, desde las normales cuyo tamaño crece conforme lo hace el número de documentos, como las colecciones capped, las cuales tienen un tamaño predefinido y que pueden contener una cierta cantidad de información que se sustituirá por nueva cuando se llene.
+- Una base de datos tendrá 0 o más **colecciones**. Una **colección** es muy similar a lo que entendemos como ***tabla*** dentro de un RDMS. *MongoDB* ofrece diferentes tipos de colecciones, desde las normales cuyo tamaño crece conforme lo hace el número de documentos, como las colecciones *capped*, las cuales tienen un tamaño predefinido y que pueden contener una cierta cantidad de información que se sustituirá por nueva cuando se llene.
 - Las colecciones contienen 0 o más documentos, por lo que es similar a una fila o registro de un RDMS.
 - Cada documento contiene 0 o más atributos, compuestos de parejas clave/valor. Cada uno de estos documentos no sigue ningún esquema, por lo que dos documentos de una misma colección pueden contener todos los atributos diferentes entre sí.
 
@@ -57,14 +57,14 @@ Además, *MongoDB* soporta índices, igual que cualquier RDMS, para acelerar la 
 
 *MongoDB* almacena los documentos mediante *BSON* ([Binary JSON](https://bsonspec.org/spec.html)).
 
-Repasemos el concepto de **JSON**: *JavaScript Object Notation*
-- Formato de texto sencillo para el intercambio de datos.
-- Subconjunto de la notación literal de objetos de JavaScript.
-- Alternativa a XML como lenguaje de intercambio de datos. Mucho más sencillo de leer y escribir.
-- Uso extendido en bases de datos noSQL, entre ellas *JSON*: JavaScript Object Notation
-- Ampliamente soportado por multitud de lenguajes de programación.
-- Un objeto *JSON* está formado por uno o varios pares string: value (cadena:valor).
-- Soporta diferentes tipos de datos como cadenas de texto, números, fecha, hora, valores nulos y booleanos.
+Repasemos el concepto de **JSON**: *JavaScript Object Notation*  
+- Formato de texto sencillo para el intercambio de datos.  
+- Subconjunto de la notación literal de objetos de JavaScript.  
+- Alternativa a XML como lenguaje de intercambio de datos. Mucho más sencillo de leer y escribir.  
+- Uso extendido en bases de datos noSQL, entre ellas *JSON*: JavaScript Object Notation  
+- Ampliamente soportado por multitud de lenguajes de programación.  
+- Un objeto *JSON* está formado por uno o varios pares string: value (cadena:valor).  
+- Soporta diferentes tipos de datos como cadenas de texto, números, fecha, hora, valores nulos y booleanos.  
 
 <div align="center">
     <img src="../../images/MongoDB/MongoDB03.png" alt="MongoDB" width="70%" />
@@ -77,7 +77,7 @@ Mediante JavaScript podemos crear objetos que se representan con *JSON*. Interna
 - Permite almacenar datos en binario
 - Incluye un conjunto de tipos de datos no incluidos en *JSON*, como pueden ser ObjectId, Date o BinData.
 
-Podemos consultar todos los tipos que soporta un objeto *BSON* en (http://docs.mongodb.org/manual/reference/bson-types/)[http://docs.mongodb.org/manual/reference/bson-types/]
+Podemos consultar todos los tipos que soporta un objeto *BSON* en [http://docs.mongodb.org/manual/reference/bson-types/](http://docs.mongodb.org/manual/reference/bson-types/)
 
 Un ejemplo de un objeto *BSON* podría ser:
 

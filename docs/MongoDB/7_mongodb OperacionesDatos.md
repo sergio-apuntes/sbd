@@ -549,9 +549,15 @@ En definitiva, el abanico de posiblidades es muy extensonuevo en muy extenso. Pa
 
 <hr>
 
-**Fuentes**:
 
-- [Manual oficial de MongoDB](https://www.mongodb.com/docs/manual/)
-- [Aitor Medrano. Cursos Inteligencia Artificial y Big Data. MongoDB](https://aitor-medrano.github.io/iabd/sa/mongo.html)
-- Ejemplos extraídos de [aqui](https://www.w3resource.com/mongodb-exercises/mongodb-movies-collection-index.php)
-- [Manipulación de datos en MongoDB mediante Aggregation Pipeline](https://www.adictosaltrabajo.com/2013/12/16/mongodb-agregatte/)
+## Base de datos de ejemplo 
+
+Datos de AirBnB de Valencia: [Inside AirBnB](https://insideairbnb.com/get-the-data/)
+
+Tabla con enlaces a datos a fecha de 22/06/2024
+
+| Country/City | File Name | Description | 
+| --- | --- | --- |
+| Valencia | [listings.csv.gz](https://data.insideairbnb.com/spain/vc/valencia/2024-06-22/data/listings.csv.gz) | Detailed Listings data | 
+| Valencia | [calendar.csv.gz](https://data.insideairbnb.com/spain/vc/valencia/2024-06-22/data/calendar.csv.gz) | Detailed Calendar Data | 
+| Valencia | [reviews.csv.gz](https://data.insideairbnb.com/spain/vc/valencia/2024-06-22/data/reviews.csv.gz) | Detailed Review Data | 
