@@ -35,5 +35,5 @@ En este apartado exploraremos cómo *MongoDB* se integra perfectamente en los en
     
     - [Manual oficial de MongoDB](https://www.mongodb.com/docs/manual/)
     - [Aitor Medrano. Cursos Inteligencia Artificial y Big Data. MongoDB](https://aitor-medrano.github.io/iabd/sa/mongo.html)
-    - Ejemplos extraídos de [aqui](https://www.w3resource.com/mongodb-exercises/mongodb-movies-collection-index.php)
+    - [Algunos ejemplos de uso](https://www.w3resource.com/mongodb-exercises/mongodb-movies-collection-index.php)
     - [Manipulación de datos en MongoDB mediante Aggregation Pipeline](https://www.adictosaltrabajo.com/2013/12/16/mongodb-agregatte/)
