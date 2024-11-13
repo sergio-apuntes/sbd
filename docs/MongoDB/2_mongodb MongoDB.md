@@ -3,21 +3,35 @@ title: 2. MongoDB
 description: Descripción de aspectos esenciales de MongoDB
 ---
 
-**MongoDB** es una base de datos NoSQL, de **código abierto** y **orientada a documentos**. En lugar de almacenar datos en tablas, como lo hace una base de datos relacional, **MongoDB** almacena datos en documentos similares a *JSON* con un formato llamado ***BSON*** (*Binary JSON*). *BSON* extiende el formato *JSON* para incluir tipos de datos adicionales como fechas y binarios, lo que lo hace más adecuado para representar datos complejos.
+**MongoDB** es una base de datos NoSQL, de **código abierto** y **orientada a documentos**. En lugar de almacenar datos en tablas, como lo hace una base de datos relacional, **MongoDB** almacena datos en documentos similares a *JSON* con un formato llamado ***BSON*** (*Binary JSON*). 
+
+*BSON* extiende el formato *JSON* para incluir tipos de datos adicionales como fechas y binarios, lo que lo hace más adecuado para representar datos complejos.
 
 
 *MongoDB* **destaca** porque:
 
-- Soporta **esquemas dinámicos**: diferentes documentos de una misma colección pueden tener atributos diferentes.
-- Aunque inicialmente tenía un soporte limitado de **joins**, desde la versión 5.2 se pueden realizar incluso entre colecciones particionadas.
+- Soporta **esquemas dinámicos**: diferentes documentos de una misma *colección* pueden tener atributos diferentes.
+- Aunque inicialmente tenía un soporte limitado de **joins**, desde la versión 5.2 se pueden realizar incluso entre colecciones particionadas. Actualmente MongoDB va por la versión. 8.0.
 - Soporte de **transacciones** sólo a nivel de aplicación. Lo que en un RDMS puede suponer múltiples operaciones, con *MongoDB* se puede hacer en una sola operación al insertar/actualizar todo un documento de una sola vez, pero si queremos crear una transacción entre dos documentos, la gestión la debe realizar el driver.
 
 *MongoDB* se utiliza ampliamente en una variedad de aplicaciones, incluidas aquellas con grandes volúmenes de datos, cargas de trabajo de alta velocidad y requisitos de flexibilidad de esquema. Es especialmente popular en aplicaciones web y móviles, así como en entornos de Big Data y análisis en tiempo real.
 
+Ejemplos muestran la versatilidad de MongoDB en diferentes sectores podrían ser:
+
+- **eBay**: Utiliza MongoDB para gestionar su enorme catálogo de productos y facilitar búsquedas rápidas y eficientes.
+
+- **Uber**: Emplea MongoDB para almacenar datos de viajes y usuarios, permitiendo un análisis en tiempo real y mejorando la experiencia del cliente.
+
+- **LinkedIn**: Utiliza MongoDB para manejar grandes volúmenes de datos de usuarios y conexiones, optimizando la búsqueda y la interacción en la plataforma.
+
+- **Foursquare**: Esta aplicación de recomendaciones de lugares utiliza MongoDB para gestionar datos de usuarios y localizaciones, permitiendo un acceso rápido a información geoespacial.
+
+- **The Guardian**: El medio de comunicación utiliza MongoDB para gestionar su contenido digital, facilitando la publicación y el acceso a artículos y multimedia de manera eficiente.
+
 
 ## Características de *MongoDB*
 
-Si tuviéramos que resumir a una la principal característica a destacar de *MongoDB*, sin duda esta sería la **velocidad**, que alcanza un **balance perfecto entre rendimiento y funcionalidad** gracias a su sistema de consulta de contenidos. Pero sus características principales no se limitan solo a esto, *MongoDB* cuenta, además, con otras que lo posicionan como el preferido de muchos desarrolladores.
+Si tuviéramos que resumir a una la principal característica a destacar de *MongoDB*, sin duda esta sería la **velocidad**, que alcanza un **balance perfecto entre rendimiento y funcionalidad** gracias a su sistema de consulta de contenidos. Pero sus características principales no se limitan solo a esto, *MongoDB* cuenta, además, con otras que lo posicionan posiblemente como la base de datos NoSQL más popular para muchos desarrolladores.
 
 Características principales:
 
@@ -35,9 +49,9 @@ Características principales:
 Hay una serie de conceptos que conviene conocer antes de entrar en detalle:
 
 - *MongoDB* tienen el mismo concepto de base de datos que un RDMS. Dentro de una instancia de *MongoDB* podemos tener 0 o más bases de datos, actuando cada una como un contenedor de alto nivel.
-- Una base de datos tendrá 0 o más **colecciones**. Una **colección** es muy similar a lo que entendemos como ***tabla*** dentro de un RDMS. *MongoDB* ofrece diferentes tipos de colecciones, desde las normales cuyo tamaño crece conforme lo hace el número de documentos, como las colecciones *capped*, las cuales tienen un tamaño predefinido y que pueden contener una cierta cantidad de información que se sustituirá por nueva cuando se llene.
-- Las colecciones contienen 0 o más documentos, por lo que es similar a una fila o registro de un RDMS.
-- Cada documento contiene 0 o más atributos, compuestos de parejas clave/valor. Cada uno de estos documentos no sigue ningún esquema, por lo que dos documentos de una misma colección pueden contener todos los atributos diferentes entre sí.
+- Una **base de datos** tendrá 0 o más **colecciones**. Una **colección** es muy similar a lo que entendemos como ***tabla*** dentro de un RDMS. *MongoDB* ofrece diferentes tipos de colecciones, desde las normales cuyo tamaño crece conforme lo hace el número de documentos, como las colecciones *capped*, las cuales tienen un tamaño predefinido y que pueden contener una cierta cantidad de información que se sustituirá por nueva cuando se llene.
+- Las **colecciones** contienen 0 o más **documentos**, por lo que es similar a una ***fila*** o ***registro*** de un RDMS.
+- Cada **documento** contiene 0 o más **atributos**, compuestos de ***parejas clave/valor***. Cada uno de estos documentos no sigue ningún esquema, por lo que dos documentos de una misma colección pueden contener todos los atributos diferentes entre sí.
 
 <div align="center">
     <img src="../../images/MongoDB/MongoDB01.png" alt="MongoDB" width="50%" />
@@ -67,7 +81,7 @@ Repasemos el concepto de **JSON**: *JavaScript Object Notation*
 - Soporta diferentes tipos de datos como cadenas de texto, números, fecha, hora, valores nulos y booleanos.  
 
 <div align="center">
-    <img src="../../images/MongoDB/MongoDB03.png" alt="MongoDB" width="70%" />
+    <img src="../../images/MongoDB/MongoDB03.png" alt="MongoDB" width="90%" />
 </div>
 
 Mediante JavaScript podemos crear objetos que se representan con *JSON*. Internamente, *MongoDB* almacena los documentos mediante *BSON* ([Binary JSON](https://www.mongodb.com/json-and-bson)). Podemos consultar la especificación en la [web oficial de *BSON*](http://BSONSpec.org) 
@@ -105,9 +119,9 @@ Los documentos **BSON** tienen las siguientes restricciones:
 
 Además *MongoDB*:
 
-- No asegura que el orden de los campos se respete.
-- Es sensible a los tipos de los datos
-- Es sensible a las mayúsculas.
+- **No asegura** que el **orden** de los campos se respete.
+- Es **sensible** a los **tipos de los datos**
+- Es **sensible** a las **mayúsculas**.
 
 Por lo que estos documentos son distintos:
 
@@ -126,13 +140,13 @@ Aquí tenemos un esquema de los elementos de una base de datos representada tant
 Primero la base de datos relacional
 
 <div align="center">
-    <img src="../../images/MongoDB/MongoDB18.png" alt="MongoDB" width="70%" />
+    <img src="../../images/MongoDB/MongoDB18.png" alt="MongoDB" width="80%" />
 </div>
 
 y ahora la misma representación en *MongoDB*
 
 <div align="center">
-    <img src="../../images/MongoDB/MongoDB19.png" alt="MongoDB" width="70%" />
+    <img src="../../images/MongoDB/MongoDB19.png" alt="MongoDB" width="90%" />
 </div>
 
 

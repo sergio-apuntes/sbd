@@ -259,14 +259,21 @@ db.movies.find({
 )
 ```
 
+- Buscar pelicuas que tengan cualquiera de estos actores: "Tom Cruise", "Tom Hanks" o un actor que contenga "Smith" en su nombre
+
+```js 
+db.movies.find({
+  cast: /Tom Cruise|Tom Hanks|Smith/
+})
+```
+
 ### Cursores
 
 Al hacer una consulta en el shell se devuelve un cursor. Este cursor lo podemos guardar en un variable, y partir de ahí trabajar con él como haríamos mediante cualquier lenguaje de programación. Si `cur` es la variable que referencia al cursor, podremos utilizar los siguientes métodos:
 
-
 | Método | Uso | Lugar de ejecución |
-| --- | --- |
-| `cur.hasNext()` | true/false para saber si quedan elementos | Cliente
+| --- | --- | --- |
+| `cur.hasNext()` | true/false para saber si quedan elementos | Cliente |
 | `cur.next()` | Pasa al siguiente documento | Cliente |
 | `cur.limit(*cantidad*)` | Restringe el número de resultados a cantidad | Servidor |
 | `cur.sort({*campo*:1})` | Ordena los datos por campo: 1 ascendente o -1 o descendente | Servidor |
@@ -352,10 +359,12 @@ db.coleccion.aggregate([op1, op2, ... opN])
 
 En la siguiente imagen se resumen los pasos de una agrupación donde primero se eligen los elementos que vamos a agrupar mediante `$match`, el resultado saliente se agrupan con `$group`, y sobre los agrupado mediante `$sum` se calcula el total:
 
+<figure markdown="span" align="center">
+  ![Image title](../images/MongoDB/MongoDB31.png){ width="75%"  }
+  <figcaption>Ejemplo de pipeline con $match y $group</figcaption>
+</figure>
 
-<div align="center">
-    <img src="../assets/images/MongoDB/MongoDB31.png" alt="MongoDB Aggregate" width="60%" />
-</div>
+
 
 Al realizar un pipeline dividimos las consultas en fases, donde cada fase utiliza un operador para realizar una transformación. Aunque no hay límite en el número de fases en una consulta, es importante destacar que el orden importa, y que hay optimizaciones para ayudar a que el pipeline tenga un mejor rendimiento (por ejemplo, hacer un `$match` al principio para reducir la cantidad de datos)
 
@@ -391,11 +400,13 @@ db.movies.aggregate([
 ])
 ```
 
-> Cuidado: La salida de `$group` esta desordenada
+!!! warning
+    Cuidado: La salida de `$group` esta desordenada
 
 La salida de `$group` depende de cómo se definan los grupos. Se empieza especificando un identificador (por ejemplo, un campo `_id`) para el grupo que creamos con el *pipeline*. Para este campo `_id`, podemos especificar varias expresiones, incluyendo un único campo proveniente de un documento del *pipeline*, un valor calculado de una fase anterior, un documento con muchos campos y otras expresiones válidas, tales como constantes o campos de subdocumentos. 
 
-> Cuando referenciemos al valor de un campo lo haremos poniendo entre comillas un $ delante del nombre del campo. Así pues, para referenciar al fabricante de un producto lo haremos mediante `$fabricante`.
+!!! note
+    Cuando referenciemos al valor de un campo lo haremos poniendo entre comillas un `$` delante del nombre del campo. Así pues, para referenciar al fabricante de un producto lo haremos mediante `$fabricante`.
 
 
 Si lo que queremos es que el valor del identificador contenga un objeto, lo podemos asociar como valor:
@@ -411,7 +422,7 @@ db.movies.aggregate([
 ```
 
 <div align="center">
-    <img src="../assets/images/MongoDB/MongoDB32.png" alt="MongoDB Aggregate" width="70%" />
+    <img src="../../images/MongoDB/MongoDB32.png" alt="MongoDB Aggregate" width="70%" />
 </div>
 
 
@@ -447,10 +458,10 @@ db.movies.aggregate([
 ```
 
 <div align="center">
-    <img src="../assets/images/MongoDB/MongoDB33.png" alt="MongoDB Aggregate" width="70%" />
+    <img src="../../images/MongoDB/MongoDB33.png" alt="MongoDB Aggregate" width="70%" />
 </div>
 
-Mediante `$avg `podemos obtener el promedio de los valores de un campo numérico.
+Mediante `$avg` podemos obtener el promedio de los valores de un campo numérico.
 
 Por ejemplo calculamos la media de la puntuación por país
 
@@ -524,7 +535,7 @@ db.movies.aggregate([
 ```
 
 <div align="center">
-    <img src="../assets/images/MongoDB/MongoDB34.png" alt="MongoDB Aggregate" width="70%" />
+    <img src="../../images/MongoDB/MongoDB34.png" alt="MongoDB Aggregate" width="70%" />
 </div>
 
 Si queremos realizar una proyección sobre el conjunto de resultados y quedarnos con un subconjunto de los campos usaremos el operador `$project`. Como resultado obtendremos el mismo número de documentos, y en el orden indicado en la proyección.
@@ -532,7 +543,7 @@ Si queremos realizar una proyección sobre el conjunto de resultados y quedarnos
 Veamos el resultado del siguiente ejemplo:
 
 <div align="center">
-    <img src="../assets/images/MongoDB/MongoDB35.png" alt="MongoDB Aggregate" width="70%" />
+    <img src="../../images/MongoDB/MongoDB35.png" alt="MongoDB Aggregate" width="70%" />
 </div>
 
 Donde:

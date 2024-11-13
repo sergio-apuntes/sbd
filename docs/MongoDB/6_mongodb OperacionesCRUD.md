@@ -18,6 +18,11 @@ Para insertar documentos en una colección, se utiliza el método `insertOne()` 
 
 - `db.collectionName.insertOne(<json>);`: Inserta un solo documento
 
+<figure markdown="span" align="center">
+  ![Image title](../../images/MongoDB/MongoDB39.svg){ width="75%"  }
+  <figcaption>MongoDB. Inserción en colección.</figcaption>
+</figure>
+
 Ejemplos
 
 !!! Example  "Insertar un solo documento en la colección 'usuarios'"
@@ -80,7 +85,7 @@ Cuando hacemos una inserción, nos devuelve el resultado del con el siguiente fo
 }
 ```
 
-### `insertMany`
+### `insertMany()`
 
 - `db.collectionName.insertMany(<json>);`. Inserción de varios elementos.
 
@@ -133,10 +138,16 @@ db.usuarios.find({ ciudad: "Barcelona" });
 db.usuarios.find({ ciudad: "Barcelona", activo: true });
 ```
 
+Podemos especificar los campos que queremos recuperar en la consulta: 
+
 !!! Example  "Leer documentos con proyección (seleccionar campos específicos)"
 ```javascript
 db.usuarios.find({}, { nombre: 1, edad: 1 });
 ```
+
+El formato a utilizar es `NombreDeCampo: 1`, o sea, escribimos el nombre del campo, seguido de dos puntos y un uno. 
+
+Lógicamente si ponemos un **1**, significa que queremos ver el campo, y por lo tanto si ponemos un **0**, significa que no queremos que se muestre el campo, pero esto solo funciona con el campo *objetctID* (***_id***)
 
 !!! Example  "Leer documentos con proyección (seleccionar campos específicos)"
 ```javascript
@@ -161,7 +172,7 @@ db.eventos.find({ fecha: { $gte: new Date("2024-01-01"), $lte: new Date("2024-12
 
 Para actualizar documentos en una colección, se utiliza el método `updateOne()` o `updateMany()`.
 
-### 'updateOne()`
+### `updateOne()`
 
 - `db.collection.updateOne(<filter>, <update>)`
 
