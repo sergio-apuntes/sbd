@@ -7,6 +7,13 @@ nav_order: 3
 nav_exclude: true
 ---
 
+
+Videos BIEN de mongoDB
+https://www.youtube.com/watch?v=fFIMYSa9JwU&list=PLvgBbgkfQDMTxnxDY2fwP_M2wo5wecYkg&index=3
+
+
+
+
 <h1>Almacenamiento de datos. NoSQL</h1>
 
 <h3>Tabla de contenidos</h3>

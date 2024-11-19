@@ -107,13 +107,13 @@ Comenzamos con consultas sencillas y vamos incrementando el nivel.
 
 ### Consultas básicas
 
-- Obtener películas lanzadas en el año 1983:
+- ^^Obtener películas lanzadas en el año 1983^^ :
 
 ```js
 db.movies.find({ year: 1893 })
 ``` 
 
-- Buscar películas de genero "corto" (genres = short)
+- ^^Buscar películas de genero "corto" (genres = short)^^
 
 ```js
 db.movies.find({ "genres": "Short" })
@@ -121,19 +121,21 @@ db.movies.find({ "genres": "Short" })
 
 ### Consultas con operadores lógicos 
 
-- Buscar películas de duración (runtime) superior a 120 minutos
+- ^^Buscar películas de duración (runtime) superior a 120 minutos^^
 
 ```js
 db.movies.find({ "runtime": { $gt: 120 } })
 ```
 
-- Buscar películas cuya duración se encuentre entre 90 y 100 minutos ambos incluidos
+- ^^Buscar películas cuya duración se encuentre entre 90 y 100 minutos ambos incluidos^^
 
 ```js
 db.movies.find({ "runtime": { $gte: 90, $lte: 100} })
 ```
 
-- Buscar películas que no tengan puntuación (UNRATED) y que duren más de 100 minutos. En este caso, podemos utilizar `$and` de forma implícita añadiendo la condición con un array o explicita si poner nada más que los campos que deben cumplirse
+- ^^Buscar películas que no tengan puntuación (UNRATED) y que duren más de 100 minutos^^. 
+
+En este caso, podemos utilizar `$and` de forma implícita añadiendo la condición con un array o explicita si poner nada más que los campos que deben cumplirse
 
 ```js
 db.movies.find({ rated: "UNRATED", runtime: { $gt: 100} })
@@ -152,7 +154,9 @@ A partir de esta el `$or` es similar.
 
     Podemos utilizar `.count()` al final para hacer recuento y verificar que el resultado de las dos consultas anteriores son iguales.
 
-- Buscar las películas que han recibido algún premio: En este caso debe existir la propiedad *awards*:
+- ^^Buscar las películas que han recibido algún premio^^: 
+
+En este caso debe existir la propiedad *awards*
 
 ```js
 db.movies.find({
@@ -160,7 +164,9 @@ db.movies.find({
 })
 ```
 
-- Buscar las películas que han sido nominadas y mostrar solo el titulo, directores y año. En este caso como novedad seleccionamos solo unos campos
+- ^^Buscar las películas que han sido nominadas y mostrar solo el titulo, directores y año^^. 
+
+En este caso como novedad seleccionamos solo unos campos
 
 ```js
 db.movies.find({
@@ -173,7 +179,7 @@ db.movies.find({
 ```
 
 
-- Buscar películas lanzadas en una fecha determinada:
+- ^^Buscar películas lanzadas en una fecha determinada^^:
 
 ```js
 db.movies.find({
@@ -191,19 +197,19 @@ db.movies.find({
 
 ### Consultas sobre objetos anidados
 
-- Buscar películas que han recibido más de 1000 votos en IMDb
+- ^^Buscar películas que han recibido más de 1000 votos en IMDb^^
 
 ```js
 db.movies.find({ "imdb.votes": { $gt: 1000 } })
 ```
 
-- Buscar películas que tienen una puntuación IMDb superior a 7
+- ^^Buscar películas que tienen una puntuación IMDb superior a 7^^
 
 ```js
 db.movies.find({ "imdb.rating": { $gt: 7 } })
 ```
 
-- Buscar las películas donde ha intervenido el actor "Charles Kayser", pero mostrar solo titulo, fecha de lanzamiento, idioma, director y premios ganados
+- ^^Buscar las películas donde ha intervenido el actor "Charles Kayser", pero mostrar solo titulo, fecha de lanzamiento, idioma, director y premios ganados^^
 ```js
 db.movies.find({
     "cast": "Charles Kayser"
@@ -216,7 +222,7 @@ db.movies.find({
 })
 ```
 
-- Buscar películas con una puntuación entre 3 y 4 en el rating de viewer en tomatoes. Mostrar solo algunos campos por simplicidad
+- ^^Buscar películas con una puntuación entre 3 y 4 en el rating de viewer en tomatoes^^. Mostrar solo algunos campos por simplicidad
 
 ```js
 db.movies.find(
@@ -229,7 +235,7 @@ db.movies.find(
 
 Si queremos realizar consultas sobre partes de un campo de texto, hemos de emplear expresiones regulares. Para ello, tenemos el operador `$regexp` o, de manera más sencilla, indicando como valor la expresión regular a cumplir:
 
-- Buscar todas las películas (titulo, lenguaje, lanzamiento, directores y guionistas) que tenga el literal "scene" en el titulo
+- ^^Buscar todas las películas (titulo, lenguaje, lanzamiento, directores y guionistas) que tenga el literal "scene" en el titulo^^
 
 ```js
 db.movies.find(
@@ -247,7 +253,7 @@ db.movies.find(
 )
 ```
 
-- Buscar películas que tengan en su sinopsis (fullplot) la palabra "fire", sean anteriores al 1980 y que sean del genero "Shorts"
+- ^^Buscar películas que tengan en su sinopsis (fullplot) la palabra "fire", sean anteriores al 1980 y que sean del genero "Shorts"^^
 
 ```js
 db.movies.find({
@@ -259,7 +265,7 @@ db.movies.find({
 )
 ```
 
-- Buscar pelicuas que tengan cualquiera de estos actores: "Tom Cruise", "Tom Hanks" o un actor que contenga "Smith" en su nombre
+- ^^Buscar pelicuas que tengan cualquiera de estos actores: "Tom Cruise", "Tom Hanks" o un actor que contenga "Smith" en su nombre^^
 
 ```js 
 db.movies.find({
@@ -283,7 +289,7 @@ Al hacer una consulta en el shell se devuelve un cursor. Este cursor lo podemos 
 Como tras realizar una consulta con `find` realmente se devuelve un cursor, un uso muy habitual es encadenar una operación de `find` con `sort` y/o `limit` y/o `count` para ordenar el resultado por uno o más campos y posteriormente limitar el número de documentos a devolver o simplemente contar.
 
 
-- Listado de las 5 mejores películas según la puntuación "imdb"
+- ^^Listado de las 5 mejores películas según la puntuación "imdb"^^
 
 ```js
 db.movies.find({}, {
@@ -301,7 +307,7 @@ db.movies.find({ "imdb.rating": {"$ne": ""}}, {
 }).sort({ imdb: -1 }).limit(5)
 ```
 
-- Buscar la cantidad películas que tengan en su sinopsis (fullplot) la palabra "fire", sean anteriores al 1980 y que sean del genero "Shorts"
+- ^^Buscar la cantidad películas que tengan en su sinopsis (fullplot) la palabra "fire", sean anteriores al 1980 y que sean del genero "Shorts"^^
 
 ```js
 db.movies.find({
@@ -320,7 +326,7 @@ Un listado detallado de todos estos métodos lo encontramos en la web oficial de
 
 Pueden resultar interesante las siguientes:
 
-### Método `.distinct`
+### Método `.distinct()`
 
 Obtiene los valores diferentes de un campo de una colección: 
 
@@ -331,7 +337,7 @@ db.movies.distinct( 'type' );
 Estos dos ejemplos obtienen los diferentes valores de los atributos indicados.
 
 
-### Método `.count`
+### Método `.count()`
 
 Cuenta la cantidad de documentos que cumplen una condición.
 
@@ -345,7 +351,7 @@ db.movies.find({
 Obtenemos la cantidad de *cortos* de la colección, posterior al año 2000
 
 
-### Método `.aggregate`
+### Método `.aggregate()`
 
 Para poder agrupar datos y realizar cálculos sobre éstos, MongoDB ofrece diferentes alternativas una de ellas es mediante el método `.aggretate`
 
@@ -366,7 +372,7 @@ En la siguiente imagen se resumen los pasos de una agrupación donde primero se 
 
 
 
-Al realizar un pipeline dividimos las consultas en fases, donde cada fase utiliza un operador para realizar una transformación. Aunque no hay límite en el número de fases en una consulta, es importante destacar que el orden importa, y que hay optimizaciones para ayudar a que el pipeline tenga un mejor rendimiento (por ejemplo, hacer un `$match` al principio para reducir la cantidad de datos)
+Al realizar un *pipeline* dividimos las consultas en fases, donde cada fase utiliza un operador para realizar una transformación. Aunque no hay límite en el número de fases en una consulta, es importante destacar que el orden importa, y que hay optimizaciones para ayudar a que el pipeline tenga un mejor rendimiento (por ejemplo, hacer un `$match` al principio para reducir la cantidad de datos)
 
 
 **Operadores del pipeline**
@@ -563,7 +569,14 @@ En definitiva, el abanico de posiblidades es muy extensonuevo en muy extenso. Pa
 
 ## Base de datos de ejemplo 
 
-Datos de AirBnB de Valencia: [Inside AirBnB](https://insideairbnb.com/get-the-data/)
+
+1. Bases de datos que ofrece directamente MongoDB:
+   https://github.com/neelabalan/mongodb-sample-dataset/tree/main/
+
+
+
+
+2. Datos de AirBnB de Valencia: [Inside AirBnB](https://insideairbnb.com/get-the-data/)
 
 Tabla con enlaces a datos a fecha de 22/06/2024
 

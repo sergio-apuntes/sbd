@@ -25,7 +25,7 @@ Para insertar documentos en una colección, se utiliza el método `insertOne()` 
 
 Ejemplos
 
-!!! Example  "Insertar un solo documento en la colección 'usuarios'"
+ - ^^Insertar un solo documento en la colección 'usuarios'^^
 
 ```javascript
 db.usuarios.insertOne({
@@ -35,13 +35,13 @@ db.usuarios.insertOne({
 });
 ```
 
-!!! Example  "En un única línea, y con comillas dobles, también... "
+- ^^En un única línea, y con comillas dobles, también...^^
 
 ```javascript
 db.usuarios.insertOne({ nombre: "Toni", edad: 15, ciudad: "Valencia"});
 ```
 
-!!! Example  "Insertar un solo documento en la colección 'usuarios'"
+- ^^Insertar un solo documento en la colección 'usuarios'^^
 
 ```javascript
 db.usuarios.insertOne({
@@ -55,7 +55,7 @@ db.usuarios.insertOne({
 });
 ```
 
-!!! Example  "Insertar un documento con la fecha actual. Ojo con el último campo"
+- ^^Insertar un documento con la fecha actual. Ojo con el último campo^^
 
 ```javascript
 db.usuarios.insertOne({
@@ -65,7 +65,9 @@ db.usuarios.insertOne({
 });
 ```
 
-!!! Example  "Insertar un documento con una fecha específica  con campos que antes no estaban poniendo los campos entre comillas, que es totalmente indiferente pero si ponemos los número entre comillas se convierten en texto"
+- ^^Insertar un documento con una fecha específica^^  
+
+Los campos antes no estaban entre comillas y en este ejemplo si lo estan; es totalmente indiferente. Pero si debemos tener en cuenta que es *case-sensitive* (Mayúsculas/Minúsculas) es importante y adcemás también cambia si ponemos los datos númericos entre comillas o no, ya que se convierten en texto
 
 ```javascript
 db.usuarios.insertOne({
@@ -76,7 +78,7 @@ db.usuarios.insertOne({
 });
 ```
 
-Cuando hacemos una inserción, nos devuelve el resultado del con el siguiente formato
+Cada vez que hacemos una inserción, si es correcta, nos devuelve el resultado del con el siguiente formato
 
 ```js
 {
@@ -93,7 +95,7 @@ Como se trata de una inserción de un conjunto de documentos, lo que hacemos en 
 
 Ejemplos: 
 
-!!! Example  "Insertar varios documentos en la colección 'usuarios'"
+- ^^Insertar varios documentos en la colección 'usuarios'^^
 ```javascript
 db.usuarios.insertMany([
     { nombre: "Ana", edad: 25, ciudad: "Madrid" },
@@ -101,7 +103,7 @@ db.usuarios.insertMany([
 ]);
 ```
 
-!!! Example  "Insertar varios documentos en la colección 'usuarios'"
+- ^^Insertar varios documentos en la colección 'usuarios'^^
 ```javascript
 db.usuarios.insertMany([
     { nombre: "Ana", edad: 25, ciudad: "Madrid", intereses: ["viajes"], fechaRegistro: new Date(), activo: false },
@@ -109,38 +111,43 @@ db.usuarios.insertMany([
 ]);
 ```
 
-Observar cómo trabajar con fechas
+Observar cómo se trabaja con las fechas
 
-## Leer:
+## Leer/Consultas:
 
 Uno de los aspectos más interesantes de las bases de datos es la capacidad para realizar consultas, por lo que ahora vamos a ver de forma muy breve como leer datos, pero más adelante profundizaremos en la realización de consultas más elaboradas.
 
 ### `find()`
 Para leer datos de una colección, se utiliza el método `find()`.
 
-!!! Example  "Leer todos los documentos de la colección 'usuarios'"
+- ^^Leer todos los documentos de la colección 'usuarios'^^
 ```javascript
 db.usuarios.find();
 ```
 
-!!! Example  "Leer todos los documentos de la colección 'usuarios' y formatear la salida json"
+- ^^Leer todos los documentos de la colección 'usuarios' y formatear la salida json^^
 ```javascript
 db.usuarios.find().pretty();
 ```
 
-!!! Example  "Leer documentos que coincidan con un criterio específico"
+!!! note "funcion `pretty()`"
+    La función `pretty()` en MongoDB sigue siendo efectiva, pero su uso ha cambiado con las versiones más recientes. En *mongosh* (la nueva shell de MongoDB), `pretty()` no altera el formato de salida, mientras que en la *shell legacy* (mongo shell), sí lo hacía, mostrando los resultados de manera más legible
+
+
+
+- ^^Leer documentos que coincidan con un criterio específico^^
 ```javascript
 db.usuarios.find({ ciudad: "Barcelona" });
 ```
 
-!!! Example  "Leer documentos que coincidan con un criterio específico (por ejemplo, ciudad igual a 'Barcelona' y activo igual a true)"
+- ^^Leer documentos que coincidan con un criterio específico (por ejemplo, ciudad igual a 'Barcelona' y activo igual a true)^^
 ```javascript
 db.usuarios.find({ ciudad: "Barcelona", activo: true });
 ```
 
 Podemos especificar los campos que queremos recuperar en la consulta: 
 
-!!! Example  "Leer documentos con proyección (seleccionar campos específicos)"
+- ^^Leer documentos con proyección (seleccionar campos específicos)^^
 ```javascript
 db.usuarios.find({}, { nombre: 1, edad: 1 });
 ```
@@ -149,17 +156,17 @@ El formato a utilizar es `NombreDeCampo: 1`, o sea, escribimos el nombre del cam
 
 Lógicamente si ponemos un **1**, significa que queremos ver el campo, y por lo tanto si ponemos un **0**, significa que no queremos que se muestre el campo, pero esto solo funciona con el campo *objetctID* (***_id***)
 
-!!! Example  "Leer documentos con proyección (seleccionar campos específicos)"
+- ^^Leer documentos con proyección (seleccionar campos específicos)^^
 ```javascript
 db.usuarios.find({}, { nombre: 1, edad: 1, _id: 0 });
 ```
 
-!!! Example  "Leer todos los eventos que ocurrieron después de una fecha específica"
+- ^^Leer todos los eventos que ocurrieron después de una fecha específica^^
 ```javascript
 db.eventos.find({ fecha: { $gt: new Date("2024-01-01") } });
 ```
 
-!!! Example  "Leer eventos que ocurrieron en un rango de fechas"
+- ^^Leer eventos que ocurrieron en un rango de fechas^^
 ```javascript
 db.eventos.find({ fecha: { $gte: new Date("2024-01-01"), $lte: new Date("2024-12-31") } });
 ```
@@ -186,7 +193,7 @@ db.collection.updateOne({}, {$set:{}});
 
 Veamos algunos ejemplos
 
-!!! Example  "Ejemplo de `updateOne()` "
+- ^^Ejemplo de `updateOne()`^^
 ```javascript
 db.usuarios.updateOne(
     { nombre: "Juan" },
@@ -194,7 +201,7 @@ db.usuarios.updateOne(
 );
 ```
 
-!!! Example  "Cambiamos más de un valor"
+- ^^Cambiamos más de un valor^^
 ```javascript
 db.usuarios.updateOne(
     { nombre: "Juan" },
@@ -202,7 +209,7 @@ db.usuarios.updateOne(
 );
 ```
 
-!!! Example  "Actualizar la fecha de un evento específico"
+- ^^Actualizar la fecha de un evento específico^^
 ```javascript
 db.usuarios.updateOne(
     { nombre: "Alberto" },
@@ -230,7 +237,7 @@ Una vez realizada la actualización, *MongoDB* avisa:
 
 Por otro lado, el método `updateMany()` se utiliza para actualizar múltiples documentos que coincidan con un criterio específico. Todos los documentos que cumplan el criterio serán actualizados.
 
-!!! Example  "Ejemplo de `updateMany()` "
+- ^^Ejemplo de `updateMany()`^^
 ```javascript
 db.usuarios.updateMany(
     { ciudad: "Játiva" },
@@ -249,7 +256,7 @@ O sea, `updateOne()` es útil cuando solo quieres actualizar un único documento
 
 Reemplazo completo de un documento. En este caso, al reemplazar el documento que encontramos por una nuevo, no necesitamos el comando `$set`
 
-!!! Example "Ejemplo donde reemplaza el primer registro qe encuentra con el filtro aplicado"
+- ^^Ejemplo donde reemplaza el primer registro qe encuentra con el filtro aplicado^^
 ```js
 db.usuarios.replaceOne(
     { nombre: "Alberto" },
@@ -280,7 +287,7 @@ En *MongoDB*, tanto `deleteOne()` como `deleteMany()` son métodos utilizados pa
 
 El método `deleteOne()` se utiliza para eliminar un solo documento que coincida con un criterio específico. **Si hay varios documentos** que coinciden con el criterio, **solo se eliminará el primero** que se encuentre.
 
-!!! Example "Ejemplo de `deleteOne()`"
+- ^^Ejemplo de `deleteOne()`^^
 ```javascript
 db.usuarios.deleteOne({ nombre: "Juan" });
 ```
@@ -291,7 +298,7 @@ En este ejemplo, se eliminará el primer documento de la colección "usuarios" q
 
 Por otro lado, el método `deleteMany()` se utiliza para eliminar varios documentos que coincidan con un criterio específico. Todos los documentos que cumplan el criterio serán eliminados.
 
-!!! Example "Ejemplo de `deleteMany()`"
+- ^^Ejemplo de `deleteMany()`^^
 ```javascript
 db.usuarios.deleteMany({ activo: false });
 ```
@@ -300,12 +307,12 @@ En este ejemplo, se eliminarán todos los documentos de la colección "usuarios"
 
 Otros ejemplos
 
-!!! Example "Eliminar varios documentos que cumplan el criterio especificado"
+- ^^Eliminar varios documentos que cumplan el criterio especificado^^
 ```javascript
 db.usuarios.deleteMany({ ciudad: "Xàtiva" });
 ```
 
-!!! Example "Eliminar eventos que ocurrieron antes de una fecha específica"
+- ^^Eliminar eventos que ocurrieron antes de una fecha específica^^
 ```javascript
 db.eventos.deleteMany({ fecha: { $lt: new Date("2024-03-01") } });
 ```
