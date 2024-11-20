@@ -250,6 +250,22 @@ En este ejemplo, se actualizarán todos los documentos de la colección "usuario
 O sea, `updateOne()` es útil cuando solo quieres actualizar un único documento, mientras que `updateMany()` es útil cuando necesitas actualizar múltiples documentos que cumplan un criterio específico.
 
 
+Además de establecer un valor en una actualización, tenemos otras opciones para las modificaciones a aplicar. Utiliza operadores como:  
+- `$set`: Para establecer un nuevo valor.  
+- `$unset`: Para eliminar un campo.  
+- `$inc`: Para incrementar un valor numérico.  
+- `$push`: Para agregar un elemento a un array.  
+
+- ^^En el siguiente ejemplo, incrementamos un año la edad de los usuarios con un determinado nombre.^^
+
+```javascript
+db.usuarios.updateMany(
+    { nombre : "Alberto" },
+    { $inc: { edad: 1 } }
+);
+```
+
+
 ### `replaceOne()`
 
 - `db.collection.replaceOne(<filter>, <update>)`
