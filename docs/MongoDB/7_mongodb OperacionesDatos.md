@@ -138,11 +138,15 @@ db.movies.find({ "runtime": { $gte: 90, $lte: 100} })
 En este caso, podemos utilizar `$and` de forma implícita añadiendo la condición con un array o explicita si poner nada más que los campos que deben cumplirse
 
 ```js
-db.movies.find({ rated: "UNRATED", runtime: { $gt: 100} })
+db.movies.find({ rated: "PASSED", runtime: { $gt: 100} })
+```
 
+Equivale exactamente a 
+
+```js
 db.Movies.find({ 
     $and: [ 
-        { rated: "UNRATED"}, 
+        { rated: "PASSED"}, 
         { runtime: { $gt: 100}} 
     ]
 })
@@ -164,26 +168,25 @@ db.movies.find({
 })
 ```
 
-- ^^Buscar las películas que han sido nominadas y mostrar solo el titulo, directores y año^^. 
-
-En este caso como novedad seleccionamos solo unos campos
-
+- ^^Buscar las películas donde ha intervenido el actor "Charles Kayser", pero mostrar solo titulo, fecha de lanzamiento, idioma, director y premios ganados^^
 ```js
 db.movies.find({
-    "awards.nominations": { $gt: 0 }
-  }, {
+    "cast": "Charles Kayser"
+    }, {
     "title": 1,
+    "released": 1,
+    "languages": 1,
     "directors": 1,
-    "year": 1
-  })
+    "awards.wins": 1,
+})
 ```
 
 
-- ^^Buscar películas lanzadas en una fecha determinada^^:
+- ^^Buscar películas lanzadas en una fecha determinada, y mostrando unos campos determinados.^^:
 
 ```js
 db.movies.find({
-    released: ISODate("1893-05-09T00:00:00.000Z")
+    released: ISODate("1997-05-01T00:00:00.000Z")
     }, {
     title: 1,
     languages: 1,
@@ -209,25 +212,35 @@ db.movies.find({ "imdb.votes": { $gt: 1000 } })
 db.movies.find({ "imdb.rating": { $gt: 7 } })
 ```
 
-- ^^Buscar las películas donde ha intervenido el actor "Charles Kayser", pero mostrar solo titulo, fecha de lanzamiento, idioma, director y premios ganados^^
+- ^^Buscar las películas que han sido nominadas y mostrar solo el titulo, directores y año^^. 
+
+En este caso como novedad seleccionamos solo unos campos
+
 ```js
 db.movies.find({
-    "cast": "Charles Kayser"
-    }, {
+    "awards.nominations": { $gt: 0 }
+  }, {
     "title": 1,
-    "released": 1,
-    "languages": 1,
     "directors": 1,
-    "awards.wins": 1,
-})
+    "year": 1
+  })
 ```
+
 
 - ^^Buscar películas con una puntuación entre 3 y 4 en el rating de viewer en tomatoes^^. Mostrar solo algunos campos por simplicidad
 
 ```js
 db.movies.find(
-    { 'tomatoes.viewer.rating': { $gte: 3, $lt: 4 } },
-    { title: 1, languages: 1, released: 1, directors: 1, 'tomatoes.viewer': 1, writers: 1, countries: 1 }
+  { 'tomatoes.viewer.rating': { $gte: 3, $lt: 4 } },
+  { 
+    title: 1, 
+    languages: 1, 
+    released: 1, 
+    directors: 1, 
+    'tomatoes.viewer': 1, 
+    writers: 1, 
+    countries: 1 
+  }
 )
 ```
 
@@ -240,7 +253,8 @@ Si queremos realizar consultas sobre partes de un campo de texto, hemos de emple
 ```js
 db.movies.find(
     { title: { $regex: /scene/i } },
-    { title: 1, languages: 1, released: 1, directors: 1, writers: 1, countries: 1 }
+    { title: 1, 
+      languages: 1, released: 1, directors: 1, writers: 1, countries: 1 }
 )
 ```
 
@@ -256,12 +270,22 @@ db.movies.find(
 - ^^Buscar películas que tengan en su sinopsis (fullplot) la palabra "fire", sean anteriores al 1980 y que sean del genero "Shorts"^^
 
 ```js
-db.movies.find({
+db.movies.find(
+  {
     fullplot: { $regex: /fire/i },
     year: { $lt: 1900 },
     genres: "Short"
-    }, 
-    { title: 1, year: 1, languages: 1, fullplot: 1, released: 1, directors: 1, writers: 1, countries: 1 }
+  }, 
+  { 
+    title: 1, 
+    year: 1, 
+    languages: 1, 
+    fullplot: 1, 
+    released: 1, 
+    directors: 1, 
+    writers: 1, 
+    countries: 1 
+  }
 )
 ```
 
@@ -269,54 +293,25 @@ db.movies.find({
 
 ```js 
 db.movies.find({
-  cast: /Tom Cruise|Tom Hanks|Smith/
-})
+    cast: /Tom Cruise|Tom Hanks|Smith/
+  }, 
+  { 
+    _id: 0,
+    title: 1, 
+    cast: 1,
+    year: 1
+  }
+)
 ```
 
-### Cursores
+!!! note "Consulta de elementos de un array"
 
-Al hacer una consulta en el shell se devuelve un cursor. Este cursor lo podemos guardar en un variable, y partir de ahí trabajar con él como haríamos mediante cualquier lenguaje de programación. Si `cur` es la variable que referencia al cursor, podremos utilizar los siguientes métodos:
+    Mediante las expresiones regulares hemos visto cómo se consulta de forma sencialla elementos de un array, sin embargo tenemos un filtro especifico para estos casos `$elemMatch`  
 
-| Método | Uso | Lugar de ejecución |
-| --- | --- | --- |
-| `cur.hasNext()` | true/false para saber si quedan elementos | Cliente |
-| `cur.next()` | Pasa al siguiente documento | Cliente |
-| `cur.limit(*cantidad*)` | Restringe el número de resultados a cantidad | Servidor |
-| `cur.sort({*campo*:1})` | Ordena los datos por campo: 1 ascendente o -1 o descendente | Servidor |
-| `cur.skip(*cantidad*)` | Permite saltar cantidad elementos con el cursor | Servidor |
-| `cur.count()` | Obtiene la cantidad de documentos | Servidor |
-
-Como tras realizar una consulta con `find` realmente se devuelve un cursor, un uso muy habitual es encadenar una operación de `find` con `sort` y/o `limit` y/o `count` para ordenar el resultado por uno o más campos y posteriormente limitar el número de documentos a devolver o simplemente contar.
-
-
-- ^^Listado de las 5 mejores películas según la puntuación "imdb"^^
-
-```js
-db.movies.find({}, {
-    title: 1,
-    imdb: 1
-}).sort({ imdb: 1 }).limit(5)
-```
-
-Mejoramos el resultado anterior y le quitamos los valores vacios en la puntuación:
-
-```js
-db.movies.find({ "imdb.rating": {"$ne": ""}}, {
-    title: 1,
-    imdb: 1
-}).sort({ imdb: -1 }).limit(5)
-```
-
-- ^^Buscar la cantidad películas que tengan en su sinopsis (fullplot) la palabra "fire", sean anteriores al 1980 y que sean del genero "Shorts"^^
-
-```js
-db.movies.find({
-    fullplot: { $regex: /fire/i },
-    year: { $lt: 1900 },
-    genres: "Short"
-}).count()
-```
-
+    ```js
+      db.movies.find({ cast: { $elemMatch: { $eq: "Leonardo DiCaprio" }}});
+    ```
+    Mientras que expresiones regulares encuentra elementos que coindicen parcial o totalmente, con este filtro buscamos elementos exactos.
 
 ## Otros métodos interesantes.
 
@@ -350,12 +345,164 @@ db.movies.find({
 
 Obtenemos la cantidad de *cortos* de la colección, posterior al año 2000
 
+- ^^Buscar la cantidad películas que tengan en su sinopsis (fullplot) la palabra "fire", sean anteriores al 1980 y que sean del genero "Shorts"^^
+
+```js
+db.movies.find({
+    fullplot: { $regex: /fire/i },
+    year: { $lt: 1900 },
+    genres: "Short"
+}).count()
+```
+
+
+### Método `.limit()`
+
+Muestra una cantidad de documentos indicada que cumplan una condición.
+
+```js
+db.movies.find({
+    year: { $lt: 2000 },
+    genres: "Short"
+}).limit(5)
+```
+
+Obtenemos 5 documentos de *cortos* de la colección, posterior al año 2000
+
+### Método `.sort()`
+
+Ordena los documentos devueltos por una consulta. 
+
+La sintaxis básica es la siguiente:
+
+```javascript
+db.collection.find().sort({ campo: orden })
+```
+
+- **`campo`**: El nombre del campo por el cual deseas ordenar.  
+- **`orden`**: Puede ser `1` para orden ascendente o `-1` para orden descendente.
+
+Por ejemplo, para ordenar por año de lanzamiento de forma ascendente:
+
+```javascript
+db.movies.find().sort({ year: 1 })
+```
+
+Si deseas ordenarlas de forma descendente:
+
+```javascript
+db.movies.find().sort({ year: -1 })
+```
+
+También podemos ordenar por más de un campo. Por ejemplo, para ordenar primero por `genre` y luego por `rating`:
+
+```javascript
+db.movies.find().sort({ genre: 1, rating: -1 })
+```
+
+
+También podemos encadenar estas funciones: 
+
+- ^^Listado de las 5 mejores películas según la puntuación "imdb"^^
+
+```js
+db.movies.find({}, {
+    title: 1,
+    imdb: 1
+}).sort({ imdb: 1 }).limit(5)
+```
+
+Mejoramos el resultado anterior y le quitamos los valores vacios en la puntuación:
+
+```js
+db.movies.find({ "imdb.rating": {"$ne": ""}}, {
+    title: 1,
+    imdb: 1
+}).sort({ imdb: -1 }).limit(5)
+```
+
+
+## Cursores
+
+Al hacer una consulta en el shell se devuelve un cursor. Este cursor lo podemos guardar en un variable, y partir de ahí trabajar con él como haríamos mediante cualquier lenguaje de programación. Si `cur` es la variable que referencia al cursor, podremos utilizar los siguientes métodos:
+
+| Método | Uso | Lugar de ejecución |
+| --- | --- | --- |
+| `cur.hasNext()` | true/false para saber si quedan elementos | Cliente |
+| `cur.next()` | Pasa al siguiente documento | Cliente |
+| `cur.limit(*cantidad*)` | Restringe el número de resultados a cantidad | Servidor |
+| `cur.sort({*campo*:1})` | Ordena los datos por campo: 1 ascendente o -1 o descendente | Servidor |
+| `cur.skip(*cantidad*)` | Permite saltar cantidad elementos con el cursor | Servidor |
+| `cur.count()` | Obtiene la cantidad de documentos | Servidor |
+
+Como tras realizar una consulta con `find` realmente se devuelve un cursor, un uso muy habitual es encadenar una operación de `find` con `sort` y/o `limit` y/o `count` para ordenar el resultado por uno o más campos y posteriormente limitar el número de documentos a devolver o simplemente contar.
+
+Estos cursores se utilizan cuando accedemos a consulta desde script en *javascript* u otros lenguajes. 
+
+Por ejemplo, a continuacion tenemos código en javascript que imprime por consola todos los documentos obtenidos tras una consulta
+
+```javascript
+// Conectar a la base de datos
+const db = connect("mongodb://localhost:27017/mydatabase");
+
+// Realizar una consulta para encontrar todas las películas
+var cursor = db.movies.find();
+
+// Iterar sobre los resultados usando un cursor
+while (cursor.hasNext()) {
+    printjson(cursor.next());
+}
+```
+
+Se puede también usar métodos como `limit` y `skip` para controlar la cantidad de resultados:
+
+-- ^^Êjemplo: obtetemos 5 registros de una colecccón"
+
+```javascript
+// Obtener las primeras 5 películas
+var limitedCursor = db.movies.find().limit(5);
+
+// Iterar sobre los resultados limitados
+while (limitedCursor.hasNext()) {
+    printjson(limitedCursor.next());
+}
+
+// Saltar las primeras 2 películas y obtener las siguientes 3
+var paginatedCursor = db.movies.find().skip(2).limit(3);
+
+while (paginatedCursor.hasNext()) {
+    printjson(paginatedCursor.next());
+}
+```
+Este enfoque te permite manejar grandes conjuntos de datos de manera eficiente. 
+
+## Agregaciones
+
+Las **agregaciones en MongoDB** son una poderosa herramienta que permite procesar y analizar grandes volúmenes de documentos en una colección. A través de un proceso conocido como **pipeline de agregación**, puedes realizar diversas operaciones en los datos, como filtrar, agrupar, ordenar y transformar documentos. Aquí te explico más sobre su funcionamiento y usos:
+
+### ¿Qué son las Agregaciones?
+
+Las agregaciones permiten realizar cálculos y transformaciones sobre los datos. En lugar de simplemente recuperar documentos, puedes aplicar funciones que devuelven resultados calculados, como sumas, promedios, conteos, etc. Esto es similar a las consultas SQL que utilizan `GROUP BY`.
+
+### ¿Para qué se utilizan?
+
+1. **Agrupación de Datos**: Puedes agrupar documentos por un campo específico y realizar cálculos sobre esos grupos. Por ejemplo, sumar las ventas por cada vendedor.
+
+2. **Filtrado de Datos**: Utilizando la etapa `$match`, puedes filtrar documentos antes de realizar otras operaciones, lo que optimiza el rendimiento.
+
+3. **Transformación de Datos**: Puedes remodelar documentos usando la etapa `$project`, lo que te permite seleccionar y renombrar campos.
+
+4. **Análisis de Tendencias**: Las agregaciones son útiles para analizar cambios en los datos a lo largo del tiempo, como el crecimiento de ventas mensuales.
+
+5. **Operaciones Complejas**: Puedes realizar operaciones más complejas, como uniones entre colecciones, utilizando la etapa `$lookup`.
+
+Las agregaciones son esenciales para obtener insights significativos de tus datos en MongoDB, acotando el rango de los datos sobre los que trabajamos y facilitando el análisis y la toma de decisiones. 
 
 ### Método `.aggregate()`
 
 Para poder agrupar datos y realizar cálculos sobre éstos, MongoDB ofrece diferentes alternativas una de ellas es mediante el método `.aggretate`
 
-**Pipeline de agregación**
+#### Pipeline de agregación
 
 Las agregaciones usan un pipeline, conocido como Aggregation Pipeline, de ahí que el método aggregate use un array con [ ] donde cada elemento es una fase del pipeline, de modo que la salida de una fase es la entrada de la siguiente:
 
@@ -375,7 +522,7 @@ En la siguiente imagen se resumen los pasos de una agrupación donde primero se 
 Al realizar un *pipeline* dividimos las consultas en fases, donde cada fase utiliza un operador para realizar una transformación. Aunque no hay límite en el número de fases en una consulta, es importante destacar que el orden importa, y que hay optimizaciones para ayudar a que el pipeline tenga un mejor rendimiento (por ejemplo, hacer un `$match` al principio para reducir la cantidad de datos)
 
 
-**Operadores del pipeline**
+#### Operadores del pipeline
 
 Antes de nada cabe destacar que las fases se pueden repetir, por lo que una consulta puede repetir operadores para encadenar diferentes acciones.
 
@@ -391,7 +538,7 @@ A continuación vamos a estudiar todos estos operadores:
 | $limit | Limitar los resultados | N:1 |
 | $unwind | Separa los datos que hay dentro de un array | 1:N |
 
-**Ejemplos de uso** 
+### Ejemplos de uso
 
 La fase **group** agrupa los documentos con el propósito de calcular valores agregados de una colección de documentos. Por ejemplo, podemos usar **$group** para calcular la cantidad de peliculas por tipo.
 
