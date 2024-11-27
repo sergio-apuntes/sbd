@@ -11,7 +11,7 @@ La tercera se ve motivada por el _Big Data_, los dispositivos móviles, las arqu
 
 
 <figure markdown="span" align="center">
-  ![Image title](../../images/NoSQL/NoSQL01.png){ width="75%"  }
+  ![Image title](./../images/NoSQL/NoSQL01.png){ width="75%"  }
   <figcaption>Evolución del volumen de datos.</figcaption>
 </figure>
 

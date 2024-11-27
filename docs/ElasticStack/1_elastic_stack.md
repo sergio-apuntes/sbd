@@ -745,7 +745,7 @@ sudo apt-get update && sudo apt-get install elasticsearch
 > sudo apt-get update && sudo apt-get install elasticsearch logstash kibana
 > ```
 
-Todo esto generará una salida donde tendremos una imagen similar a la obtenida en la [instalación de ElasticSearch con Docker](#331-instalando-elasticsearch)
+Todo esto generará una salida donde tendremos una imagen similar a la obtenida en la [instalación de ElasticSearch con Docker](#instalando-elasticsearch-en-docker)
 
 Posteriormente, realizamos otros cambios, como por ejemplo el fichero `/etc/default/elasticsearch` que tiene variables internas de elastic
 

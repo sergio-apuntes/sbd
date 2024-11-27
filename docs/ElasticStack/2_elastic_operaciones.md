@@ -192,7 +192,7 @@ Observar que cada uno de estos elementos tiene una respuesta en su ejecución.
 
 Podemos tener fichero tipo `json` con un listado de operaciones como las anteriores y lanzarlos directamente sobre elastic, de forma que realizará todas las operaciones simultáneamente:
 
-Dado un fichero llamado [vehiculos_aux.json](../../files/vehiculos_aux.json), su ingesta se realizaría desde la línea de comandos, ya que no hay forma de hacerlo desde la interface de `kibana`.
+Dado un fichero llamado [vehiculos_aux.json](./../files/vehiculos_aux.json), su ingesta se realizaría desde la línea de comandos, ya que no hay forma de hacerlo desde la interface de `kibana`.
 
 El comando para tal efecto sería: 
 
@@ -350,7 +350,7 @@ Elasticsearch utiliza una puntuación (***score***) para determinar la clasifica
 
 Elasticsearch posibilita usar JSON para definir consulta DSL (Lenguaje de Dominio Específico).
 
-Vamos a ver cómo podemos lanzar diferentes tipos de Query para obtener los *hits* que mas relevancia tienen para nosotros, para ello vamos a utilizar el índice que obtendremos de la ingesta del fichero [restaurantes_es.json](../../files/restaurantes_es.json) 
+Vamos a ver cómo podemos lanzar diferentes tipos de Query para obtener los *hits* que mas relevancia tienen para nosotros, para ello vamos a utilizar el índice que obtendremos de la ingesta del fichero [restaurantes_es.json](./../files/restaurantes_es.json) 
 
 ```bash
 curl --cacert http_ca.crt -u elastic:$ELASTIC_PASSWORD https://localhost:9200/_bulk -H "Content-type: application/json" --data-binary @restaurantes_es.json 

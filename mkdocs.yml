@@ -32,6 +32,10 @@ markdown_extensions:
   - pymdownx.keys
   - pymdownx.mark
   - pymdownx.tilde
+  # Tabs para códigos de dos lenguajes o más
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true  
 
 plugins:
   - glightbox
@@ -51,15 +55,15 @@ nav:
     - MongoDB/5_mongodb PrimerosPasos.md
     - MongoDB/6_mongodb OperacionesCRUD.md
     - MongoDB/7_mongodb OperacionesDatos.md
-  # - ETL con Apache NiFi:
-  #   - ApacheNiFi/1_ETL.md
-  #   - ApacheNiFi/2_PostgreSQL.md
-  #   - ApacheNiFi/3_ApacheNiFi.md
-  # - Elasctic Stack: 
-  #   - ElasticStack/1_elastic_stack.md
-  #   - ElasticStack/2_elastic_operaciones.md  
-  #   - ElasticStack/3_elastic_kibana.md       
-  #   - ElasticStack/4_elastic_python.md  
-  #   - ElasticStack/5_elastic_nifi.md 
+  - ETL con Apache NiFi:
+    - ApacheNiFi/1_ETL.md
+    - ApacheNiFi/2_PostgreSQL.md
+    - ApacheNiFi/3_ApacheNiFi.md
+#  - Elasctic Stack: 
+#    - ElasticStack/1_elastic_stack.md
+#    - ElasticStack/2_elastic_operaciones.md  
+#    - ElasticStack/3_elastic_kibana.md       
+#    - ElasticStack/4_elastic_python.md  
+#    - ElasticStack/5_elastic_nifi.md 
     
     

@@ -19,7 +19,7 @@ Para insertar documentos en una colección, se utiliza el método `insertOne()` 
 - `db.collectionName.insertOne(<json>);`: Inserta un solo documento
 
 <figure markdown="span" align="center">
-  ![Image title](../../images/MongoDB/MongoDB39.svg){ width="75%"  }
+  ![Image title](./../images/MongoDB/MongoDB39.svg){ width="75%"  }
   <figcaption>MongoDB. Inserción en colección.</figcaption>
 </figure>
 

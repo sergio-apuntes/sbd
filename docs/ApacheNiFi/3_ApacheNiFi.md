@@ -28,10 +28,10 @@ Para la instalación de NiFi, descargamos la última versión desde la [web de n
 !!! Atención
 	Cuidado, si descargamos la version 2.0 necesitamos realizar una configuración más avanzada del servidor, incluidos ceertificados, por lo que nosotros vamos a trabajar con version 1.xxx
 
-	<figure markdown="span" align="center">
-		![Image title](../../images/NiFi/NIFI06.png){ width="50%"  }
-		<figcaption>Descargamos versión 1.xx para evitar problemas de configuración</figcaption>
-	</figure>
+<figure markdown="span" align="center">
+	![Image title](../images/NiFi/NIFI06.png){ width="50%"  }
+	<figcaption>Descargamos versión 1.xx para evitar problemas de configuración</figcaption>
+</figure>
 
 
 Podemos descargar directamente desde la web mediante `wget`:
@@ -71,7 +71,7 @@ Generated Password [zavwbGlRcYeky51Bxc0zbVN8hj2bE61u]
 ```
 
 <figure markdown="span" align="center">
-  ![Image title](../../images/NiFi/NIFI03.png){ width="85%"  }
+  ![Image title](./../images/NiFi/NIFI03.png){ width="85%"  }
   <figcaption>Iniciando nifi y obteniendo usuario y contraseña por defecto</figcaption>
 </figure>
 
@@ -112,7 +112,7 @@ Luego accedemos en `https://localhost:8443/nifi`
 	```
 
 	<figure markdown="span" align="center">
-		![Image title](../../images/NiFi/NIFI04.png){ width="85%"  }
+		![Image title](./../images/NiFi/NIFI04.png){ width="85%"  }
 		<figcaption>Iniciando nifi y obteniendo usuario y contraseña por defecto</figcaption>
 	</figure>
 
@@ -128,7 +128,7 @@ sudo systemctl enable nifi
 ```
 
 <figure markdown="span" align="center">
-  ![Image title](../../images/NiFi/NIFI05.png){ width="85%"  }
+  ![Image title](./../images/NiFi/NIFI05.png){ width="85%"  }
   <figcaption>Iniciando NiFi como servicio</figcaption>
 </figure>
 
@@ -490,20 +490,20 @@ Veamos la configuración de `Nifi` para poder almacenar datos en `MongoDB`
 En primer lugar para la ingesta de datos en MongoDB, utilizamos el Processor `PutMongoRecord` o `PutMongo`
 
 <div align="center">
-    <img src="../../images/NoSQLUsos/UsosNoSQL01.png" alt="Nifi - Elastic" width="30%" />
+    <img src="./../images/NoSQLUsos/UsosNoSQL01.png" alt="Nifi - Elastic" width="30%" />
 </div>
 
 Dentro del processor, debemos configurar dos servicios: 
 
 <div align="center">
-    <img src="../../images/NoSQLUsos/UsosNoSQL02.png" alt="Nifi - Elastic" width="50%" />
+    <img src="./../images/NoSQLUsos/UsosNoSQL02.png" alt="Nifi - Elastic" width="50%" />
 </div>
 
 Los cuales quedan configurados como sigue:
 
 <div align="center">
-    <img src="../../images/NoSQLUsos/UsosNoSQL03.png" alt="Nifi - Elastic" width="40%" />
-    <img src="../../images/NoSQLUsos/UsosNoSQL04.png" alt="Nifi - Elastic" width="40%" />
+    <img src="./../images/NoSQLUsos/UsosNoSQL03.png" alt="Nifi - Elastic" width="40%" />
+    <img src="./../images/NoSQLUsos/UsosNoSQL04.png" alt="Nifi - Elastic" width="40%" />
 </div>
 
 El servicio `JsonTreeReader` no es necesario modificarlo, y el `MongoDBControllerService` simplemente asignamos la propiedad de **Mongo URL**

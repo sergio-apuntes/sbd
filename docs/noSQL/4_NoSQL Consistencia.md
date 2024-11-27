@@ -10,7 +10,7 @@ Por ejemplo, en un sistema de control de stock, si el sistema es consistente, ca
 
 
 <figure markdown="span" align="center">
-  ![Image title](../../images/NoSQL/NoSQL17.jpg){ width="70%"  }
+  ![Image title](./../images/NoSQL/NoSQL17.jpg){ width="70%"  }
   <figcaption>Tipos de consistencia</figcaption>
 </figure>
 
@@ -47,7 +47,7 @@ Propuesto por _Eric Brewer_ en el año 2000, prueba que podemos crear una base d
 En otras palabras, podemos crear un sistema de base de datos que sea consistente y tolerante a particiones (CP), un sistema que sea disponible y tolerante a particiones (AP), o un sistema que sea consistente y disponible (CA). Pero no es posible crear una base de datos distribuida que sea consistente, disponible y tolerante a particiones al mismo tiempo.
 
 <figure markdown="span" align="center">
-  ![Image title](../../images/NoSQL/NoSQL15.png){ width="65%"  }
+  ![Image title](./../images/NoSQL/NoSQL15.png){ width="65%"  }
   <figcaption>Teorema de CAP</figcaption>
 </figure>
 
@@ -62,7 +62,7 @@ Algunas bases de datos tolerantes a particiones se pueden ajustar para ser más 
 El siguiente gráfico muestra cómo dependiendo de estos atributos podemos clasificar los sistemas *NoSQL*:
 
 <figure markdown="span" align="center">
-  ![Image title](../../images/NoSQL/NoSQL16.png){ width="75%"  }
+  ![Image title](./../images/NoSQL/NoSQL16.png){ width="75%"  }
   <figcaption>Clasificación según teorema de CAP</figcaption>
 </figure>
 
@@ -77,7 +77,7 @@ Lo bueno es que la gran mayoría de sistemas permiten configurarse para cambiar 
 
 ### BASE
 
-De forma análoga al modelo transaccional [ACID](#2-no-solo-sql) para las bases de datos relacionales que dan soporte a la transaccionalidad ofreciendo en todo momento un sistema consistente, las bases de datos distribuidas siguen el modelo transaccional BASE, el cual se centra en la alta disponibilidad y significa:
+De forma análoga al modelo transaccional [ACID](./2_NoSQL%20NoSoloSQL.md#definicion-nosql) para las bases de datos relacionales que dan soporte a la transaccionalidad ofreciendo en todo momento un sistema consistente, las bases de datos distribuidas siguen el modelo transaccional BASE, el cual se centra en la alta disponibilidad y significa:
 
 - Básicamente disponible (**_B_**_asically_ **_A_**_vailable_): la base de datos siempre responde a las solicitudes recibidas, ya sea con una respuesta exitosa o con un error, aún en el caso de que el sistema soporte la tolerancia a particiones (de manera que caiga algún nodo o no esté accesible por problemas de la red). Esto puedo implicar lecturas desde nodos que no han recibido la última escritura, por lo que el resultado puede no ser consistente.
 - Estado blando (**_S_**_oft State_): la base de datos puede encontrarse en un estado inconsistente cuando se produce una lectura, de modo que es posible realizar dos veces la misma lectura y obtener dos resultados distintos a pesar de que no haya habido ninguna escritura entre ambas operaciones, sino que la escritura se había realizado antes en el tiempo y no se había persistido hasta ese momento.
@@ -86,7 +86,7 @@ De forma análoga al modelo transaccional [ACID](#2-no-solo-sql) para las bases 
 Una base de datos que sigue el modelo transaccional BASE prefiere la disponibilidad antes que la consistencia (es decir, desde el punto de vista del teorema CAP es AP).
 
 <figure markdown="span" align="center">
-  ![Image title](../../images/NoSQL/NoSQL18.png){ width="75%"  }
+  ![Image title](./../images/NoSQL/NoSQL18.png){ width="75%"  }
   <figcaption>ACID vs BASE.</figcaption>
 </figure>
 

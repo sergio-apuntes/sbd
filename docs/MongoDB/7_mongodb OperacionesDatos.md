@@ -110,7 +110,7 @@ Comenzamos con consultas sencillas y vamos incrementando el nivel.
 - ^^Obtener películas lanzadas en el año 1983^^ :
 
 ```js
-db.movies.find({ year: 1893 })
+db.movies.find({ year: 1993 })
 ``` 
 
 - ^^Buscar películas de genero "corto" (genres = short)^^
@@ -273,7 +273,7 @@ db.movies.find(
 db.movies.find(
   {
     fullplot: { $regex: /fire/i },
-    year: { $lt: 1900 },
+    year: { $lt: 1980 },
     genres: "Short"
   }, 
   { 
@@ -326,7 +326,9 @@ Pueden resultar interesante las siguientes:
 Obtiene los valores diferentes de un campo de una colección: 
 
 ```js
-db.movies.distinct({ 'genres' });
+db.movies.distinct( 'genres' );
+```
+```js
 db.movies.distinct( 'type' );
 ```
 Estos dos ejemplos obtienen los diferentes valores de los atributos indicados.
@@ -439,52 +441,98 @@ Como tras realizar una consulta con `find` realmente se devuelve un cursor, un u
 
 Estos cursores se utilizan cuando accedemos a consulta desde script en *javascript* u otros lenguajes. 
 
-Por ejemplo, a continuacion tenemos código en javascript que imprime por consola todos los documentos obtenidos tras una consulta
+Por ejemplo, a continuacion tenemos código en *javascript* que imprime por consola todos los documentos obtenidos tras una consulta
 
-```javascript
-// Conectar a la base de datos
-const db = connect("mongodb://localhost:27017/mydatabase");
+=== "javascript"
 
-// Realizar una consulta para encontrar todas las películas
-var cursor = db.movies.find();
+    ```javascript
+    // necesario node.js
+    // Conectar a la base de datos
+    const db = connect("mongodb://localhost:27017/mydatabase");
 
-// Iterar sobre los resultados usando un cursor
-while (cursor.hasNext()) {
-    printjson(cursor.next());
-}
-```
+    // Realizar una consulta para encontrar todas las películas
+    var cursor = db.movies.find();
+
+    // Iterar sobre los resultados usando un cursor
+    while (cursor.hasNext()) {
+        printjson(cursor.next());
+    }
+    ```
+
+=== "python"
+
+    ```py
+    # necesaria librería pymongo: 
+    from pymongo import MongoClient
+
+    # Conectar a la base de datos
+    client = MongoClient("mongodb://localhost:27017/")
+    db = client.mydatabase
+
+    # Realizar una consulta para encontrar todas las películas
+    cursor = db.movies.find()
+
+    # Iterar sobre los resultados usando un cursor
+    for document in cursor:
+        print(document)
+    ```
 
 Se puede también usar métodos como `limit` y `skip` para controlar la cantidad de resultados:
 
--- ^^Êjemplo: obtetemos 5 registros de una colecccón"
+- Ejemplo: ^^obtenemos 5 registros de una colecccón^^
 
-```javascript
-// Obtener las primeras 5 películas
-var limitedCursor = db.movies.find().limit(5);
+=== "javascript" 
 
-// Iterar sobre los resultados limitados
-while (limitedCursor.hasNext()) {
-    printjson(limitedCursor.next());
-}
+    ```javascript
+    // Obtener las primeras 5 películas
+    var limitedCursor = db.movies.find().limit(5);
 
-// Saltar las primeras 2 películas y obtener las siguientes 3
-var paginatedCursor = db.movies.find().skip(2).limit(3);
+    // Iterar sobre los resultados limitados
+    while (limitedCursor.hasNext()) {
+        printjson(limitedCursor.next());
+    }
 
-while (paginatedCursor.hasNext()) {
-    printjson(paginatedCursor.next());
-}
-```
-Este enfoque te permite manejar grandes conjuntos de datos de manera eficiente. 
+    // Saltar las primeras 2 películas y obtener las siguientes 3
+    var paginatedCursor = db.movies.find().skip(2).limit(3);
+
+    while (paginatedCursor.hasNext()) {
+        printjson(paginatedCursor.next());
+    }
+    ```
+
+=== "python"
+
+    ```py
+    from pymongo import MongoClient
+
+    # Conectar a la base de datos
+    client = MongoClient("mongodb://localhost:27017/")
+    db = client.mydatabase
+
+    # Obtener las primeras 5 películas
+    limited_cursor = db.movies.find().limit(5)
+
+    # Iterar sobre los resultados limitados
+    for document in limited_cursor:
+        print(document)
+
+    # Saltar las primeras 2 películas y obtener las siguientes 3
+    paginated_cursor = db.movies.find().skip(2).limit(3)
+
+    # Iterar sobre los resultados paginados
+    for document in paginated_cursor:
+        print(document)
+    ```
+
+En todo caso, estos ejemplos quedan fuera del alcance de nuestro objetivo para este curso. Para más información [MongoDB Documentation → MongoDB Drivers → Node.js](https://www.mongodb.com/docs/drivers/node/v3.6/fundamentals/connection/connect/)
 
 ## Agregaciones
 
 Las **agregaciones en MongoDB** son una poderosa herramienta que permite procesar y analizar grandes volúmenes de documentos en una colección. A través de un proceso conocido como **pipeline de agregación**, puedes realizar diversas operaciones en los datos, como filtrar, agrupar, ordenar y transformar documentos. Aquí te explico más sobre su funcionamiento y usos:
 
-### ¿Qué son las Agregaciones?
-
 Las agregaciones permiten realizar cálculos y transformaciones sobre los datos. En lugar de simplemente recuperar documentos, puedes aplicar funciones que devuelven resultados calculados, como sumas, promedios, conteos, etc. Esto es similar a las consultas SQL que utilizan `GROUP BY`.
 
-### ¿Para qué se utilizan?
+### Usos y ventajas de las agreraciones
 
 1. **Agrupación de Datos**: Puedes agrupar documentos por un campo específico y realizar cálculos sobre esos grupos. Por ejemplo, sumar las ventas por cada vendedor.
 
@@ -496,11 +544,11 @@ Las agregaciones permiten realizar cálculos y transformaciones sobre los datos.
 
 5. **Operaciones Complejas**: Puedes realizar operaciones más complejas, como uniones entre colecciones, utilizando la etapa `$lookup`.
 
-Las agregaciones son esenciales para obtener insights significativos de tus datos en MongoDB, acotando el rango de los datos sobre los que trabajamos y facilitando el análisis y la toma de decisiones. 
+Las agregaciones son esenciales para obtener `insights` significativos de tus datos en *MongoDB*, acotando el rango de los datos sobre los que trabajamos y facilitando el análisis y la toma de decisiones. 
 
 ### Método `.aggregate()`
 
-Para poder agrupar datos y realizar cálculos sobre éstos, MongoDB ofrece diferentes alternativas una de ellas es mediante el método `.aggretate`
+Para poder agrupar datos y realizar cálculos sobre éstos, *MongoDB* ofrece diferentes alternativas una de ellas es mediante el método `.aggretate`
 
 #### Pipeline de agregación
 
@@ -529,14 +577,14 @@ Antes de nada cabe destacar que las fases se pueden repetir, por lo que una cons
 A continuación vamos a estudiar todos estos operadores:
 
 | Operador | Descripción | Cardinalidad |
-| --- | --- | --- |
-| $project | Proyección de campos, es decir, propiedades en las que estamos interesados. También nos permite modificar un documento, o crear un subdocumento (reshape) | 1:1 |
-| $match | Filtrado de campos, similar a where | N:1 |
-| $group | Para agrupar los datos, similar a group by | N:1 |
-| $sort | Ordenar | 1:1 |
-| $skip | Saltar | N:1 |
-| $limit | Limitar los resultados | N:1 |
-| $unwind | Separa los datos que hay dentro de un array | 1:N |
+| --- | --- | :---: |
+| `$project` | Proyección de campos, es decir, propiedades en las que estamos interesados. También nos permite modificar un documento, o crear un subdocumento (reshape) | 1:1 |
+| `$match` | Filtrado de campos, similar a where | N:1 |
+| `$group` | Para agrupar los datos, similar a group by | N:1 |
+| `$sort` | Ordenar | 1:1 |
+| `$skip` | Saltar | N:1 |
+| `$limit` | Limitar los resultados | N:1 |
+| `$unwind` | Separa los datos que hay dentro de un array | 1:N |
 
 ### Ejemplos de uso
 
@@ -575,7 +623,7 @@ db.movies.aggregate([
 ```
 
 <div align="center">
-    <img src="../../images/MongoDB/MongoDB32.png" alt="MongoDB Aggregate" width="70%" />
+    <img src="../../images/MongoDB/MongoDB32.png" alt="MongoDB Aggregate" width="90%" />
 </div>
 
 
@@ -611,12 +659,31 @@ db.movies.aggregate([
 ```
 
 <div align="center">
-    <img src="../../images/MongoDB/MongoDB33.png" alt="MongoDB Aggregate" width="70%" />
+    <img src="../../images/MongoDB/MongoDB33.png" alt="MongoDB Aggregate" width="90%" />
 </div>
 
-Mediante `$avg` podemos obtener el promedio de los valores de un campo numérico.
 
-Por ejemplo calculamos la media de la puntuación por país
+No solo tenemos el operados `$sume`; en la siguiente tabla se indican algunos de los operadores acumuladores más comunes que puedes utilizar en el método `.aggregate` de MongoDB:
+
+| **Operador** | **Descripción**  | **Ejemplo**   |
+| --- | --- |  --- |
+| `$sum`       | Suma de valores.                                     | `{$group: { _id: null, total: { $sum: "$cantidad" } }}`                      |
+| `$avg`       | Promedio de valores.                                 | `{$group: { _id: "$categoria", promedio: { $avg: "$precio" } }}`             |
+| `$min`       | Valor mínimo.                                        | `{$group: { _id: "$categoria", minimo: { $min: "$precio" } }}`               |
+| `$max`       | Valor máximo.                                        | `{$group: { _id: "$categoria", maximo: { $max: "$precio" } }}`               |
+| `$push`      | Añade valores a un array.                            | `{$group: { _id: "$categoria", items: { $push: "$nombre" } }}`               |
+| `$addToSet`  | Añade valores únicos a un array.                     | `{$group: { _id: "$categoria", itemsUnicos: { $addToSet: "$nombre" } }}`     |
+| `$first`     | Primer valor en el grupo.                            | `{$group: { _id: "$categoria", primerValor: { $first: "$nombre" } }}`        |
+| `$last`      | Último valor en el grupo.                            | `{$group: { _id: "$categoria", ultimoValor: { $last: "$nombre" } }}`         |
+| `$stdDevPop` | Desviación estándar de la población de los valores.  | `{$group: { _id: "$categoria", desviacion: { $stdDevPop: "$precio" } }}`     |
+| `$stdDevSamp`| Desviación estándar de la muestra de los valores.    | `{$group: { _id: "$categoria", desviacion: { $stdDevSamp: "$precio" } }}`    |
+
+Estos operadores son muy útiles para realizar cálculos y transformaciones en los datos dentro de un pipeline de agregación en MongoDB [MongoDB Aggregation Operators](https://www.mongodb.com/docs/manual/reference/operator/aggregation/)
+
+
+Por ejemplo, mediante `$avg` podemos obtener el promedio de los valores de un campo numérico.
+
+- ^^Calculamos la media de la puntuación por país^^
 
 ```js
 db.movies.aggregate([
@@ -688,7 +755,7 @@ db.movies.aggregate([
 ```
 
 <div align="center">
-    <img src="../../images/MongoDB/MongoDB34.png" alt="MongoDB Aggregate" width="70%" />
+    <img src="../../images/MongoDB/MongoDB34.png" alt="MongoDB Aggregate" width="90%" />
 </div>
 
 Si queremos realizar una proyección sobre el conjunto de resultados y quedarnos con un subconjunto de los campos usaremos el operador `$project`. Como resultado obtendremos el mismo número de documentos, y en el orden indicado en la proyección.
@@ -696,7 +763,7 @@ Si queremos realizar una proyección sobre el conjunto de resultados y quedarnos
 Veamos el resultado del siguiente ejemplo:
 
 <div align="center">
-    <img src="../../images/MongoDB/MongoDB35.png" alt="MongoDB Aggregate" width="70%" />
+    <img src="../../images/MongoDB/MongoDB35.png" alt="MongoDB Aggregate" width="90%" />
 </div>
 
 Donde:
@@ -708,7 +775,9 @@ Donde:
 5. Realizamos operaciones matemáticas
 6. Obtenemos un número determinado de documentos, aunque el método `$limit` no es un modificador de `$project`
 
-En definitiva, el abanico de posiblidades es muy extensonuevo en muy extenso. Para más información en el [Manual de MongoDB: Aggregation Operations](https://www.mongodb.com/docs/manual/aggregation/#aggregation-operations)
+Así pues, como hemos visto el abanico de posiblidades es muy extenso, aunque en nuestro curso no tenemos tiempo suficiente para profundizar en todas las posibilidades, nos quedamos aqui. 
+
+Para más información tienes el [Manual de MongoDB: Aggregation Operations](https://www.mongodb.com/docs/manual/aggregation/#aggregation-operations)
 
 
 <hr>
