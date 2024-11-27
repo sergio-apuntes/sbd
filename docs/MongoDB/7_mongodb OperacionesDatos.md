@@ -447,11 +447,11 @@ Por ejemplo, a continuacion tenemos código en *javascript* que imprime por cons
 
     ```javascript
     // necesario node.js
-    // Conectar a la base de datos
-    const db = connect("mongodb://localhost:27017/mydatabase");
+    // Conectar a la base de datos test
+    const db = connect("mongodb://localhost:27017/test");
 
-    // Realizar una consulta para encontrar todas las películas
-    var cursor = db.movies.find();
+    // Realizar una consulta para encontrar todas (5) las películas
+    var cursor = db.movies.find().limit( 5);
 
     // Iterar sobre los resultados usando un cursor
     while (cursor.hasNext()) {
@@ -467,10 +467,11 @@ Por ejemplo, a continuacion tenemos código en *javascript* que imprime por cons
 
     # Conectar a la base de datos
     client = MongoClient("mongodb://localhost:27017/")
-    db = client.mydatabase
+    # Utilizamos la base de datos "text"
+    db = client.test
 
-    # Realizar una consulta para encontrar todas las películas
-    cursor = db.movies.find()
+    # Realizar una consulta para encontrar todas (5) las películas
+    cursor = db.movies.find().limit(5)
 
     # Iterar sobre los resultados usando un cursor
     for document in cursor:
@@ -507,7 +508,7 @@ Se puede también usar métodos como `limit` y `skip` para controlar la cantidad
 
     # Conectar a la base de datos
     client = MongoClient("mongodb://localhost:27017/")
-    db = client.mydatabase
+    db = client.test
 
     # Obtener las primeras 5 películas
     limited_cursor = db.movies.find().limit(5)
