@@ -116,6 +116,26 @@ Luego accedemos en `https://localhost:8443/nifi`
 		<figcaption>Iniciando nifi y obteniendo usuario y contraseña por defecto</figcaption>
 	</figure>
 
+
+
+!!! Note 
+	Si queremos instalar la versión 2.0 o posterior tenenemos que cambiar los siguiente parámetros (para poder entrar como http en vez de https, porque si no, tenemos que instalar certificados y es complejo).
+
+	
+	```js
+	# quitamos la seguridad
+	nifi.remote.input.secure=false
+
+	# configuramos para acceder desde cualquier equipo por http
+	nifi.web.http.host=0.0.0.0
+	nifi.web.http.port=8080
+
+	# deshabilitamos acceder por https
+	nifi.web.https.host=
+	nifi.web.https.port=
+	```
+
+
 ### Iniciando como servicio
 
 Por último, si queremos que **Nifi** se instale como **servicio** y se inicie de forma automática cada vez que iniciamos el sistema, realizamos los suguientes pasos
@@ -512,3 +532,62 @@ El servicio `JsonTreeReader` no es necesario modificarlo, y el `MongoDBControlle
 ## Ejercicio en NiFi
 
 De la AEMET podemos recuperar el tiempo de Xàtiva : https://www.el-tiempo.net/api/json/v2/provincias/46/municipios/46145
+
+Planteamos un ejercicio para obtener los datos desde esta web, meterlos en una base de datos MongoDB y desde ahí pasar datos a una base de datos relacional en PostgreSQL
+
+Uno de los puntos a realizar sería hacerlo todo con Docker-compose:
+
+```js
+version: '3.8'
+
+services:
+  postgres_dc:
+    image: postgres:latest
+    container_name: postgres_dc
+    environment:
+      POSTGRES_USER: sergio
+      POSTGRES_PASSWORD: sergio
+      POSTGRES_DB: test
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./data/postgres:/data
+
+  mongodb_dc:
+    image: mongo:latest
+    container_name: mongodb_dc
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+      - ./data/mongodb:/data
+
+  nifi_dc:
+    image: apache/nifi:latest
+    container_name: nifi_dc
+    ports:
+      - "8443:8443"
+    environment:
+      SINGLE_USER_CREDENTIALS_USERNAME: nifi
+      SINGLE_USER_CREDENTIALS_PASSWORD: nifinifinifi
+      NIFI_JVM_HEAP_MAX: 2g
+    volumes:
+      - nifi_data:/opt/nifi/nifi-current
+      - ./data/nifi:/data
+
+volumes:
+  postgres_data:
+  mongo_data:
+  nifi_data:
+```
+
+Los puntos a tener en cuenta son:
+
+- Para conectar nifi con MongoDB, debemos saber la IP del contenedor de MongoDB. Para ello usamos 
+
+```bash
+docker-compose ps -q | xargs -I {} docker inspect -f '{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' {}
+```
+
+- En todas los contenedores tenemos la carpeta `/data` para dejar datos, por ejemmplo se puede usar en Nifi si hacemos un `PutFile`

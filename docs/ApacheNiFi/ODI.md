@@ -17,10 +17,33 @@ nav_exclude: true
 
 # Introducción a `Oracle Data Integrator`. `ODI`
 
+
+En la máquina hay un documento llamado "Information about this machine" que tiene las contraseñas de todo el sistema. De mitad para abajo, no lo vamos a usar. Al final todoas las contraseñas son `oracle`o `welcome1`
+
 La base es que todo lo guarda en repositorios.
 
 WebManual de ODI en oracle:  [Integrating Oracle Data Integrator 12c (ODI) and Oracle GoldenGate 12c (OGG) ](https://www.oracle.com/webfolder/technetwork/tutorials/obe/fmw/odi/odi_12c/ogg_odi_12c_int/index.html#overview)
 
+Explicación de la parte izquiera del interfaz de ODI
+
+- Pestaña `Designer`
+  Explicación de qué es cada cosa.
+  - Módulos de conocimiento: Hay diferentes tipos de módulos de conocimiento, los mas interesante con los de Check y LKM que son los que cargan.
+
+  - Pestaña `Modelos`: Aqui es donde esta la metadata de las tablas que se importan en ODI. Si se difine una tabla, un fichero o lo que sea, debe esta aqui a nivel lógico.
+
+  - Pestaña de `Objetos Globales`
+
+
+  - Pestaña de `Topology`
+  Tenemos la parte fisica, Conexto y la parte lógica de la arquitectura, esto es lo más importante
+    - Física: es aqui donde se especifican los elementos físicos con los que trabajamos
+    - Arquitectura lógica: Dado todas las conexiones físicas, deben tener un nombre en la parte lódiga para poder referencialas
+    - Contexto: Relaciona las partes lógicas con las físicas.
+    - Repositorios: Es la información de cómo se conecta, pero esto no lo vamos a tocar
+
+  - Pestaña de `Operador`
+  Aqui es donde vamos a ver información de si funciona o no 
 
 # Demo de uso con `ODI`
 

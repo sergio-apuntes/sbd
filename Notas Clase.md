@@ -373,7 +373,71 @@ En este caso tenemos dierentes opciones:
  - **ODBC Driver** : mongodb://atlas-sql-671d161b7183374ebf59511c-azyjt.a.query.mongodb.net/sample_mflix?ssl=true&authSource=admin
 
 
-# Instalación NiFi en Ubuntu Docker
+# Instalación PostgreSQL + Apache Nifi + MongoDB con `docker-compose`
+
+Tenemos la el siguiente fichero de configuracion `docker-compose.yml`
+
+```yml
+version: '3.8'
+
+services:
+  postgres_dc:
+    image: postgres:latest
+    container_name: postgres_dc
+    environment:
+      POSTGRES_USER: sergio
+      POSTGRES_PASSWORD: sergio
+      POSTGRES_DB: test
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./data/postgres:/data
+
+  mongodb_dc:
+    image: mongo:latest
+    container_name: mongodb_dc
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+      - ./data/mongodb:/data
+
+  nifi_dc:
+    image: apache/nifi:latest
+    container_name: nifi_dc
+    ports:
+      - "8443:8443"
+    environment:
+      SINGLE_USER_CREDENTIALS_USERNAME: nifi
+      SINGLE_USER_CREDENTIALS_PASSWORD: nifinifinifi
+      NIFI_JVM_HEAP_MAX: 2g
+    volumes:
+      - nifi_data:/opt/nifi/nifi-current
+      - ./data/nifi:/data
+
+volumes:
+  postgres_data:
+  mongo_data:
+  nifi_data:
+```
+
+Este fichero crea los las carpetas de datos en `./data`
+
+Para **saber las IPs de los contenedores** y poder después configurar los drives y demás entre ellos: 
+
+```bash
+docker ps -q | xargs -n 1 docker inspect --format '{{range .NetworkSettings.Networks}} - {{.IPAddress}}{{end}} {{ .Name }}'
+```
+
+Obtenemos algo similar a : 
+
+```
+ - 172.18.0.2 /nifi_dc
+ - 172.18.0.3 /mongodb_dc
+ - 172.18.0.4 /postgres_dc
+```
+
 
 Generated Username [52fa93d8-14a8-4507-8c9c-5697aa1fbb51]
 Generated Password [i4x6oUWeiXk6MidVqUGKJj4SXdInu0ek]
