@@ -47,9 +47,10 @@ Explicación de la parte izquiera del interfaz de ODI
 
 # Demo de uso con `ODI`
 
-Los puntos 2 y 3 hacen una introducción de lo que se va a hacer.
+Los puntos 2 y 3 hacen una introducción de lo que se va a hacer. En este caso es una relación de ventas y grupos de ventas.
 
 El punto 4 y 5 ya tienen cómo se implementa un ETL en ODI.
+Realmente se comienza en el punto 4 paso a paso los pasos a seguir
 
 ## Maquina virtual
 
