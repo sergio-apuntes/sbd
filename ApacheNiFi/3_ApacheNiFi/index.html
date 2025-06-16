@@ -1,0 +1,1937 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Herramienta Apache NiFi">
+      
+      
+      
+        <link rel="canonical" href="https://sergio-apuntes.github.io/sbd/ApacheNiFi/3_ApacheNiFi/">
+      
+      
+        <link rel="prev" href="../2_PostgreSQL/">
+      
+      
+        <link rel="next" href="../../ElasticStack/1_elastic_stack/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>3. Apache NiFi - Apuntes Sistemas en Big Data</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+   <link href="../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+    html.glightbox-open { overflow: initial; height: 100%; }
+    .gslide-title { margin-top: 0px; user-select: text; }
+    .gslide-desc { color: #666; user-select: text; }
+    .gslide-image img { background: white; }
+    .gscrollbar-fixer { padding-right: 15px; }
+    .gdesc-inner { font-size: 0.75rem; }
+    body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+    body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+    body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="../../assets/javascripts/glightbox.min.js"></script></head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#instalacion-apache-nifi" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../.." title="Apuntes Sistemas en Big Data" class="md-header__button md-logo" aria-label="Apuntes Sistemas en Big Data" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Apuntes Sistemas en Big Data
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              3. Apache NiFi
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Apuntes Sistemas en Big Data" class="md-nav__button md-logo" aria-label="Apuntes Sistemas en Big Data" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Apuntes Sistemas en Big Data
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introducción
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    NoSQL
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            NoSQL
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../noSQL/1_NoSQL%20Intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1. Introducción
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../noSQL/2_NoSQL%20NoSoloSQL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2. No Solo SQL
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../noSQL/3_NoSQL%20ModeloDatos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3. Modelos de datos
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../noSQL/4_NoSQL%20Consistencia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4. Consistencia
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    MongoDB
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            MongoDB
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MongoDB/1_mongodb%20Introducci%C3%B3n./" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1. Introducción a MongoDB
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MongoDB/2_mongodb%20MongoDB/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2. MongoDB
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MongoDB/3_mongodb%20ModeladoDatos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3. Diseño de modelado de bases de datos. schemaless
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MongoDB/4_mongodb%20Instalaci%C3%B3n/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4. Instalación
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MongoDB/5_mongodb%20PrimerosPasos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    5. Primeros pasos
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MongoDB/6_mongodb%20OperacionesCRUD/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    6. Operaciones con datos CRUD
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MongoDB/7_mongodb%20OperacionesDatos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    7. Consulta de datos
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    ETL con Apache NiFi
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            ETL con Apache NiFi
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1_ETL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1. ETL con Apache NiFi
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2_PostgreSQL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2. PostgreSQL
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    3. Apache NiFi
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    3. Apache NiFi
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#instalacion-apache-nifi" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instalación Apache Nifi
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Instalación Apache Nifi">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#iniciando-desde-linea-de-comandos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Iniciando desde línea de comandos
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iniciando-como-servicio" class="md-nav__link">
+    <span class="md-ellipsis">
+      Iniciando como servicio
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#terminologia-nifi" class="md-nav__link">
+    <span class="md-ellipsis">
+      Terminología NiFi
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Terminología NiFi">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#los-conceptos-fundamentales-de-nifi" class="md-nav__link">
+    <span class="md-ellipsis">
+      Los conceptos fundamentales de NiFi
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dataflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      DataFlow
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flowfile" class="md-nav__link">
+    <span class="md-ellipsis">
+      FlowFile
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#processors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Processors
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#processors-mas-usados" class="md-nav__link">
+    <span class="md-ellipsis">
+      Processors más usados
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conexiones" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conexiones
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#process-groups" class="md-nav__link">
+    <span class="md-ellipsis">
+      Process Groups
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#controller-services" class="md-nav__link">
+    <span class="md-ellipsis">
+      Controller Services
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#apache-nifi-expression-language" class="md-nav__link">
+    <span class="md-ellipsis">
+      Apache NiFi Expression Language
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#expresiones-regulares" class="md-nav__link">
+    <span class="md-ellipsis">
+      Expresiones regulares
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#uso-de-mongodb-con-apache-nifi" class="md-nav__link">
+    <span class="md-ellipsis">
+      Uso de MongoDB con Apache Nifi
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejercicio-en-nifi" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ejercicio en NiFi
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Elasctic Stack
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Elasctic Stack
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ElasticStack/1_elastic_stack/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1. Introducción
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ElasticStack/2_elastic_operaciones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2. Elasticsearch. Operaciones
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ElasticStack/3_elastic_kibana/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3. Kibana
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ElasticStack/4_elastic_python/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4. Elasticsearch. Acceso desde cliente Python
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ElasticStack/5_elastic_nifi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    5. Elastic stack y Apache Nifi
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#instalacion-apache-nifi" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instalación Apache Nifi
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Instalación Apache Nifi">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#iniciando-desde-linea-de-comandos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Iniciando desde línea de comandos
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iniciando-como-servicio" class="md-nav__link">
+    <span class="md-ellipsis">
+      Iniciando como servicio
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#terminologia-nifi" class="md-nav__link">
+    <span class="md-ellipsis">
+      Terminología NiFi
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Terminología NiFi">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#los-conceptos-fundamentales-de-nifi" class="md-nav__link">
+    <span class="md-ellipsis">
+      Los conceptos fundamentales de NiFi
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dataflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      DataFlow
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flowfile" class="md-nav__link">
+    <span class="md-ellipsis">
+      FlowFile
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#processors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Processors
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#processors-mas-usados" class="md-nav__link">
+    <span class="md-ellipsis">
+      Processors más usados
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conexiones" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conexiones
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#process-groups" class="md-nav__link">
+    <span class="md-ellipsis">
+      Process Groups
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#controller-services" class="md-nav__link">
+    <span class="md-ellipsis">
+      Controller Services
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#apache-nifi-expression-language" class="md-nav__link">
+    <span class="md-ellipsis">
+      Apache NiFi Expression Language
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#expresiones-regulares" class="md-nav__link">
+    <span class="md-ellipsis">
+      Expresiones regulares
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#uso-de-mongodb-con-apache-nifi" class="md-nav__link">
+    <span class="md-ellipsis">
+      Uso de MongoDB con Apache Nifi
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejercicio-en-nifi" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ejercicio en NiFi
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+  <h1>3. Apache NiFi</h1>
+
+<p><code>Apache NiFi</code> es una plataforma de procesamiento y logística de datos en tiempo real, que permite automatizar el movimiento de datos entre diferentes sistemas. </p>
+<p>Es un sistema distribuido, Open Source y desarrollado por la <strong><em>Apache Software Foundation</em></strong>. </p>
+<p><code>Apache NiFi</code> ofrece una gestión de flujos de datos complejos, con trazabilidad y control de los datos que se reciben, transforman, envían o descartan34.</p>
+<div class="admonition info">
+<p class="admonition-title">En la web del proyecto podemos encontrar la siguiente definición</p>
+<p>An easy to use, powerful, and reliable system to process and distribute data.</p>
+</div>
+<p><code>NiFi</code> (o Ni-Fi) ha sido diseñado para poder automatizar de una manera eficiente y visual los flujos de datos entre distintos sistemas: ingesta, enrutado y gestión. Para ello, cuenta con más de 300 conectores externos ya implementados y además es posible añadir conectores a medida.</p>
+<p>Uno de los puntos fuertes de <code>NiFi</code> es la capacidad para programar flujos de datos arrastrando y conectando los componentes necesarios sobre los canvas de la web de administración. No es necesario por tanto tener conocimientos de programación específicos, sino entender y configurar correctamente cada uno de los componentes que se quieren usar.</p>
+<p>Aunque se pueda considerar una herramienta <strong>ETL</strong>, <code>NiFi</code> no está realmente optimizado para realizar transformaciones de datos complejas o pesadas. Es posible realizar transformaciones de datos ligeras pero no es un motor de transformaciones batch completo. Aún así es común su uso integrado en sistemas <strong><em>Big Data</em></strong>, ya que ofrece muchas ventajas como herramienta de automatización de ingestas de datos y para realizar transformaciones y limpiezas sencillas.</p>
+<h2 id="instalacion-apache-nifi">Instalación <code>Apache Nifi</code></h2>
+<p>Para la instalación de NiFi, descargamos la última versión desde la <a href="https://nifi.apache.org/download/">web de nifi</a>; archivo binario.</p>
+<div class="admonition atención">
+<p class="admonition-title">Atención</p>
+<p>Cuidado, si descargamos la version 2.0 necesitamos realizar una configuración más avanzada del servidor, incluidos ceertificados, por lo que nosotros vamos a trabajar con version 1.xxx</p>
+</div>
+<figure align="center">
+    <a class="glightbox" href="../../images/NiFi/NIFI06.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image title" src="../../images/NiFi/NIFI06.png" width="50%" /></a>
+    <figcaption>Descargamos versión 1.xx para evitar problemas de configuración</figcaption>
+</figure>
+<p>Podemos descargar directamente desde la web mediante <code>wget</code>:</p>
+<p><div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>wget https://dlcdn.apache.org/nifi/1.28.0/nifi-1.28.0-bin.zip
+</span></code></pre></div>
+Lo descomprimimos y ...</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>unzip<span class="w"> </span>nifi-1.28.0-bin.zip
+</span></code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">si no tenemos instalado 'unzip' en nuestro sistema, recordad que para instalar</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>unzip
+</span></code></pre></div>
+</div>
+<p>y lo dejamos en la ubicación adecuada y ya podemos ejecutarlo.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>sudo<span class="w"> </span>mv<span class="w"> </span>nifi-1.28.0<span class="w"> </span>/opt
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nb">cd</span><span class="w"> </span>/opt/nifi-1.28.0/bin
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>./nifi.sh<span class="w"> </span>start<span class="w">             </span><span class="c1"># iniciamos nifi en background</span>
+</span></code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">El sistema debe tener instalada una máquina virtual de Java (JRE) para poder ejecutarse, asi que recordad que para instalar, por ejemplo:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>default-jre
+</span></code></pre></div>
+</div>
+<p>El usuario se puede crear vía comandos por cmd, o se puede coger el que genera automáticamente en el log NiFi, algo asi (fichero nifi-app.log):</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>$<span class="w"> </span>cat<span class="w"> </span>../logs/nifi-app.log<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>Generated
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>Generated<span class="w"> </span>Username<span class="w"> </span><span class="o">[</span>80e91118-b222-4b47-8dab-63a8deb7905d<span class="o">]</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>Generated<span class="w"> </span>Password<span class="w"> </span><span class="o">[</span>zavwbGlRcYeky51Bxc0zbVN8hj2bE61u<span class="o">]</span>
+</span></code></pre></div>
+<figure align="center">
+  <a class="glightbox" href="../../images/NiFi/NIFI03.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image title" src="../../images/NiFi/NIFI03.png" width="85%" /></a>
+<br />
+<figcaption>Iniciando nifi y obteniendo usuario y contraseña por defecto</figcaption>
+</figure>
+<div class="admonition tip">
+<p class="admonition-title">Para establecer un usuario y contraseña, lo podemos hacer con el siguiente comando</p>
+<p><div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>./bin/nifi.sh<span class="w"> </span>set-single-user-credentials<span class="w"> </span>sergio<span class="w"> </span>sergiosergio<span class="w">  </span>
+</span></code></pre></div>
+usuario que desees y contraseña de 12 caracteres mínimo</p>
+</div>
+<p>Por último, comentar que hay diferentes forma de iniciar/operar con <strong><em>Apache Nifi</em></strong>, arrancando NiFi cada vez que deseemos usarlo desde la línea de comandos o creando un servicio y que inicia de forma automática</p>
+<h3 id="iniciando-desde-linea-de-comandos">Iniciando desde línea de comandos</h3>
+<p>Si queremos iniciar Nifi desde la línea de comandos (recomendado sobre todo en nuestro primera arranque), tenemos los siguientes comandos:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>./nifi.sh<span class="w"> </span>start<span class="w">   </span><span class="c1"># ejecución en segundo plano</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>./nifi.sh<span class="w"> </span>run<span class="w">     </span><span class="c1"># ejecución en primer plano</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>./nifi.sh<span class="w"> </span>status<span class="w">  </span><span class="c1"># saber estado... si se esta ejecutando</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>./nifi.sh<span class="w"> </span>stop<span class="w">    </span><span class="c1"># para </span>
+</span></code></pre></div>
+<p>Dependiendo de la máquina donde la ejecutemos, puede tarda un poco en ponerse en marcha, hasta 5 minutos.</p>
+<p>Luego accedemos en <code>https://localhost:8443/nifi</code></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Si accedemos desde una máquina remota, entonces debemos cambiar la configuración del archivo <strong>conf/nifi.properties</strong></p>
+<p>Debemos cambiar las siguientes líneas:</p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nx">nifi</span><span class="p">.</span><span class="nx">web</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">host</span><span class="o">=</span><span class="mf">0.0.0.0</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nx">nifi</span><span class="p">.</span><span class="nx">web</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">port</span><span class="o">=</span><span class="mf">8080</span>
+</span></code></pre></div>
+<p><figure markdown="span" align="center">
+    <a class="glightbox" href="../../images/NiFi/NIFI04.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image title" src="../../images/NiFi/NIFI04.png" width="85%" /></a>
+    <figcaption>Iniciando nifi y obteniendo usuario y contraseña por defecto</figcaption>
+</figure></p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Si queremos instalar la versión 2.0 o posterior tenenemos que cambiar los siguiente parámetros (para poder entrar como http en vez de https, porque si no, tenemos que instalar certificados y es complejo).</p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="err">#</span><span class="w"> </span><span class="nx">quitamos</span><span class="w"> </span><span class="nx">la</span><span class="w"> </span><span class="nx">seguridad</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nx">nifi</span><span class="p">.</span><span class="nx">remote</span><span class="p">.</span><span class="nx">input</span><span class="p">.</span><span class="nx">secure</span><span class="o">=</span><span class="kc">false</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="err">#</span><span class="w"> </span><span class="nx">configuramos</span><span class="w"> </span><span class="nx">para</span><span class="w"> </span><span class="nx">acceder</span><span class="w"> </span><span class="nx">desde</span><span class="w"> </span><span class="nx">cualquier</span><span class="w"> </span><span class="nx">equipo</span><span class="w"> </span><span class="nx">por</span><span class="w"> </span><span class="nx">http</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="nx">nifi</span><span class="p">.</span><span class="nx">web</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">host</span><span class="o">=</span><span class="mf">0.0.0.0</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="nx">nifi</span><span class="p">.</span><span class="nx">web</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">port</span><span class="o">=</span><span class="mf">8080</span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="err">#</span><span class="w"> </span><span class="nx">deshabilitamos</span><span class="w"> </span><span class="nx">acceder</span><span class="w"> </span><span class="nx">por</span><span class="w"> </span><span class="nx">https</span>
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="nx">nifi</span><span class="p">.</span><span class="nx">web</span><span class="p">.</span><span class="nx">https</span><span class="p">.</span><span class="nx">host</span><span class="o">=</span>
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="nx">nifi</span><span class="p">.</span><span class="nx">web</span><span class="p">.</span><span class="nx">https</span><span class="p">.</span><span class="nx">port</span><span class="o">=</span>
+</span></code></pre></div>
+</div>
+<h3 id="iniciando-como-servicio">Iniciando como servicio</h3>
+<p>Por último, si queremos que <strong>Nifi</strong> se instale como <strong>servicio</strong> y se inicie de forma automática cada vez que iniciamos el sistema, realizamos los suguientes pasos</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>sudo<span class="w"> </span>/opt/nifi/bin/nifi.sh<span class="w"> </span>install
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>daemon-reload
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>nifi
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>nifi
+</span></code></pre></div>
+<figure align="center">
+  <a class="glightbox" href="../../images/NiFi/NIFI05.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image title" src="../../images/NiFi/NIFI05.png" width="85%" /></a>
+<br />
+<figcaption>Iniciando NiFi como servicio</figcaption>
+</figure>
+<p>Más información en la <a href="https://nifi.apache.org/docs/nifi-docs/html/getting-started.html#downloading-and-installing-nifi">web de apache nifi</a></p>
+<h2 id="terminologia-nifi">Terminología NiFi</h2>
+<h3 id="los-conceptos-fundamentales-de-nifi">Los conceptos fundamentales de NiFi</h3>
+<p><code>Nifi</code> esta basado en FBP (Flow Based Programming), que es un paradigma de programación que define aplicación como cajas negras (procesos), los cuales intercambian datos entre conexiones predefinidas.</p>
+<p>A continuación se indican algunos de los conceptos principales de NiFi y cómo se mapean a FBP:</p>
+<table>
+<thead>
+<tr>
+<th>Término de NiFi</th>
+<th>Término de FBP</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>FlowFile</strong></td>
+<td>Paquete de Información</td>
+<td>Un FlowFile representa cada objeto que se mueve a través del sistema y para cada uno, NiFi realiza un seguimiento de un mapa de pares clave/valor de atributos y su contenido asociado de cero o más bytes.</td>
+</tr>
+<tr>
+<td><strong>FlowFile Processor</strong></td>
+<td>Caja Negra</td>
+<td>Los procesadores realizan el trabajo. En términos de [eip], un procesador realiza alguna combinación de enrutamiento de datos, transformación o mediación entre sistemas. Los procesadores tienen acceso a los atributos de un FlowFile dado y su flujo de contenido. Los procesadores pueden operar en cero o más FlowFiles en una unidad de trabajo dada y ya sea comprometer ese trabajo o revertirlo.</td>
+</tr>
+<tr>
+<td><strong>Connection</strong></td>
+<td>Búfer Acotado</td>
+<td>Las conexiones proporcionan el enlace real entre procesadores. Actúan como colas y permiten que varios procesos interactúen a diferentes velocidades. Estas colas pueden priorizarse dinámicamente y pueden tener límites superiores de carga, lo que permite la retropresión.</td>
+</tr>
+<tr>
+<td><strong>Flow Controller</strong></td>
+<td>Programador</td>
+<td>El Flow Controller mantiene el conocimiento de cómo se conectan los procesos y gestiona los hilos y las asignaciones de los mismos que todos los procesos utilizan. El Flow Controller actúa como el intermediario que facilita el intercambio de FlowFiles entre procesadores.</td>
+</tr>
+<tr>
+<td><strong>Process Group</strong></td>
+<td>Subred</td>
+<td>Un Process Group es un conjunto específico de procesos y sus conexiones, que pueden recibir datos a través de puertos de entrada y enviar datos a través de puertos de salida. De esta manera, los grupos de procesos permiten la creación de componentes completamente nuevos simplemente mediante la composición de otros componentes.</td>
+</tr>
+</tbody>
+</table>
+<p>Estas cajas negras (procesos) pueden ser combinados en dataflows. </p>
+<h3 id="dataflow">DataFlow</h3>
+<ul>
+<li><code>Dataflow</code> o <code>flujo de dato</code> son los pasos de los datos desde el origen al destino, con o sin transformación en medio.</li>
+</ul>
+<p>Los datos pueden ser de diversos formatos, csv, json, videos, audios, .... </p>
+<p><code>Apache Nifi</code> esta diseñado para automatizar el movimiento de datos.</p>
+<p>No es recomendable para hacer transformaciones grandes o de tipo batch, en ese caso tenemos <strong><em>spark</em></strong></p>
+<p>Esta basada en la <strong>programación basada en flujo</strong>, basada en unos procesadores que se unen mediante conexiones.</p>
+<p>Estos procesadores son como cajas negras, y los conectores cogen los datos de un procesador y lo entregan a otro, de forma que a los procesadores no les interesa la salida, solo el proceso</p>
+<h3 id="flowfile">FlowFile</h3>
+<p>Los ficheros que se generan entre diferentes procesadores se llaman <code>flowfiles</code>, con paquetes de datos (como ficheros) compuesto por contenido y atributos o metadatos. Los atributos contienen información del contenido; fecha de creación, nombre, o información que añadamos.</p>
+<p>Contiene datos. Abstracción de los datos en NiFi --&gt;  CSV,JSON,XML,SQL,Binary,etc</p>
+<p>Tiene dos componentes:
+- Content:  contiene los datos actuales.
+- Attributes: representa los metadatos del fichero</p>
+<p>Son ficheros persistentes en disco.</p>
+<p>Este paquete de datos que viaja por el flow entre los procesadores está compuesto por un puntero al propio dato útil o contenido (un array de bytes) y metadatos asociados llamados atributos. Los atributos pares clave-valor editables y NiFi los usa para enriquecer la información de provenance. Los metadatos más importantes son el identificador (uuid), el nombre del fichero (filename) y el path. Para acelerar el rendimiento del sistema, el flowfile no contiene el propio dato, sino que apunta al dato en el almacenamiento local. Muchas de las operaciones que se realizan en NiFi no alteran el propio dato ni necesitan cargarlo en memoria. En concreto, el dato se encuentra en el llamado repositorio de contenido (Content Repository) Flowfile de Apache NiFi.</p>
+<h3 id="processors">Processors</h3>
+<ul>
+<li><code>Processor</code>: un Processor puede generar un nuevo "FlowFile" para procesar o ingestar un existente FlowFile desde cualquier origen. Todos los processors pueden ser conectados con otros. Estos, son enlazados vía conexiones con links. Cada conexión tendrá una cola "Queue for FlowFiles".</li>
+</ul>
+<p>Puede añadir, actualizar y borrar atributos de un FlowFile
+Puede cambiar el contenido a un FlowFile.</p>
+<ul>
+<li>
+<p>Input/Output: entrada y salida són utilizados para mover datos entre "Process Group".</p>
+</li>
+<li>
+<p>Controller Service: servicio compartido que puede usado por un Processor. Este servicio puede mantener
+conexiones con bases de datos. Por ejemplo, CSV Reader, JSON Writer, etc.</p>
+</li>
+</ul>
+<p>Los procesadores son los encargados de realizar las transformaciones o acciones sobre los datos. Se pueden configurar para que se ejecuten según una temporización, tipo cron. Proporcionan una interface para acceder a los flowfiles. Hay procesadores ya creados y publicados o podemos crear nuevos, utilizando java.</p>
+<h3 id="processors-mas-usados">Processors más usados</h3>
+<p>Apache Nifi ofrece diferentes tipos de <strong>procesadores</strong>, y los más utilizados o importantes son: </p>
+<p><strong>Ingesta de datos</strong></p>
+<div class="language-text highlight"><pre><span></span><code>GenerateFlowFiles
+GetFile
+GetFTP
+GetSFTP
+GetJMSQueue
+GetJMSTopic
+GetHTTP
+ListenHTTP
+ListenUDP
+getHDFS
+GetKafka
+QueryDatabaseTable
+GetMongo
+GetTwitter
+ListHDFS / FetchHDFS
+</code></pre></div>
+<p><strong>Transformación del datos</strong>. Permiten transformar datos antes de almacenar en destino</p>
+<div class="language-text highlight"><pre><span></span><code>ConvertRecord
+UpdateRecord
+ConvertJSONToSQL
+ReplaceText
+CompressContent
+ConvertCharacterSet
+EncryptContent
+TransformXml
+JoltTransformJSON
+</code></pre></div>
+<p><strong>Envío de datos</strong>. Ayudan a enviar los datos a un destino</p>
+<div class="language-text highlight"><pre><span></span><code>PutEmail
+PutFile
+PutFTP
+PutSFTP
+PutJMS
+PutSQL
+PutKafka
+PutMongo
+PutHDFS
+</code></pre></div>
+<p><strong>Control y revisión</strong>. Enrutan el dato por el flujo adecuado</p>
+<div class="language-text highlight"><pre><span></span><code>ControlRatte
+DetectDuplicate
+DistributeLoad
+RouteOnAttribute
+RouteOnAttribute
+RouteOnContent
+ScanAttribute
+ScanContent
+ValidateXml
+ValidateCSV
+</code></pre></div>
+<p><strong>Acceso a base de datos</strong></p>
+<div class="language-text highlight"><pre><span></span><code>ConvertJSONToSQL
+ExecuteSQL
+PutSQL
+SelectHiveQL
+PutHiveQL
+ListDatabaseTables
+</code></pre></div>
+<p><strong>Extracción de atributos</strong>. Añade o extrae atributos de los FlowFiles</p>
+<div class="language-text highlight"><pre><span></span><code>EvaluateJsonPath
+EvaluateXPath
+EvaluateXQuery
+ExtractText
+HashAttribute
+HashContent
+IdentifyMimeType
+UpdateAttribute
+LogAttribute
+</code></pre></div>
+<p><strong>Sistema</strong></p>
+<div class="language-text highlight"><pre><span></span><code>ExecuteProcess
+ExecuteStreamCommand
+</code></pre></div>
+<p><strong>Agregaciones y Splits</strong></p>
+<div class="language-text highlight"><pre><span></span><code>SplitText
+SplitJson
+SplitXml
+SplitRecord
+SplitContent
+UnpackContent
+SegmentContent
+MergeContent
+QueryRecord
+</code></pre></div>
+<p><strong>Http y udp</strong></p>
+<div class="language-text highlight"><pre><span></span><code>GetHTTP
+ListenHTTP
+InvokeHTTP
+PostHTTP
+HandleHttpRequest
+HandleHttpRespone
+ListenUDP
+PutUDP
+ListenUDPRecord
+</code></pre></div>
+<p><strong>AWS</strong></p>
+<div class="language-text highlight"><pre><span></span><code>FetchS3Object
+PutS3Object
+PutSNS
+GetSQS
+PutSQS
+DeleteSQS
+GetDynamoDB
+PutDynamoDB
+PutLambda
+</code></pre></div>
+<h3 id="conexiones">Conexiones</h3>
+<p>Las <strong>Conexiones</strong> permiten transmitir flowFiles entre procesadores. Se encargan de controlar colas y su caducidad, por ejemplo ante procesadores que van a diferentes velocidades, o encola o deciden que datos tienen más prioridad o que datos ya han quedado obsoletos.</p>
+<h3 id="process-groups">Process Groups</h3>
+<p>Los <strong>Process Groups</strong> es la unión de varios procesadores que tiene una tarea de forma agrupada.</p>
+<p>Son conjuntos de componentes Processor combinados. Ayudan a mantener un gran y complejo dataflow.</p>
+<h3 id="controller-services">Controller Services</h3>
+<p>Los <code>Controller Services</code> en Apache <code>NiFi</code> son <strong>servicios compartidos</strong> que pueden ser utilizados por los procesadores, tareas de informes y otros servicios de controlado. Estos servicios proporcionan una funcionalidad común que puede ser utilizada por varios componentes de NiFi. </p>
+<p>Algunos ejemplos de servicios de controlador incluyen servicios de autenticación, servicios de encriptación y servicios de base de datos.</p>
+<h2 id="apache-nifi-expression-language">Apache NiFi Expression Language</h2>
+<p>El lenguaje de expresiones en Apache NiFi es una forma de especificar patrones de texto que se pueden utilizar para buscar, reemplazar o extraer información de los atributos y el contenido de los archivos de flujo. El lenguaje de expresiones de NiFi permite referenciar estos atributos, compararlos con otros valores y manipular sus valores. </p>
+<p>El lenguaje de expresiones de NiFi siempre comienza con el delimitador de inicio <code>${</code> y termina con el delimitador final <code>}</code>. Entre los delimitadores se encuentra el texto de la expresión en sí. En su forma más básica, la expresión puede consistir en solo un nombre de atributo. </p>
+<p>Por ejemplo, <code>${filename}</code> devolverá el valor del atributo filename. En un ejemplo un poco más complejo, podemos devolver una manipulación de este valor. Podemos, por ejemplo, devolver una versión en mayúsculas del nombre de archivo llamando a la función <code>${filename:toUpper()}</code>. En este caso, referenciamos el atributo y luego manipulamos este valor usando la función toUpper. </p>
+<p>Otro ejemplo de uso de este tipo de expresiones lo encontramos en la práctica 8, de forma que generamos un fichero json con valores aleatorios</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>{
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>    &quot;title&quot;: &quot;mr&quot;,
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>    &quot;first&quot;: &quot;John ${random():mod(10):plus(1)}&quot;,
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>    &quot;last&quot;: &quot;Doe ${random():mod(10):plus(1)}&quot;,
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>    &quot;email&quot;: &quot;johndoe${random():mod(10):plus(1)}nail.com&quot;,
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>    &quot;created_on&quot;: &quot;${now():toNumber()}&quot;
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>}
+</span></code></pre></div>
+<p>Sirva como base el documento <a href="https://www.nifi.rocks/documents/nifi-expression-language-cheat-sheet.pdf">Apache Nifi Expression Language Cheat Sheet</a></p>
+<p>Mas Información en <a href="https://nifi.apache.org/docs/nifi-docs/html/expression-language-guide.htm">Apache NiFi Expression Language Guide</a></p>
+<h2 id="expresiones-regulares">Expresiones regulares</h2>
+<p>Las expresiones regulares son una forma de especificar patrones de texto que se pueden utilizar para buscar, reemplazar o extraer información de cadenas. Apache NiFi es una plataforma de gestión de flujos de datos que permite procesar y distribuir datos de forma eficiente y fiable. NiFi tiene su propio lenguaje de expresión, que se puede utilizar para referenciar y manipular los atributos y el contenido de los archivos de flujo. El lenguaje de expresión de NiFi soporta el uso de expresiones regulares para realizar operaciones como:</p>
+<ul>
+<li>Validar el formato o el contenido de un atributo o una cadena usando la función matchesRegex.</li>
+<li>Extraer una parte de un atributo o una cadena usando la función replaceRegex.</li>
+<li>Reemplazar una parte de un atributo o una cadena usando la función replaceAll.</li>
+<li>Dividir un atributo o una cadena en una lista usando la función split.</li>
+</ul>
+<p>Algunos ejemplos de uso de expresiones regulares en NiFi son:</p>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo 1</p>
+<p>Para extraer el nombre de dominio de una URL, se puede usar la expresión </p>
+<p><code>${url:replaceRegex('^(?:https?://)?([^/]+)(.*)$', '$1')}</code></p>
+<p>En este ejemplo, si el atributo <code>url</code> tiene el valor https://nifi.apache.org/some%20value%20with%20spaces, la expresión devolverá <em>nifi.apache.org</em>.</p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo 2</p>
+<div class="language-text highlight"><pre><span></span><code>Para validar que un atributo email tiene un formato válido, se puede usar la expresión
+</code></pre></div>
+<p><code>${email:matchesRegex('^[\\w.-]+@[\\w.-]+\\.[\\w]{2,}$')}</code></p>
+<div class="language-text highlight"><pre><span></span><code>Por ejemplo, si el atributo email tiene el valor *user@example.com*, la expresión devolverá true.
+</code></pre></div>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo 3</p>
+<div class="language-text highlight"><pre><span></span><code>Para reemplazar los espacios por guiones en un atributo filename, se puede usar la expresión
+
+`${filename:replaceAll(&#39;\\s&#39;, &#39;-&#39;)}`
+
+Por ejemplo, si el atributo *filename* tiene el valor *my document.txt*, la expresión devolverá *my-document.txt*.
+</code></pre></div>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo 4</p>
+<div class="language-text highlight"><pre><span></span><code>Para dividir un atributo tags en una lista separada por comas, se puede usar la expresión
+
+`${tags:split(&#39;,&#39;)}`
+
+Por ejemplo, si el atributo tags tiene el valor *nifi,data,regex*, la expresión devolverá &#39;[nifi, data, regex]&#39;.
+</code></pre></div>
+</div>
+<p>Ante cualquier duda, las expresiones regulares de Apache NiFi siguen las nomenclatura de Java</p>
+<p>A continuación, te presento una tabla con algunos ejemplos de expresiones regulares de Java y su descripción:</p>
+<table>
+<thead>
+<tr>
+<th>Expresión regular</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>\d</td>
+<td>Coincide con un dígito del 0 al 9</td>
+</tr>
+<tr>
+<td>\w</td>
+<td>Coincide con una letra, un dígito o un guión bajo</td>
+</tr>
+<tr>
+<td>\s</td>
+<td>Coincide con un espacio en blanco</td>
+</tr>
+<tr>
+<td>.</td>
+<td>Coincide con cualquier carácter excepto el salto de línea</td>
+</tr>
+<tr>
+<td>[abc]</td>
+<td>Coincide con cualquiera de los caracteres a, b o c</td>
+</tr>
+<tr>
+<td>[^abc]</td>
+<td>Coincide con cualquier carácter que no sea a, b o c</td>
+</tr>
+<tr>
+<td>[a-z]</td>
+<td>Coincide con cualquier letra minúscula del alfabeto inglés</td>
+</tr>
+<tr>
+<td>[A-Z]</td>
+<td>Coincide con cualquier letra mayúscula del alfabeto inglés</td>
+</tr>
+<tr>
+<td>[0-9]</td>
+<td>Coincide con cualquier dígito del 0 al 9</td>
+</tr>
+<tr>
+<td>[a-zA-Z0-9]</td>
+<td>Coincide con cualquier letra o dígito</td>
+</tr>
+<tr>
+<td>^</td>
+<td>Coincide con el inicio de la cadena o de la línea</td>
+</tr>
+<tr>
+<td>$</td>
+<td>Coincide con el final de la cadena o de la línea</td>
+</tr>
+<tr>
+<td>?</td>
+<td>Indica que el carácter o la expresión anterior puede aparecer cero o una vez</td>
+</tr>
+<tr>
+<td>+</td>
+<td>Indica que el carácter o la expresión anterior puede aparecer una o más veces</td>
+</tr>
+<tr>
+<td>*</td>
+<td>Indica que el carácter o la expresión anterior puede aparecer cero o más veces</td>
+</tr>
+<tr>
+<td>{n}</td>
+<td>Indica que el carácter o la expresión anterior debe aparecer exactamente n veces</td>
+</tr>
+<tr>
+<td>{n,m}</td>
+<td>Indica que el carácter o la expresión anterior debe aparecer entre n y m veces, ambos inclusive</td>
+</tr>
+<tr>
+<td>{n,}</td>
+<td>Indica que el carácter o la expresión anterior debe aparecer al menos n veces</td>
+</tr>
+<tr>
+<td>{,m}</td>
+<td>Indica que el carácter o la expresión anterior debe aparecer como máximo m veces</td>
+</tr>
+<tr>
+<td><code></code></td>
+<td></td>
+</tr>
+<tr>
+<td>( )</td>
+<td>Agrupa una subexpresión dentro de la expresión regular</td>
+</tr>
+<tr>
+<td>\</td>
+<td>Escapa el carácter siguiente para que se interprete como un carácter normal</td>
+</tr>
+</tbody>
+</table>
+<p>Otros ejemplos de uso: </p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>Por ejemplo, para validar que una cadena es una dirección de correo electrónico válida, se puede usar la siguiente expresión regular:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>^[\\w.-]+@[\\w.-]+\\.[\\w]{2,}$
+</span></code></pre></div>
+<p>Esta expresión regular significa lo siguiente:</p>
+<ul>
+<li>^: coincide con el inicio de la cadena.</li>
+<li>[\w.-]+: coincide con una o más repeticiones de letras, dígitos, puntos o guiones.</li>
+<li>@: coincide con el símbolo arroba.</li>
+<li>[\w.-]+: coincide con una o más repeticiones de letras, dígitos, puntos o guiones.</li>
+<li>\.: coincide con un punto literal.</li>
+<li>[\w]{2,}: coincide con dos o más repeticiones de letras o dígitos.</li>
+<li>$: coincide con el final de la cadena.</li>
+</ul>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p>El siguiente ejemplo de una expresión regular en Java para identificar un fichero con extensión <code>.json</code> sería la siguiente:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>.*\.json
+</span></code></pre></div>
+<p>Esta expresión regular significa lo siguiente:</p>
+<ul>
+<li>.*: coincide con cualquier número de caracteres, excepto el salto de línea.</li>
+<li>.: coincide con un punto literal. Se usa el carácter  para escapar el punto, ya que este es un metacarácter que tiene otro significado en las expresiones regulares.</li>
+<li>json: coincide con la cadena literal “json”.</li>
+</ul>
+</div>
+<p>De esta forma, la expresión regular coincide con cualquier fichero que termine en “.json”, como por ejemplo “datos.json” o “configuracion.json”.
+En la tabla siguiente se muestran otros ejemplos de expresiones regulares en Java y su descripción:</p>
+<table>
+<thead>
+<tr>
+<th>Expresión regular</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>^\\d{9}-[A-Z]$</td>
+<td>Coincide con un NIF formado por 9 dígitos, un guión y una letra mayúscula.</td>
+</tr>
+<tr>
+<td>^\\d{2}/\\d{2}/\\d{4}$</td>
+<td>Coincide con una fecha en formato dd/mm/aaaa.</td>
+</tr>
+<tr>
+<td>^\+?\\d{1,3}-\\d{3}-\\d{3}-\\d{3}$</td>
+<td>Coincide con un número de teléfono internacional con código de país opcional.</td>
+</tr>
+<tr>
+<td><sup>(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[@#$%</sup>&amp;+=]).{8,}$</td>
+<td>Coincide con una contraseña que tenga al menos 8 caracteres, una letra mayúscula, una letra minúscula, un dígito y un carácter especial.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="uso-de-mongodb-con-apache-nifi">Uso de <code>MongoDB</code> con <code>Apache Nifi</code></h2>
+<p>Otros de los usos típicos que podemos tener es el almacenamiento de un ETL utilizando <code>Apache Nifi</code> y <code>MongoDB</code></p>
+<p>Veamos la configuración de <code>Nifi</code> para poder almacenar datos en <code>MongoDB</code></p>
+<p>En primer lugar para la ingesta de datos en MongoDB, utilizamos el Processor <code>PutMongoRecord</code> o <code>PutMongo</code></p>
+<div align="center">
+    <a class="glightbox" href="./../images/NoSQLUsos/UsosNoSQL01.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="./../images/NoSQLUsos/UsosNoSQL01.png" alt="Nifi - Elastic" width="30%" /></a>
+</div>
+
+<p>Dentro del processor, debemos configurar dos servicios: </p>
+<div align="center">
+    <a class="glightbox" href="./../images/NoSQLUsos/UsosNoSQL02.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="./../images/NoSQLUsos/UsosNoSQL02.png" alt="Nifi - Elastic" width="50%" /></a>
+</div>
+
+<p>Los cuales quedan configurados como sigue:</p>
+<div align="center">
+    <a class="glightbox" href="./../images/NoSQLUsos/UsosNoSQL03.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="./../images/NoSQLUsos/UsosNoSQL03.png" alt="Nifi - Elastic" width="40%" /></a>
+    <a class="glightbox" href="./../images/NoSQLUsos/UsosNoSQL04.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="./../images/NoSQLUsos/UsosNoSQL04.png" alt="Nifi - Elastic" width="40%" /></a>
+</div>
+
+<p>El servicio <code>JsonTreeReader</code> no es necesario modificarlo, y el <code>MongoDBControllerService</code> simplemente asignamos la propiedad de <strong>Mongo URL</strong></p>
+<h2 id="ejercicio-en-nifi">Ejercicio en NiFi</h2>
+<p>De la AEMET podemos recuperar el tiempo de Xàtiva : https://www.el-tiempo.net/api/json/v2/provincias/46/municipios/46145</p>
+<p>Planteamos un ejercicio para obtener los datos desde esta web, meterlos en una base de datos MongoDB y desde ahí pasar datos a una base de datos relacional en PostgreSQL</p>
+<p>Uno de los puntos a realizar sería hacerlo todo con Docker-compose:</p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nx">version</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;3.8&#39;</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="nx">services</span><span class="o">:</span>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">  </span><span class="nx">postgres_dc</span><span class="o">:</span>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="w">    </span><span class="nx">image</span><span class="o">:</span><span class="w"> </span><span class="nx">postgres</span><span class="o">:</span><span class="nx">latest</span>
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="w">    </span><span class="nx">container_name</span><span class="o">:</span><span class="w"> </span><span class="nx">postgres_dc</span>
+</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="w">    </span><span class="nx">environment</span><span class="o">:</span>
+</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="w">      </span><span class="nx">POSTGRES_USER</span><span class="o">:</span><span class="w"> </span><span class="nx">sergio</span>
+</span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="w">      </span><span class="nx">POSTGRES_PASSWORD</span><span class="o">:</span><span class="w"> </span><span class="nx">sergio</span>
+</span><span id="__span-14-10"><a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="w">      </span><span class="nx">POSTGRES_DB</span><span class="o">:</span><span class="w"> </span><span class="nx">test</span>
+</span><span id="__span-14-11"><a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="w">    </span><span class="nx">ports</span><span class="o">:</span>
+</span><span id="__span-14-12"><a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a><span class="w">      </span><span class="o">-</span><span class="w"> </span><span class="s2">&quot;5432:5432&quot;</span>
+</span><span id="__span-14-13"><a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a><span class="w">    </span><span class="nx">volumes</span><span class="o">:</span>
+</span><span id="__span-14-14"><a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a><span class="w">      </span><span class="o">-</span><span class="w"> </span><span class="nx">postgres_data</span><span class="o">:</span><span class="err">/var/lib/postgresql/data</span>
+</span><span id="__span-14-15"><a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a><span class="w">      </span><span class="o">-</span><span class="w"> </span><span class="p">.</span><span class="o">/</span><span class="nx">data</span><span class="o">/</span><span class="nx">postgres</span><span class="o">:</span><span class="err">/data</span>
+</span><span id="__span-14-16"><a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a>
+</span><span id="__span-14-17"><a id="__codelineno-14-17" name="__codelineno-14-17" href="#__codelineno-14-17"></a><span class="w">  </span><span class="nx">mongodb_dc</span><span class="o">:</span>
+</span><span id="__span-14-18"><a id="__codelineno-14-18" name="__codelineno-14-18" href="#__codelineno-14-18"></a><span class="w">    </span><span class="nx">image</span><span class="o">:</span><span class="w"> </span><span class="nx">mongo</span><span class="o">:</span><span class="nx">latest</span>
+</span><span id="__span-14-19"><a id="__codelineno-14-19" name="__codelineno-14-19" href="#__codelineno-14-19"></a><span class="w">    </span><span class="nx">container_name</span><span class="o">:</span><span class="w"> </span><span class="nx">mongodb_dc</span>
+</span><span id="__span-14-20"><a id="__codelineno-14-20" name="__codelineno-14-20" href="#__codelineno-14-20"></a><span class="w">    </span><span class="nx">ports</span><span class="o">:</span>
+</span><span id="__span-14-21"><a id="__codelineno-14-21" name="__codelineno-14-21" href="#__codelineno-14-21"></a><span class="w">      </span><span class="o">-</span><span class="w"> </span><span class="s2">&quot;27017:27017&quot;</span>
+</span><span id="__span-14-22"><a id="__codelineno-14-22" name="__codelineno-14-22" href="#__codelineno-14-22"></a><span class="w">    </span><span class="nx">volumes</span><span class="o">:</span>
+</span><span id="__span-14-23"><a id="__codelineno-14-23" name="__codelineno-14-23" href="#__codelineno-14-23"></a><span class="w">      </span><span class="o">-</span><span class="w"> </span><span class="nx">mongo_data</span><span class="o">:</span><span class="err">/data/db</span>
+</span><span id="__span-14-24"><a id="__codelineno-14-24" name="__codelineno-14-24" href="#__codelineno-14-24"></a><span class="w">      </span><span class="o">-</span><span class="w"> </span><span class="p">.</span><span class="o">/</span><span class="nx">data</span><span class="o">/</span><span class="nx">mongodb</span><span class="o">:</span><span class="err">/data</span>
+</span><span id="__span-14-25"><a id="__codelineno-14-25" name="__codelineno-14-25" href="#__codelineno-14-25"></a>
+</span><span id="__span-14-26"><a id="__codelineno-14-26" name="__codelineno-14-26" href="#__codelineno-14-26"></a><span class="w">  </span><span class="nx">nifi_dc</span><span class="o">:</span>
+</span><span id="__span-14-27"><a id="__codelineno-14-27" name="__codelineno-14-27" href="#__codelineno-14-27"></a><span class="w">    </span><span class="nx">image</span><span class="o">:</span><span class="w"> </span><span class="nx">apache</span><span class="o">/</span><span class="nx">nifi</span><span class="o">:</span><span class="nx">latest</span>
+</span><span id="__span-14-28"><a id="__codelineno-14-28" name="__codelineno-14-28" href="#__codelineno-14-28"></a><span class="w">    </span><span class="nx">container_name</span><span class="o">:</span><span class="w"> </span><span class="nx">nifi_dc</span>
+</span><span id="__span-14-29"><a id="__codelineno-14-29" name="__codelineno-14-29" href="#__codelineno-14-29"></a><span class="w">    </span><span class="nx">ports</span><span class="o">:</span>
+</span><span id="__span-14-30"><a id="__codelineno-14-30" name="__codelineno-14-30" href="#__codelineno-14-30"></a><span class="w">      </span><span class="o">-</span><span class="w"> </span><span class="s2">&quot;8443:8443&quot;</span>
+</span><span id="__span-14-31"><a id="__codelineno-14-31" name="__codelineno-14-31" href="#__codelineno-14-31"></a><span class="w">    </span><span class="nx">environment</span><span class="o">:</span>
+</span><span id="__span-14-32"><a id="__codelineno-14-32" name="__codelineno-14-32" href="#__codelineno-14-32"></a><span class="w">      </span><span class="nx">SINGLE_USER_CREDENTIALS_USERNAME</span><span class="o">:</span><span class="w"> </span><span class="nx">nifi</span>
+</span><span id="__span-14-33"><a id="__codelineno-14-33" name="__codelineno-14-33" href="#__codelineno-14-33"></a><span class="w">      </span><span class="nx">SINGLE_USER_CREDENTIALS_PASSWORD</span><span class="o">:</span><span class="w"> </span><span class="nx">nifinifinifi</span>
+</span><span id="__span-14-34"><a id="__codelineno-14-34" name="__codelineno-14-34" href="#__codelineno-14-34"></a><span class="w">      </span><span class="nx">NIFI_JVM_HEAP_MAX</span><span class="o">:</span><span class="w"> </span><span class="mf">2</span><span class="nx">g</span>
+</span><span id="__span-14-35"><a id="__codelineno-14-35" name="__codelineno-14-35" href="#__codelineno-14-35"></a><span class="w">    </span><span class="nx">volumes</span><span class="o">:</span>
+</span><span id="__span-14-36"><a id="__codelineno-14-36" name="__codelineno-14-36" href="#__codelineno-14-36"></a><span class="w">      </span><span class="o">-</span><span class="w"> </span><span class="nx">nifi_data</span><span class="o">:</span><span class="err">/opt/nifi/nifi-current</span>
+</span><span id="__span-14-37"><a id="__codelineno-14-37" name="__codelineno-14-37" href="#__codelineno-14-37"></a><span class="w">      </span><span class="o">-</span><span class="w"> </span><span class="p">.</span><span class="o">/</span><span class="nx">data</span><span class="o">/</span><span class="nx">nifi</span><span class="o">:</span><span class="err">/data</span>
+</span><span id="__span-14-38"><a id="__codelineno-14-38" name="__codelineno-14-38" href="#__codelineno-14-38"></a>
+</span><span id="__span-14-39"><a id="__codelineno-14-39" name="__codelineno-14-39" href="#__codelineno-14-39"></a><span class="nx">volumes</span><span class="o">:</span>
+</span><span id="__span-14-40"><a id="__codelineno-14-40" name="__codelineno-14-40" href="#__codelineno-14-40"></a><span class="w">  </span><span class="nx">postgres_data</span><span class="o">:</span>
+</span><span id="__span-14-41"><a id="__codelineno-14-41" name="__codelineno-14-41" href="#__codelineno-14-41"></a><span class="w">  </span><span class="nx">mongo_data</span><span class="o">:</span>
+</span><span id="__span-14-42"><a id="__codelineno-14-42" name="__codelineno-14-42" href="#__codelineno-14-42"></a><span class="w">  </span><span class="nx">nifi_data</span><span class="o">:</span>
+</span></code></pre></div>
+<p>Los puntos a tener en cuenta son:</p>
+<ul>
+<li>Para conectar nifi con MongoDB, debemos saber la IP del contenedor de MongoDB. Para ello usamos </li>
+</ul>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>docker-compose<span class="w"> </span>ps<span class="w"> </span>-q<span class="w"> </span><span class="p">|</span><span class="w"> </span>xargs<span class="w"> </span>-I<span class="w"> </span><span class="o">{}</span><span class="w"> </span>docker<span class="w"> </span>inspect<span class="w"> </span>-f<span class="w"> </span><span class="s1">&#39;{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}&#39;</span><span class="w"> </span><span class="o">{}</span>
+</span></code></pre></div>
+<ul>
+<li>En todas los contenedores tenemos la carpeta <code>/data</code> para dejar datos, por ejemmplo se puede usar en Nifi si hacemos un <code>PutFile</code></li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.indexes", "navigation.instant", "navigation.instant.progress", "toc.follow", "navigation.top", "content.code.copy"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+    
+  <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(() => { lightbox.reload() });
+</script></body>
+</html>

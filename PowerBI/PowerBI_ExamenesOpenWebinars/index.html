@@ -1,0 +1,1116 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://sergio-apuntes.github.io/sbd/PowerBI/PowerBI_ExamenesOpenWebinars/">
+      
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>Exámenes de OpenWebinars: - Apuntes Sistemas en Big Data</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+   <link href="../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+    html.glightbox-open { overflow: initial; height: 100%; }
+    .gslide-title { margin-top: 0px; user-select: text; }
+    .gslide-desc { color: #666; user-select: text; }
+    .gslide-image img { background: white; }
+    .gscrollbar-fixer { padding-right: 15px; }
+    .gdesc-inner { font-size: 0.75rem; }
+    body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+    body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+    body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="../../assets/javascripts/glightbox.min.js"></script></head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#examenes-de-openwebinars" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../.." title="Apuntes Sistemas en Big Data" class="md-header__button md-logo" aria-label="Apuntes Sistemas en Big Data" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Apuntes Sistemas en Big Data
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Exámenes de OpenWebinars:
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Apuntes Sistemas en Big Data" class="md-nav__button md-logo" aria-label="Apuntes Sistemas en Big Data" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Apuntes Sistemas en Big Data
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introducción
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    NoSQL
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            NoSQL
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../noSQL/1_NoSQL%20Intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1. Introducción
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../noSQL/2_NoSQL%20NoSoloSQL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2. No Solo SQL
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../noSQL/3_NoSQL%20ModeloDatos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3. Modelos de datos
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../noSQL/4_NoSQL%20Consistencia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4. Consistencia
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    MongoDB
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            MongoDB
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MongoDB/1_mongodb%20Introducci%C3%B3n./" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1. Introducción a MongoDB
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MongoDB/2_mongodb%20MongoDB/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2. MongoDB
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MongoDB/3_mongodb%20ModeladoDatos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3. Diseño de modelado de bases de datos. schemaless
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MongoDB/4_mongodb%20Instalaci%C3%B3n/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4. Instalación
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MongoDB/5_mongodb%20PrimerosPasos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    5. Primeros pasos
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MongoDB/6_mongodb%20OperacionesCRUD/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    6. Operaciones con datos CRUD
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MongoDB/7_mongodb%20OperacionesDatos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    7. Consulta de datos
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    ETL con Apache NiFi
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            ETL con Apache NiFi
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ApacheNiFi/1_ETL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1. ETL con Apache NiFi
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ApacheNiFi/2_PostgreSQL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2. PostgreSQL
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ApacheNiFi/3_ApacheNiFi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3. Apache NiFi
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Elasctic Stack
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Elasctic Stack
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ElasticStack/1_elastic_stack/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1. Introducción
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ElasticStack/2_elastic_operaciones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2. Elasticsearch. Operaciones
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ElasticStack/3_elastic_kibana/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3. Kibana
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ElasticStack/4_elastic_python/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4. Elasticsearch. Acceso desde cliente Python
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ElasticStack/5_elastic_nifi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    5. Elastic stack y Apache Nifi
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#02-curso-de-power-bi-preparacion-de-los-datos" class="md-nav__link">
+    <span class="md-ellipsis">
+      02. Curso de Power BI: Preparación de los datos
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="examenes-de-openwebinars">Exámenes de OpenWebinars:</h1>
+<h2 id="02-curso-de-power-bi-preparacion-de-los-datos">02. Curso de Power BI: Preparación de los datos</h2>
+<p><strong>¿Cuál de las siguientes afirmaciones es cierta?</strong>
+- Importando un Dataset como Datasource, te proporciona los mismos reports que otros existentes.
+- Los datasets, son un conjunto de datos generados únicamente por PowerBI cuando se aplican optimizaciones de carga.
+- El Dataset de nuestro PowerBI nunca podrá ser reutilizado para la creación de nuevos reports..
+- Importando un Dataset obtienes los cálculos en DAX del dataset original. <code>&lt;----</code></p>
+<p><strong>Power Query Editor nos permite...</strong>
+- Navegar, definir y realizar operaciones de transformación de datos en un origen de datos. <code>&lt;----</code>
+- Conectarnos a múltiples datasource como fuente de origen.
+- Todas las respuestas son correctas.
+- Generar Datasets en PBI Service.</p>
+<p><strong>A la hora de importar datos con Excel, ¿es posible crear relaciones entre tablas de manera automática?</strong>
+- Sí, PowerBi, te genera por defecto las relaciones que encuentra en función del nombre de las columnas.  <code>&lt;----</code>
+- Sí, pero solamente crea relaciones tipo estrella.
+- No, ya que hay que definir previamente las primary keys de las tablas.
+- No, cuando utilizamos un datasource de Excel, esta función no está habilitada.</p>
+<p><strong>¿Qué es Direct Query?</strong>
+- Es una técnica de Modelado de Datos, más eficiente que Import Query.
+- Método de conectividad de datos, que mantiene los datos en la base de datos origen, y lanza queries para obtener los datos necesarios. <code>&lt;----</code>
+- Es un tipo de DataSource de los que dispone PowerBI.
+- Acción disponible desde PowerBI Service, para conectarse a fuentes de datos de tipo bases de datos.</p>
+<hr />
+<p><strong>Tratamos de cargar datos a través de una página web, pero el servicio web está caído, ¿cómo podemos añadir eficiencia en los tiempos de consulta?</strong>
+- Ninguna de las otras respuestas.
+- Creando parámetros "What-If" en nuestra URL.
+- Creando schedule refresh desde el Power Service.
+- Añadiendo un "Comand Time out" en minutos, para establecer un tiempo de consulta máximo.  <code>&lt;----</code></p>
+<hr />
+<p><strong>¿Puedo añadir una columna condicional dentro de PowerQuery Editor?</strong>
+- Sí, aunque solamente es posible si estamos importando un fichero Excel.
+- Sí, aunque solamente es posible si estamos utilizando el método de Direct Query.
+- No.
+- Sí, dentro la pestaña "Add Column", encontramos la opción añadir columna condicional. <code>&lt;----</code></p>
+<hr />
+<p><strong>¿Cuándo nos aparece el editor de consultas en PowerBI?</strong>
+- Cuando queremos editar consultas.
+- Cuando cargamos nuevos datos.
+- Todas las respuestas son correctas. <code>&lt;----</code>
+- Cuando queremos crear nuevas consultas.</p>
+<hr />
+<p>¿Utilizando Direct Query necesito activar el schedule refresh desde PowerBI Service para actualizar los datos?
+- Sí, pero es necesario hacerlo desde el Desktop.
+- Sí, se podrá actualizar hasta 8 veces al día.
+- No. <code>&lt;----</code>
+- Sí, solamente será necesario una vez al día.</p>
+<hr />
+<p>¿Qué es el Dataset de nuestro PowerBI?
+- El Dataset es un visual en PowerBI, que te permite visualizar datos en cualquier informe.
+- El Dataset es un método de conectividad de datos más eficiente que el Import Query.
+- Todas las respuestas son ciertas.
+- Dataset es un conjunto de datos que se utilizan para crear visualizaciones e informes en PowerBI. <code>&lt;----</code></p>
+<hr />
+<p>¿Cuál de las siguientes acciones no es posible realizar en PowerQuery Editor?
+- Crear una nueva tabla e introducir manualmente los datos que desees.
+- Ejecutar un script en Python. <code>&lt;---- **Incorrecta**</code>
+- Modificar el tipo de datos de cualquier columna.
+- Modificar el método de conectividad de Import Query a Direct Query.</p>
+<hr />
+<p>Si queremos conectarnos a una base de datos SQL, ¿cómo podemos hacerlo?:
+- Mediante los modos de conectividad Direct Query e Import Query.
+- Mediante modo de conectividad de Direct Query.
+- Podemos hacer un mix mediante Direct Query e Import Query para optimizar recursos. <code>&lt;---- **Incorrecta**</code>
+- Mediante modo de conectividad de Import Query.</p>
+<hr />
+<p>Cuando cargamos una tabla (mediante Import Query), ¿tenemos la opción de transformar los datos antes de cargarlos?
+- Sí, aunque esta opción solo está disponible para las licencias de pago.
+- No, primera hay que cargar la tabla en memoria, y luego podremos transformar los datos que queramos. 
+- Todas las respuestas son incorrectas.
+- No, es mejor modificar/transformar los datos previamente en origen, y luego importarlos directamente a PowerBI. <code>&lt;----**Incorrecta**</code></p>
+<hr />
+<p>¿Qué es PowerBi DataFlow?
+- Es un conjunto de entities que se crean y administran dentro de nuestros Workspace en PowerBI Service.
+- Todas las respuestas anteriores son ciertas. <code>&lt;----**Incorrecta**</code>
+- PowerBI Dataflow nos permite reutilizar grandes flujos de datos en formato CDM.
+- PowerBi DataFlow es un datasource disponible en PowerBI Desktop.</p>
+<hr />
+<p>¿Cuál/es de las siguientes acciones está disponible en PowerQuery Editor?
+- Podemos escoger las columnas que nos interesan mantener.
+- Utilizar la primera fila del fichero/tabla como cabecera de nuestra tabla.
+- Todas las respuestas son ciertas. <code>&lt;----</code>
+- Podemos eliminar las filas de la tabla que no nos interesen.</p>
+<hr />
+<p>Para detectar el datatype de las columnas, de un fichero TXT, disponemos de las opciones...
+- Podemos elegir no detectar el tipo de datos de las columnas.
+- Utilizando todas las filas del fichero del documento. 
+- Todas las respuestas son correctas. <code>&lt;----</code>
+- Basándose en las primeras 200 filas del documento.</p>
+<hr />
+<p>¿Cómo funciona la extracción de datos mediante Direct Query?
+- Deja los datos en la base de datos de origen, y ejecuta querys para cargar la información necesaria. <code>&lt;----</code>
+- Genera cubos virtuales (MOLAP), que son almacenados en Power BI Azure.
+- PowerBI genera ficheros .JSON, donde los datos son codificados por temas de seguridad.
+- Extrae la información de tu database y la introduce dentro del Power BI Service.</p>
+<hr />
+<p>¿Para qué sirve Applied Steps dentro de PowerQuery Editor?
+- Todas las otras respuestas son ciertas. <code>&lt;----</code>
+- Nos permite modificar el Origen (Source) de nuestra tabla.
+- Nos permite visualizar en que order se han aplicado transformaciones en nuestra tabla.
+- Nos permite eliminar uno o varios pasos aplicados en nuestra tabla.</p>
+<hr />
+<p>Cuando nos conectamos a una base de datos SQL, las "Advanced Options" nos permiten...
+- Utilizando el modo de conectividad Import query, además nos permite incluir relaciones entre columnas en nuestro relationship model.
+- Crear una quick measure que se adapte a nuestra base de datos.
+- Añadir un timeout, para establecer un límite de tiempo en respuesta para nuestras consultas. <code>&lt;----</code>
+- Los dataSource de bases de datos de SQL, no permiten utilizar las advanced options.</p>
+<hr />
+<p>Cuando estamos importando datos en PowerBI, y los queremos transformar, ¿qué ventana emergente nos aparece?
+- Power Query Editor. <code>&lt;----</code>
+- Transform Editor Query.
+- Import Query Editor
+- Direct Query Editor.</p>
+<hr />
+<p>A la hora de importar datos con un TXT, ¿qué parámetros son necesarios para detectar las columnas del archivo?:
+- Relationships entre columnas.
+- Timeout de consulta.
+- Ninguna de las otras respuestas.
+- Delimitador del archivo. <code>&lt;----</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.indexes", "navigation.instant", "navigation.instant.progress", "toc.follow", "navigation.top", "content.code.copy"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+    
+  <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(() => { lightbox.reload() });
+</script></body>
+</html>

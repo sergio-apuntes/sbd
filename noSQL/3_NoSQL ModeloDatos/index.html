@@ -1,0 +1,1723 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Revisión de los diferentes modelos de datos noSQL.Documental, Clase-Valor, Basado en columnas y Grafos">
+      
+      
+      
+        <link rel="canonical" href="https://sergio-apuntes.github.io/sbd/noSQL/3_NoSQL%20ModeloDatos/">
+      
+      
+        <link rel="prev" href="../2_NoSQL%20NoSoloSQL/">
+      
+      
+        <link rel="next" href="../4_NoSQL%20Consistencia/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>3. Modelos de datos - Apuntes Sistemas en Big Data</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+   <link href="../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+    html.glightbox-open { overflow: initial; height: 100%; }
+    .gslide-title { margin-top: 0px; user-select: text; }
+    .gslide-desc { color: #666; user-select: text; }
+    .gslide-image img { background: white; }
+    .gscrollbar-fixer { padding-right: 15px; }
+    .gdesc-inner { font-size: 0.75rem; }
+    body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+    body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+    body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="../../assets/javascripts/glightbox.min.js"></script></head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#modelos-de-datos" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../.." title="Apuntes Sistemas en Big Data" class="md-header__button md-logo" aria-label="Apuntes Sistemas en Big Data" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Apuntes Sistemas en Big Data
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              3. Modelos de datos
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Apuntes Sistemas en Big Data" class="md-nav__button md-logo" aria-label="Apuntes Sistemas en Big Data" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Apuntes Sistemas en Big Data
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introducción
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    NoSQL
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            NoSQL
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1_NoSQL%20Intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1. Introducción
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2_NoSQL%20NoSoloSQL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2. No Solo SQL
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    3. Modelos de datos
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    3. Modelos de datos
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#modelos-de-datos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Modelos de Datos
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documental" class="md-nav__link">
+    <span class="md-ellipsis">
+      Documental
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Documental">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#caracteristicas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Características
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#casos-de-uso" class="md-nav__link">
+    <span class="md-ellipsis">
+      Casos de uso
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clave-valor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Clave-Valor
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Clave-Valor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#diferencias-entre-modelo-documental-y-clave-valor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Diferencias entre modelo Documental y Clave-Valor
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#casos-de-uso_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Casos de uso
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#basado-en-columnas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Basado en columnas
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Basado en columnas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#representacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Representación
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#familias-de-columnas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Familias de columnas
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#operaciones" class="md-nav__link">
+    <span class="md-ellipsis">
+      Operaciones
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#casos-de-uso_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Casos de uso
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#grafos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Grafos
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Grafos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#traversing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Traversing
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#casos-de-uso_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      Casos de uso
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#diferencias-entre-los-modelos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Diferencias entre los modelos
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4_NoSQL%20Consistencia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4. Consistencia
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    MongoDB
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            MongoDB
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MongoDB/1_mongodb%20Introducci%C3%B3n./" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1. Introducción a MongoDB
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MongoDB/2_mongodb%20MongoDB/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2. MongoDB
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MongoDB/3_mongodb%20ModeladoDatos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3. Diseño de modelado de bases de datos. schemaless
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MongoDB/4_mongodb%20Instalaci%C3%B3n/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4. Instalación
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MongoDB/5_mongodb%20PrimerosPasos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    5. Primeros pasos
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MongoDB/6_mongodb%20OperacionesCRUD/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    6. Operaciones con datos CRUD
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MongoDB/7_mongodb%20OperacionesDatos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    7. Consulta de datos
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    ETL con Apache NiFi
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            ETL con Apache NiFi
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ApacheNiFi/1_ETL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1. ETL con Apache NiFi
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ApacheNiFi/2_PostgreSQL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2. PostgreSQL
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ApacheNiFi/3_ApacheNiFi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3. Apache NiFi
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Elasctic Stack
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Elasctic Stack
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ElasticStack/1_elastic_stack/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1. Introducción
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ElasticStack/2_elastic_operaciones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2. Elasticsearch. Operaciones
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ElasticStack/3_elastic_kibana/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3. Kibana
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ElasticStack/4_elastic_python/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4. Elasticsearch. Acceso desde cliente Python
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ElasticStack/5_elastic_nifi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    5. Elastic stack y Apache Nifi
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#modelos-de-datos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Modelos de Datos
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documental" class="md-nav__link">
+    <span class="md-ellipsis">
+      Documental
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Documental">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#caracteristicas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Características
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#casos-de-uso" class="md-nav__link">
+    <span class="md-ellipsis">
+      Casos de uso
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clave-valor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Clave-Valor
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Clave-Valor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#diferencias-entre-modelo-documental-y-clave-valor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Diferencias entre modelo Documental y Clave-Valor
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#casos-de-uso_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Casos de uso
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#basado-en-columnas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Basado en columnas
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Basado en columnas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#representacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Representación
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#familias-de-columnas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Familias de columnas
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#operaciones" class="md-nav__link">
+    <span class="md-ellipsis">
+      Operaciones
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#casos-de-uso_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Casos de uso
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#grafos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Grafos
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Grafos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#traversing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Traversing
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#casos-de-uso_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      Casos de uso
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#diferencias-entre-los-modelos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Diferencias entre los modelos
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+  <h1>3. Modelos de datos</h1>
+
+<h2 id="modelos-de-datos">Modelos de Datos</h2>
+<p>La principal clasificación de los sistemas de bases de datos <em>NoSQL</em> se realiza respecto a los diferentes modelos de datos:</p>
+<h2 id="documental">Documental</h2>
+<p>Mientras las bases de datos relacionales almacenan los datos en filas y columnas, las bases de datos documentales emplean documentos. Estos documentos utilizan una estructura JSON, ofreciendo un modo natural e intuitivo para modelar datos de manera similar a la orientación a objetos, donde cada documento es un objeto.</p>
+<div align="center">
+    <a class="glightbox" href="../../images/NoSQL/NoSQL08.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/NoSQL/NoSQL08.png" alt="NoSQL" width="50%" /></a>
+</div>
+
+<p>Los documentos se agrupan en colecciones o bases de datos, dependiendo del sistema, lo que permite agrupar documentos.</p>
+<p>Los documentos contienen uno o más campos, donde cada campo contiene un valor con un tipo, ya sea cadena, entero, flotante, fecha, binario o array u otro documento. En vez de extender los datos entre múltiples columnas y tablas, cada registro y sus datos asociados se almacenan de manera unida en un único documento. Esto simplifica el acceso a los datos y reduce (y en ocasiones elimina) la necesidad de <em>joins</em> y transacciones complejas.</p>
+<p>Dicho de otra manera, en las bases de datos documentales, los datos que van juntos y se emplean juntos, se almacenan juntos.</p>
+<h3 id="caracteristicas">Características</h3>
+<p>En una base de datos documental, la noción de <strong>esquema es dinámico</strong>: cada documento puede contener diferentes campos. Esta flexibilidad puede ser útil para modelar datos desestructurados y polimórficos, lo que facilita la evolución del desarrollo al permitir añadir nuevos campos de manera dinámica.</p>
+<p>Perfectamente podemos tener dos documentos que pertenecen a la misma colección, pero con atributos diferentes. Por ejemplo, un primer documento puede ser el siguiente:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span><span class="w">   </span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;BW001&quot;</span><span class="p">,</span><span class="w">   </span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="nt">&quot;nombre&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Bruce&quot;</span><span class="p">,</span><span class="w">   </span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nt">&quot;apellido&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Wayne&quot;</span><span class="p">,</span><span class="w">   </span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="nt">&quot;edad&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">35</span><span class="p">,</span><span class="w">   </span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="nt">&quot;salario&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">10000000</span><span class="w"> </span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Mientras que un segundo documento dentro de la misma colección podría ser:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;JK1&quot;</span><span class="p">,</span><span class="w">   </span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nt">&quot;nombre&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Joker&quot;</span><span class="p">,</span><span class="w">   </span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nt">&quot;edad&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">34</span><span class="p">,</span><span class="w">   </span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="nt">&quot;salario&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5000000</span><span class="p">,</span><span class="w">   </span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="nt">&quot;direccion&quot;</span><span class="p">:</span><span class="w">                        </span><span class="err">(</span><span class="mi">1</span><span class="err">)</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="p">{</span><span class="w">               </span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">        </span><span class="nt">&quot;calle&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Asilo Arkham&quot;</span><span class="p">,</span><span class="w">    </span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">        </span><span class="nt">&quot;ciudad&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Gotham&quot;</span><span class="w">   </span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="p">},</span><span class="w">   </span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">    </span><span class="nt">&quot;proyectos&quot;</span><span class="p">:</span><span class="w">                        </span><span class="err">(</span><span class="mi">2</span><span class="err">)</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">    </span><span class="p">[</span><span class="w">                  </span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">        </span><span class="s2">&quot;desintoxicacion-virus&quot;</span><span class="p">,</span><span class="w">     </span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">        </span><span class="s2">&quot;top-secret-007&quot;</span><span class="w">   </span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">    </span><span class="p">]</span><span class="w"> </span>
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Donde: <br />
+ 1.  Un objeto o subdocumento permite agrupar información similar a una relación <strong><em>1:1</em></strong> de un modelo relacional. De esta manera, no necesitamos una tabla <code>Direccion</code>.<br />
+ 2.  Un array puede contener valores o documentos, de manera que podríamos tener un array de documentos, permitiendo agrupar información similar a una relación <strong><em>1:N</em></strong> de un modelo relacional. De esta manera, no necesitamos una tabla <code>Proyectos</code>. </p>
+<p>Normalmente, cada documento contiene <strong>un elemento clave</strong>, sobre el cual se puede obtener un documento de manera unívoca. De todos modos, las bases de datos documentales ofrecen un completo mecanismo de consultas, posibilitando obtener información por cualquier campo del documento. Algunos productos ofrecen opciones de indexado para optimizar las consultas, como pueden ser índices compuestos, dispersos, con tiempo de vida (TTL), únicos, de texto o geoespaciales.</p>
+<p>Además, estos sistemas ofrecen productos que permiten analizar los datos, mediante funciones de agregación o implementación de <em>MapReduce</em>.</p>
+<h3 id="casos-de-uso">Casos de uso</h3>
+<p>Las bases de datos documentales sirven para propósito general, válidos para un amplio abanico de aplicaciones gracias a la flexibilidad que ofrece el modelo de datos, lo que permite consultar cualquier campo y modelar de manera natural de manera similar a la programación orientada a objetos.</p>
+<p>Entre los casos de éxito de estos sistemas cabe destacar:</p>
+<ul>
+<li>Sistemas de flujo de eventos: entre diferentes aplicaciones dentro de una empresa</li>
+<li>Gestores de Contenido, plataformas de Blogging: al almacenar los documentos mediante JSON, facilita la estructura de datos para guardar los comentarios, registros de usuarios, etc…​</li>
+<li>Analíticas Web, datos en Tiempo Real: al permitir modificar partes de un documento, e insertar nuevos atributos a un documento cuando se necesita una nueva métrica</li>
+<li>Aplicaciones eCommerce: conforme las aplicaciones crecen, el esquema también lo hace</li>
+</ul>
+<p>Si nos centramos en aquellos casos donde no conviene este tipo de sistemas podemos destacar:</p>
+<ul>
+<li>Sistemas operacionales con transacciones complejas.</li>
+<li>Sistemas con consultas agregadas que modifican su estructura. Si los criterios de las consultas no paran de cambiar, acabaremos normalizando los datos.</li>
+</ul>
+<p>Los productos más destacados son:</p>
+<ul>
+<li><em>MongoDB</em>: <a href="http://www.mongodb.com">http://www.mongodb.com</a>. </li>
+<li><em>CouchDB</em>: <a href="http://couchdb.apache.org">http://couchdb.apache.org</a></li>
+</ul>
+<h2 id="clave-valor">Clave-Valor</h2>
+<p>Un almacén clave-valor es una simple tabla <em>hash</em> donde todos los accesos a la base de datos se realizan a través de la clave primaria.</p>
+<p>Desde una perspectiva de <strong>modelo de datos</strong>, los almacenes de clave-valor son los <strong>más básicos</strong>.</p>
+<p>Su funcionamiento es similar a tener una tabla relacional con dos columnas, por ejemplo <code>id</code> y <code>nombre</code>, siendo <code>id</code> la columna utilizada como clave y <code>nombre</code> como valor. Mientras que en una base de datos en el campo <code>nombre</code> sólo podemos almacenar datos de tipo cadena o numérico, en un almacén clave-valor, el valor puede ser de un dato simple o un objeto. En muchos casos, se almacena un objeto binario BLOB (<em>Binary Large Object</em>). Cuando una aplicación accede mediante la clave y el valor, se almacenan el par de elementos. Si la clave ya existe, el valor se modifica.</p>
+<div align="center">
+    <a class="glightbox" href="../../images/NoSQL/NoSQL09.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/NoSQL/NoSQL09.png" alt="NoSQL" width="50%" /></a>
+</div>
+
+<p>El cliente puede tanto obtener el valor por la clave, asignar un valor a una clave o eliminar una clave del almacén. El valor, sin embargo, es opaco al sistema, el cual no sabe que hay dentro de él, ya que los datos sólo se pueden consultar por la clave, lo cual puede ser un inconveniente. Así pues, la aplicación es responsable de saber qué hay almacenado en cada valor.</p>
+<p>Por ejemplo, <a href="https://riak.com">Riak</a> utiliza el concepto de <em>bucket</em> (cubo) como una manera de agrupar claves, de manera similar a una tabla.</p>
+<p>Por ejemplo, <em>Riak</em> permite interactuar con la base de datos mediante peticiones HTTP:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>curl<span class="w"> </span>-v<span class="w"> </span>-X<span class="w"> </span>PUT<span class="w"> </span>&lt;http://localhost:8091/riak/heroes/ace&gt;<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span>-d<span class="w"> </span><span class="o">{</span><span class="s2">&quot;nombre&quot;</span><span class="w"> </span>:<span class="w"> </span><span class="s2">&quot;Batman&quot;</span>,<span class="w"> </span><span class="s2">&quot;color&quot;</span><span class="w"> </span>:<span class="w"> </span><span class="s2">&quot;Negro&quot;</span><span class="o">}</span>
+</span></code></pre></div>
+<p>Algunos almacenes clave-valor, como puede ser <a href="https://redis.io">Redis</a>, permiten almacenar datos con cualquier estructura, como por ejemplos listas, conjuntos, hashes, permitiendo realizar operaciones como la intersección, unión, diferencia y rango.</p>
+<p>Comandos <strong><em>Redis</em></strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>SET nombre &quot;Bruce Wayne&quot;      // String 
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>HSET heroe nombre &quot;Batman&quot;    // Hash – set 
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>HSET heroe color &quot;Negro&quot; 
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>SADD &quot;heroe:amigos&quot; &quot;Robin&quot; &quot;Alfred&quot;   // Set – create/update
+</span></code></pre></div></p>
+<p>Comandos <strong><em>Python</em></strong></p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">redis</span> 
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">r</span> <span class="o">=</span> <span class="n">redis</span><span class="o">.</span><span class="n">Redis</span><span class="p">()</span> 
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">r</span><span class="o">.</span><span class="n">mset</span><span class="p">({</span><span class="s2">&quot;Croatia&quot;</span><span class="p">:</span> <span class="s2">&quot;Zagreb&quot;</span><span class="p">,</span> <span class="s2">&quot;Bahamas&quot;</span><span class="p">:</span> <span class="s2">&quot;Nassau&quot;</span><span class="p">})</span> 
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Bahamas&quot;</span><span class="p">)</span> <span class="c1"># b&#39;Nassau&#39;</span>
+</span></code></pre></div>
+<p>Estas prestaciones hacen que <em>Redis</em> se extrapole a ámbitos ajenos a un almacén clave-valor. Otra característica que ofrecen algunos almacenes es que permiten crear un segundo nivel de consulta o incluso definir más de una clave para un mismo objeto.</p>
+<p>Como los almacenes clave-valor siempre utilizan accesos por clave primaria, de manera general tienen un gran rendimiento y son fácilmente escalables.</p>
+<p>Si queremos que su rendimiento sea máximo, pueden configurarse para que mantengan la información en memoria y que se serialice de manera periódica, a costa de tener una consistencia eventual de los datos.</p>
+<h3 id="diferencias-entre-modelo-documental-y-clave-valor">Diferencias entre modelo Documental y Clave-Valor</h3>
+<p>Los modelos de datos Documental y Clave-Valor son dos paradigmas comunes en las bases de datos <em>NoSQL</em>. Pueden parecer similares pero existen unas diferencias claras entre ellos: </p>
+<ul>
+<li>
+<p><strong>Estructura de datos:</strong> En el modelo documental, los datos se organizan en documentos con una estructura interna, mientras que en el modelo clave-valor, los datos se almacenan como pares de clave-valor simples sin una estructura interna definida.</p>
+</li>
+<li>
+<p><strong>Flexibilidad:</strong> El modelo documental ofrece más flexibilidad para almacenar datos semiestructurados o no estructurados, mientras que el modelo clave-valor es más adecuado para datos simples y bien definidos.</p>
+</li>
+<li>
+<p><strong>Consultas:</strong> El modelo documental permite consultas más complejas y flexibles utilizando índices secundarios y lenguajes de consulta avanzados, mientras que en el modelo clave-valor, la recuperación de datos se realiza principalmente mediante búsquedas directas por clave.</p>
+</li>
+</ul>
+<h3 id="casos-de-uso_1">Casos de uso</h3>
+<p>Este modelo es muy útil para representar datos desestructurados o polimórficos, ya que no fuerzan ningún esquema más allá de los pares de clave-valor.</p>
+<p>Entre los casos de uso de estos almacenes podemos destacar el almacenaje de:</p>
+<ul>
+<li>Información sobre la sesión de navegación (<em>sessionid</em>)</li>
+<li>Perfiles de usuario, preferencias</li>
+<li>Datos del carrito de la compra</li>
+<li>Cachear datos</li>
+</ul>
+<p>Todas estas operaciones van a asociada a operaciones de recuperación, modificación o inserción de los datos de una sola vez, de ahí su elección.</p>
+<p>En cambio, no conviene utilizar estos almacenes cuando queremos realizar:</p>
+<ul>
+<li>Relaciones entre datos</li>
+<li>Transacciones entre varias operaciones</li>
+<li>Consultas por los datos del valor</li>
+<li>Operaciones con conjuntos de claves</li>
+</ul>
+<p>Los almacenes más empleados son:</p>
+<ul>
+<li><em>Riak</em>: <a href="https://riak.com">https://riak.com</a></li>
+<li><em>Redis</em>: <a href="http://redis.io">http://redis.io</a></li>
+<li><em>AWS DynamoDB</em>: <a href="http://aws.amazon.com/dynamodb">http://aws.amazon.com/dynamodb</a></li>
+<li><em>Voldemort</em>: <a href="http://www.project-voldemort.com/voldemort">http://www.project-voldemort.com/voldemort</a> implementación open-source de <em>Amazon DynamoDB</em></li>
+</ul>
+<h2 id="basado-en-columnas">Basado en columnas</h2>
+<p>Las bases de datos relacionales utilizan la fila como unidad de almacenamiento, lo que permite un buen rendimiento de escritura. Sin embargo, cuando las <strong>escrituras son ocasionales</strong> y es más común tener que leer unas pocas columnas de muchas filas a la vez, es mejor utilizar como unidad de almacenamiento un <strong>grupos de columnas</strong>. Es decir, lo que hacemos es girar el modelo 90 grados, de manera que <strong>los registros se almacenan en columnas en vez de hacerlo por fila</strong>s.</p>
+<p>Supongamos que tenemos los siguientes datos:</p>
+<div align="center">
+    <a class="glightbox" href="../../images/NoSQL/NoSQL10.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/NoSQL/NoSQL10.png" alt="NoSQL" width="40%" /></a>
+</div>
+
+<p>Dependiendo del almacenamiento en filas o columnas tendríamos la siguiente representación:</p>
+<div align="center">
+    <a class="glightbox" href="../../images/NoSQL/NoSQL11.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/NoSQL/NoSQL11.png" alt="NoSQL" width="60%" /></a>
+</div>
+
+<p>En un formato columnar los datos del mismo tipo se agrupan, lo que permite codificarlos/comprimirlos, lo que mejora el rendimiento de acceso y reduce el tamaño:</p>
+<div align="center">
+    <a class="glightbox" href="../../images/NoSQL/NoSQL12.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/NoSQL/NoSQL12.png" alt="NoSQL" width="70%" /></a>
+</div>
+
+<p><strong>Sin embargo, a medida que se incrementa la utilización de análisis de datos en memoria</strong>, con soluciones como <em>Spark</em>, <strong>los beneficios</strong> relativos de la base de datos basadas en columnas comparados con los de las bases de datos orientadas a filas pueden llegar a ser <strong>menos importantes</strong>.</p>
+<h3 id="representacion">Representación</h3>
+<p>Un modelo basado en columnas se representa como una estructura agregada de dos niveles. El primer nivel formado por un almacén clave-valor, siendo la clave el identificador de la fila, y el valor un nuevo mapa con los datos agregados de la fila (familias de columnas). Los valores de este segundo nivel son las columnas. De este modo, podemos acceder a los datos de un fila, o a una determinada columna:</p>
+<div align="center">
+    <a class="glightbox" href="../../images/NoSQL/NoSQL13.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/NoSQL/NoSQL13.png" alt="NoSQL" width="50%" /></a>
+</div>
+<p>s</p>
+<div class="admonition note">
+<p class="admonition-title">BigTable</p>
+<p>Los modelos de datos basados en columnas se basan en la implementación de <em>Google</em> de la tecnología <em>BigTable</em> (<a href="https://research.google.com/archive/bigtable.html">http://research.google.com/archive/bigtable.html</a>), la cual consiste en columnas separadas y sin esquema, a modo de mapa de dos niveles.</p>
+</div>
+<p>Así pues, los almacenes basados en columnas utilizan un mapa ordenado multi-dimensional y distribuido para almacenar los datos. Están pensados para que cada fila tenga una gran número de columnas (del orden del millón), almacenando las diferentes versiones que tenga una fila (pudiendo almacenar del orden de miles de millones de filas).</p>
+<h3 id="familias-de-columnas">Familias de columnas</h3>
+<p>Una <strong>columna</strong> consiste en un pareja <code>name</code>-<code>value</code>, donde el nombre hace de clave. Además, contiene un atributo <code>timestamp</code> para poder expirar datos y resolver conflictos de escritura.</p>
+<p>Un ejemplo de columna podría ser:</p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;nombre&quot;</span><span class="p">,</span><span class="w">   </span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="nx">value</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Bruce&quot;</span><span class="p">,</span><span class="w">   </span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="nx">timestamp</span><span class="o">:</span><span class="w"> </span><span class="mf">12345667890</span><span class="w"> </span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Una fila es una colección de columnas agrupadas a una clave.</p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">{</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">    </span><span class="p">{</span><span class="w">         </span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">        </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;nombre&quot;</span><span class="p">,</span><span class="w">         </span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">        </span><span class="nx">value</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Bruce&quot;</span><span class="p">,</span><span class="w">         </span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">        </span><span class="nx">timestamp</span><span class="o">:</span><span class="w"> </span><span class="mf">12345667890</span><span class="w">     </span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">    </span><span class="p">},</span><span class="w">     </span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">    </span><span class="p">{</span><span class="w">         </span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">        </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;nombre&quot;</span><span class="p">,</span><span class="w">         </span>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">        </span><span class="nx">value</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Clark&quot;</span><span class="p">,</span><span class="w">         </span>
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">        </span><span class="nx">timestamp</span><span class="o">:</span><span class="w"> </span><span class="mf">12345667891</span><span class="w">     </span>
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">    </span><span class="p">},</span><span class="w">     </span>
+</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">    </span><span class="p">{</span><span class="w">         </span>
+</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="w">        </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;nombre&quot;</span><span class="p">,</span><span class="w">         </span>
+</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="w">        </span><span class="nx">value</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Barbara&quot;</span><span class="p">,</span><span class="w">         </span>
+</span><span id="__span-6-15"><a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="w">        </span><span class="nx">timestamp</span><span class="o">:</span><span class="w"> </span><span class="mf">12345667892</span><span class="w">     </span>
+</span><span id="__span-6-16"><a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="w">    </span><span class="p">}</span><span class="w"> </span>
+</span><span id="__span-6-17"><a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Si agrupamos filas similares tendremos una <strong>familia de columnas</strong> (similar al concepto de tabla):</p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1">// familia de columnas </span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="p">{</span><span class="w">   </span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="c1">// fila   </span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="s2">&quot;tim-gordon&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">    </span><span class="p">{</span><span class="w">     </span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">        </span><span class="nx">nombre</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Tim&quot;</span><span class="p">,</span><span class="w">     </span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">        </span><span class="nx">apellido</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Gordon&quot;</span><span class="p">,</span><span class="w">     </span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">        </span><span class="nx">ultimaVisita</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;2015/12/12&quot;</span><span class="w">   </span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">    </span><span class="p">}</span><span class="w">   </span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">    </span><span class="c1">// fila   </span>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">    </span><span class="s2">&quot;bruce-wayne&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span>
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="w">    </span><span class="p">{</span><span class="w">     </span>
+</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="w">        </span><span class="nx">nombre</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Bruce&quot;</span><span class="p">,</span><span class="w">     </span>
+</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="w">        </span><span class="nx">apellido</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Wayne&quot;</span><span class="p">,</span><span class="w">     </span>
+</span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="w">        </span><span class="nx">lugar</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Gotham&quot;</span><span class="w">   </span>
+</span><span id="__span-7-16"><a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="w">    </span><span class="p">}</span><span class="w"> </span>
+</span><span id="__span-7-17"><a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Con este ejemplo, podemos ver como las diferentes filas de la misma tabla (familia de columnas) no tienen por que compartir el mismo conjunto de columnas.</p>
+<p>Además, las columnas se pueden anidar dentro de otras formando <strong>super-columnas</strong>, donde el valor es un nuevo mapa de columnas.</p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="p">{</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">    </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;libro:978-84-16152-08-7&quot;</span><span class="p">,</span><span class="w">   </span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">    </span><span class="nx">value</span><span class="o">:</span><span class="w"> </span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">    </span><span class="p">{</span><span class="w">     </span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">        </span><span class="nx">autor</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Grant Morrison&quot;</span><span class="p">,</span><span class="w">     </span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">        </span><span class="nx">titulo</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Batman - Asilo Arkham&quot;</span><span class="p">,</span><span class="w">     </span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">        </span><span class="nx">isbn</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;978-84-16152-08-7&quot;</span><span class="w">   </span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">    </span><span class="p">}</span><span class="w"> </span>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Cuando se utilizan super columnas para crear familias de columnas tendremos una familia de super columnas.</p>
+<p>En resumen, las bases de datos basadas en columnas, almacenan los datos en familias de columnas como filas, las cuales tienen muchas columnas asociadas al identificador de una fila. Las familias de columnas son grupos de datos relacionados, a las cuales normalmente se accede de manera conjunta.</p>
+<h3 id="operaciones">Operaciones</h3>
+<p>A la hora de consultar los datos, éstos se pueden obtener por la clave primaria de la familia. Así pues, podemos obtener toda una familia, o la columna de una familia:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>// Mediante Cassandra 
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>GET Clientes[&#39;bruce-wayne&#39;];            // familia 
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>GET Clientes[&#39;bruce-wayne&#39;][&#39;lugar&#39;];   // columna
+</span></code></pre></div>
+<p>Algunos productos ofrecen un soporte limitado para índices secundarios, pero con restricciones. Por ejemplo, <em>Cassandra</em> ofrece el lenguaje CQL similar a SQL pero sin joins, ni subconsultas donde las restricciones de <em>where</em> son sencillas:</p>
+<p><div class="language-sql highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Clientes</span><span class="w"> </span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">nombre</span><span class="p">,</span><span class="n">email</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Clientes</span><span class="w"> </span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">nombre</span><span class="p">,</span><span class="n">email</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Clientes</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">lugar</span><span class="o">=</span><span class="s1">&#39;Gotham&#39;</span><span class="o">`</span>
+</span></code></pre></div>
+Las actualizaciones se realizan en dos pasos: primero encontrar el registro y segundo modificarlo. En estos sistemas, una modificación puede suponer una reescritura completa del registro independientemente que hayan cambiado unos pocos <em>bytes</em> del mismo.</p>
+<h3 id="casos-de-uso_2">Casos de uso</h3>
+<p>Las bases de datos columnares se han empleado durante décadas ofreciendo beneficios a las aplicaciones de negocio modernas, como la analítica de datos, <em>business intelligence</em> y <em>data warehousing</em>.</p>
+<p>Son multipropósito, aunque su uso se centra en el mercado del big data, la analítica de datos, cubos multidimensionales OLAP y/o almacenar metadatos y realizar analítica en tiempo real.</p>
+<p>Además de poder comprimir los datos, los datos están auto-indexados, lo que implica que utiliza menos espacio en disco, y acelera la ejecución de consultas agregadas entre múltiples tablas que implica el uso de joins.</p>
+<p>En cambio, no se recomienda su uso en aplicaciones de procesamiento transaccional (OLTP), ya que las bases de datos relacionales gestionan mejor el procesamiento concurrente y el aislamiento de las operaciones.</p>
+<p>Los productos más destacados son:</p>
+<ul>
+<li><em>HBase</em> : <a href="http://hbase.apache.org">http://hbase.apache.org</a>, el cual se basa en <em>Hadoop</em> - <a href="http://hadoop.apache.org">http://hadoop.apache.org</a></li>
+<li><em>Cassandra</em> : <a href="http://cassandra.apache.org">http://cassandra.apache.org</a></li>
+<li><em>Amazon Redshift</em>: <a href="https://aws.amazon.com/es/redshift/">https://aws.amazon.com/es/redshift/</a></li>
+</ul>
+<h2 id="grafos">Grafos</h2>
+<p>Las bases de datos de grafos almacenan entidades y las relaciones entre estas entidades. Las entidades se conocen como nodos, los cuales tienen propiedades. Cada nodo es similar a una instancia de un objeto. Las relaciones, también conocidas como vértices, a su vez tienen propiedades, y su sentido es importante.</p>
+<div align="center">
+    <a class="glightbox" href="../../images/NoSQL/NoSQL14.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/NoSQL/NoSQL14.png" alt="NoSQL" width="50%" /></a>
+</div>
+
+<p>Los nodos se organizan mediante relaciones que facilitan encontrar patrones de información existente entre los nodos. Este tipo de organización permite almacenar los datos una vez e interpretar los datos de diferentes maneras dependiendo de sus relaciones.</p>
+<ul>
+<li>Los nodos son entidades que tienen propiedades, tales como el <em>nombre</em>. Por ejemplo, en el gráfico cada nodo tiene una propiedad <code>name</code>. </li>
+<li>También podemos ver que las relaciones tienen tipos, como <code>label</code>, <code>since</code>, etc…​ Estas propiedades permiten organizar los nodos. </li>
+<li>Las relaciones pueden tener múltiples propiedades, y además tienen dirección, con lo cual si queremos incluir bidireccionalidad tenemos que añadir dos relaciones en sentidos opuestos. </li>
+<li>Tanto los nodos como las relaciones tienen un atributo <code>id</code> que los identifica.</li>
+</ul>
+<p>Por ejemplo, podemos comenzar a crear el grafo anterior mediante Neo4J de la siguiente manera:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>Node alice = graphDb.createNode();
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>alice.setProperty(&quot;name&quot;, &quot;Alice&quot;);
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>Node bob = graphDb.createNode();
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>bob.setProperty(&quot;name&quot;, &quot;Bob&quot;);
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>alice.createRelationshipTo(bob, FRIEND);
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>bob.createRelationshipTo(alice, FRIEND);
+</span></code></pre></div>
+<p>Los nodos permiten tener diferentes tipos de relaciones entre ellos y así representar relaciones entre las entidades del dominio, y tener relaciones secundarias para características como categoría, camino, árboles de tiempo, listas enlazas para acceso ordenado, etc…​ Al no existir un límite en el número ni en el tipo de relaciones que puede tener un nodo, todas se pueden representar en la misma base de datos.</p>
+<h3 id="traversing">Traversing</h3>
+<p>Una vez tenemos creado un grafo de nodos y relaciones, podemos consultar el grafo de muchas maneras; por ejemplo "<em>obtener todos los nodos que son miembros del grupo de ajedrez y que tienen más de 20 años</em>". Realizar una consulta se conoce como hacer un <em>traversing</em> (recorrido) del mismo.</p>
+<p>Un ejemplo de <em>traversing</em> mediante <em>Neo4J</em> sería:</p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nx">Node</span><span class="w"> </span><span class="nx">ajedrez</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">nodeIndex</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;chess&quot;</span><span class="p">).</span><span class="nx">getSingle</span><span class="p">();</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="nx">allRelationships</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ajedrez</span><span class="p">.</span><span class="nx">getRelationships</span><span class="p">(</span><span class="nx">Direction</span><span class="p">.</span><span class="nx">INCOMING</span><span class="p">);</span>
+</span></code></pre></div>
+<p>Una ventaja a destacar de las bases de datos basadas en grafos es que podemos cambiar los requisitos de <em>traversing</em> sin tener que cambiar los nodos o sus relaciones.</p>
+<p>En las bases de datos de grafos, recorrer las relaciones es muy rápido, ya que no se calculan en tiempo de consulta, sino que se persisten como una relación, y por tanto no hay que hacer ningún cálculo.</p>
+<p>En cambio, en una base de datos relacional, para crear una estructura de grafo se realiza para una relación sencilla (<em>¿Quien es mi jefe?"</em>). Para poder añadir otras relaciones necesitamos muchos cambios en el esquema y trasladar datos entre tablas. Además, necesitamos de antemano saber qué consultas queremos realizar para modelar las tablas y las relaciones acorde a las consultas.</p>
+<p>Así pues, estos sistemas ofrecen modelos ricos de consultas donde se pueden investigar las relaciones simples y complejas entre los nodos para obtener información directa e indirecta de los datos del sistemas. Los tipos de análisis que se realizan sobre estos sistema se ciñen a los tipos de relación existente entre los datos.</p>
+<h3 id="casos-de-uso_3">Casos de uso</h3>
+<p>Mientras que el modelo de grafos no es muy intuitivo y tiene una importante curva de aprendizaje, se puede usar en un gran número de aplicaciones.</p>
+<p>Su principal atractivo es que facilitan almacenar las relaciones entre entidades de una aplicación, como por ejemplo en una red social, o las intersecciones existentes entre carreteras. Es decir, se emplean para almacenar datos que se representan como nodos interconectados.</p>
+<p>Por lo tanto, los casos de uso son:</p>
+<ul>
+<li>Datos conectados: redes sociales con diferentes tipos de conexiones entre los usuarios.</li>
+<li>Enrutamiento, entrega o servicios basados en la posición: si las relaciones almacenan la distancia entre los nodos, podemos realizar consultas sobre lugares cercanos, trayecto más corto, etc…​</li>
+<li>Motores de recomendaciones: de compras, de lugares visitados, etc…​</li>
+</ul>
+<p>En cambio, no se recomienda su uso cuando necesitemos modificar todos o un subconjunto de entidades, ya que modificar una propiedad en todos los nodos es una operación compleja.</p>
+<p>Los productos más destacados son:</p>
+<ul>
+<li><em>Neo4j</em>: <a href="http://neo4j.com">http://neo4j.com</a></li>
+<li><em>ArangoDB</em>: <a href="https://www.arangodb.com/">https://www.arangodb.com/</a></li>
+<li><em>Apache TinkerPop</em>: <a href="https://tinkerpop.apache.org/">https://tinkerpop.apache.org/</a></li>
+<li><em>Amazon Neptune</em>: <a href="https://aws.amazon.com/es/neptune/">https://aws.amazon.com/es/neptune/</a></li>
+</ul>
+<h2 id="diferencias-entre-los-modelos">Diferencias entre los modelos</h2>
+<table>
+<thead>
+<tr>
+<th>Diferencias entre modelos</th>
+<th>Documental</th>
+<th>Clave-Valor</th>
+<th>Basado en Columnas</th>
+<th>Grafos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Estructura de Datos</strong></td>
+<td>Documentos JSON/BSON/XML</td>
+<td>Pares de Clave-Valor</td>
+<td>Columnas con familias</td>
+<td>Nodos y Relaciones</td>
+</tr>
+<tr>
+<td><strong>Flexibilidad</strong></td>
+<td>Flexible</td>
+<td>Variable</td>
+<td>Menos flexible</td>
+<td>Variable</td>
+</tr>
+<tr>
+<td><strong>Consultas</strong></td>
+<td>Complejas, utilizando índices secundarios y lenguajes de consulta avanzados</td>
+<td>Búsquedas directas por clave</td>
+<td>Consultas ad-hoc limitadas</td>
+<td>Consultas complejas de relaciones</td>
+</tr>
+<tr>
+<td><strong>Escalabilidad</strong></td>
+<td>Escalabilidad Horizontal</td>
+<td>Escalabilidad Horizontal</td>
+<td>Escalabilidad Horizontal</td>
+<td>Escalabilidad Horizontal y Vertical</td>
+</tr>
+<tr>
+<td><strong>Transacciones</strong></td>
+<td>Transacciones ACID</td>
+<td>Operaciones atómicas simples</td>
+<td>Transacciones ACID</td>
+<td>Transacciones ACID</td>
+</tr>
+<tr>
+<td><strong>Ejemplos</strong></td>
+<td>MongoDB, Couchbase</td>
+<td>Redis, DynamoDB</td>
+<td>Cassandra, HBase</td>
+<td>Neo4j, Amazon Neptune</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.indexes", "navigation.instant", "navigation.instant.progress", "toc.follow", "navigation.top", "content.code.copy"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+    
+  <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(() => { lightbox.reload() });
+</script></body>
+</html>

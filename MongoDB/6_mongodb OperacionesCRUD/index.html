@@ -1,0 +1,1607 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Revisión de las operaciones básicas CRUD - Create, Read, Update and Delete">
+      
+      
+      
+        <link rel="canonical" href="https://sergio-apuntes.github.io/sbd/MongoDB/6_mongodb%20OperacionesCRUD/">
+      
+      
+        <link rel="prev" href="../5_mongodb%20PrimerosPasos/">
+      
+      
+        <link rel="next" href="../7_mongodb%20OperacionesDatos/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>6. Operaciones con datos CRUD - Apuntes Sistemas en Big Data</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+   <link href="../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+    html.glightbox-open { overflow: initial; height: 100%; }
+    .gslide-title { margin-top: 0px; user-select: text; }
+    .gslide-desc { color: #666; user-select: text; }
+    .gslide-image img { background: white; }
+    .gscrollbar-fixer { padding-right: 15px; }
+    .gdesc-inner { font-size: 0.75rem; }
+    body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+    body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+    body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="../../assets/javascripts/glightbox.min.js"></script></head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#6-operaciones-con-datos-crud" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../.." title="Apuntes Sistemas en Big Data" class="md-header__button md-logo" aria-label="Apuntes Sistemas en Big Data" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Apuntes Sistemas en Big Data
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              6. Operaciones con datos CRUD
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Apuntes Sistemas en Big Data" class="md-nav__button md-logo" aria-label="Apuntes Sistemas en Big Data" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Apuntes Sistemas en Big Data
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introducción
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    NoSQL
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            NoSQL
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../noSQL/1_NoSQL%20Intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1. Introducción
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../noSQL/2_NoSQL%20NoSoloSQL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2. No Solo SQL
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../noSQL/3_NoSQL%20ModeloDatos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3. Modelos de datos
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../noSQL/4_NoSQL%20Consistencia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4. Consistencia
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    MongoDB
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            MongoDB
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1_mongodb%20Introducci%C3%B3n./" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1. Introducción a MongoDB
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2_mongodb%20MongoDB/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2. MongoDB
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3_mongodb%20ModeladoDatos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3. Diseño de modelado de bases de datos. schemaless
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4_mongodb%20Instalaci%C3%B3n/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4. Instalación
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5_mongodb%20PrimerosPasos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    5. Primeros pasos
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    6. Operaciones con datos CRUD
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    6. Operaciones con datos CRUD
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#insertar" class="md-nav__link">
+    <span class="md-ellipsis">
+      Insertar :
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Insertar :">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#insertone" class="md-nav__link">
+    <span class="md-ellipsis">
+      insertOne()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#insertmany" class="md-nav__link">
+    <span class="md-ellipsis">
+      insertMany()
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#leerconsultas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Leer/Consultas:
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Leer/Consultas:">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#find" class="md-nav__link">
+    <span class="md-ellipsis">
+      find()
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#actualizar" class="md-nav__link">
+    <span class="md-ellipsis">
+      Actualizar:
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Actualizar:">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#updateone" class="md-nav__link">
+    <span class="md-ellipsis">
+      updateOne()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#updatemany" class="md-nav__link">
+    <span class="md-ellipsis">
+      updateMany()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replaceone" class="md-nav__link">
+    <span class="md-ellipsis">
+      replaceOne()
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#eliminar" class="md-nav__link">
+    <span class="md-ellipsis">
+      Eliminar:
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Eliminar:">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#deleteone" class="md-nav__link">
+    <span class="md-ellipsis">
+      deleteOne()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deletemany" class="md-nav__link">
+    <span class="md-ellipsis">
+      deleteMany()
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7_mongodb%20OperacionesDatos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    7. Consulta de datos
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    ETL con Apache NiFi
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            ETL con Apache NiFi
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ApacheNiFi/1_ETL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1. ETL con Apache NiFi
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ApacheNiFi/2_PostgreSQL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2. PostgreSQL
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ApacheNiFi/3_ApacheNiFi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3. Apache NiFi
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Elasctic Stack
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Elasctic Stack
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ElasticStack/1_elastic_stack/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1. Introducción
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ElasticStack/2_elastic_operaciones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2. Elasticsearch. Operaciones
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ElasticStack/3_elastic_kibana/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3. Kibana
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ElasticStack/4_elastic_python/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4. Elasticsearch. Acceso desde cliente Python
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ElasticStack/5_elastic_nifi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    5. Elastic stack y Apache Nifi
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#insertar" class="md-nav__link">
+    <span class="md-ellipsis">
+      Insertar :
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Insertar :">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#insertone" class="md-nav__link">
+    <span class="md-ellipsis">
+      insertOne()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#insertmany" class="md-nav__link">
+    <span class="md-ellipsis">
+      insertMany()
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#leerconsultas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Leer/Consultas:
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Leer/Consultas:">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#find" class="md-nav__link">
+    <span class="md-ellipsis">
+      find()
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#actualizar" class="md-nav__link">
+    <span class="md-ellipsis">
+      Actualizar:
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Actualizar:">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#updateone" class="md-nav__link">
+    <span class="md-ellipsis">
+      updateOne()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#updatemany" class="md-nav__link">
+    <span class="md-ellipsis">
+      updateMany()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replaceone" class="md-nav__link">
+    <span class="md-ellipsis">
+      replaceOne()
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#eliminar" class="md-nav__link">
+    <span class="md-ellipsis">
+      Eliminar:
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Eliminar:">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#deleteone" class="md-nav__link">
+    <span class="md-ellipsis">
+      deleteOne()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deletemany" class="md-nav__link">
+    <span class="md-ellipsis">
+      deleteMany()
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="6-operaciones-con-datos-crud">6. Operaciones con datos CRUD</h1>
+<p>En <em>MongoDB</em> , las operaciones <strong>CRUD</strong> (<em>Crear</em>, <em>Leer</em>, <em>Actualizar</em>, <em>Eliminar</em>) se realizan utilizando métodos específicos. Aquí te muestro cómo realizar cada una de estas operaciones.</p>
+<p>Antes de comenzar a trabajar, debemos entrar en una de las bases de datos con <code>use</code> y en todo momento podemos ver las colecciones que tenemos en esta base de datos con <code>use collections</code> </p>
+<h2 id="insertar">Insertar :</h2>
+<p>Para insertar documentos en una colección, se utiliza el método <code>insertOne()</code> o <code>insertMany()</code>.</p>
+<h3 id="insertone"><code>insertOne()</code></h3>
+<ul>
+<li><code>db.collectionName.insertOne(&lt;json&gt;);</code>: Inserta un solo documento</li>
+</ul>
+<figure align="center">
+  <a class="glightbox" href="../../images/MongoDB/MongoDB39.svg" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image title" src="../../images/MongoDB/MongoDB39.svg" width="75%" /></a>
+<br />
+<figcaption>MongoDB. Inserción en colección.</figcaption>
+</figure>
+<p>Ejemplos</p>
+<ul>
+<li><ins>Insertar un solo documento en la colección 'usuarios'</ins></li>
+</ul>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nx">db</span><span class="p">.</span><span class="nx">usuarios</span><span class="p">.</span><span class="nx">insertOne</span><span class="p">({</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="nx">nombre</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Juan&quot;</span><span class="p">,</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="nx">edad</span><span class="o">:</span><span class="w"> </span><span class="mf">30</span><span class="p">,</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nx">ciudad</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Barcelona&quot;</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="p">});</span>
+</span></code></pre></div>
+<ul>
+<li><ins>En un única línea, y con comillas dobles, también...</ins></li>
+</ul>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nx">db</span><span class="p">.</span><span class="nx">usuarios</span><span class="p">.</span><span class="nx">insertOne</span><span class="p">({</span><span class="w"> </span><span class="nx">nombre</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Toni&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">edad</span><span class="o">:</span><span class="w"> </span><span class="mf">15</span><span class="p">,</span><span class="w"> </span><span class="nx">ciudad</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Valencia&quot;</span><span class="p">});</span>
+</span></code></pre></div>
+<ul>
+<li><ins>Insertar un solo documento en la colección 'usuarios'</ins></li>
+</ul>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nx">db</span><span class="p">.</span><span class="nx">usuarios</span><span class="p">.</span><span class="nx">insertOne</span><span class="p">({</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="nx">nombre</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Juan&quot;</span><span class="p">,</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nx">edad</span><span class="o">:</span><span class="w"> </span><span class="mf">30</span><span class="p">,</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="nx">ciudad</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Barcelona&quot;</span><span class="p">,</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="nx">intereses</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;fútbol&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;música&quot;</span><span class="p">],</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="nx">direccion</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">calle</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Calle Mayor&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">numero</span><span class="o">:</span><span class="w"> </span><span class="mf">123</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="nx">fechaRegistro</span><span class="o">:</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Date</span><span class="p">(),</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="nx">activo</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="p">});</span>
+</span></code></pre></div>
+<ul>
+<li><ins>Insertar un documento con la fecha actual. Ojo con el último campo</ins></li>
+</ul>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nx">db</span><span class="p">.</span><span class="nx">usuarios</span><span class="p">.</span><span class="nx">insertOne</span><span class="p">({</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="nx">nombre</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Dorotea&quot;</span><span class="p">,</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="nx">fecha</span><span class="o">:</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Date</span><span class="p">(),</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="nx">lugar</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Xàtiva&quot;</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="p">});</span>
+</span></code></pre></div>
+<ul>
+<li><ins>Insertar un documento con una fecha específica</ins>  </li>
+</ul>
+<p>Los campos antes no estaban entre comillas y en este ejemplo si lo estan; es totalmente indiferente. Pero si debemos tener en cuenta que es <em>case-sensitive</em> (Mayúsculas/Minúsculas) es importante y adcemás también cambia si ponemos los datos númericos entre comillas o no, ya que se convierten en texto</p>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nx">db</span><span class="p">.</span><span class="nx">usuarios</span><span class="p">.</span><span class="nx">insertOne</span><span class="p">({</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="s2">&quot;nombre&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Filiberto&quot;</span><span class="p">,</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="s2">&quot;edad&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;33&quot;</span><span class="p">,</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="s2">&quot;fechaNacimiento&quot;</span><span class="o">:</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Date</span><span class="p">(</span><span class="s2">&quot;2004-03-15&quot;</span><span class="p">),</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="s2">&quot;ciudad&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Alacant&quot;</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="p">});</span>
+</span></code></pre></div>
+<p>Cada vez que hacemos una inserción, si es correcta, nos devuelve el resultado del con el siguiente formato</p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nx">acknowledged</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="nx">insertedId</span><span class="o">:</span><span class="w"> </span><span class="nx">ObjectId</span><span class="p">(</span><span class="s1">&#39;65e818360ad094ed2ab24245&#39;</span><span class="p">)</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="insertmany"><code>insertMany()</code></h3>
+<ul>
+<li><code>db.collectionName.insertMany(&lt;json&gt;);</code>. Inserción de varios elementos.</li>
+</ul>
+<p>Como se trata de una inserción de un conjunto de documentos, lo que hacemos en pasar un <strong>array</strong> y esto se hace mediante el uso de <strong><em>corchetes</em></strong> : <code>[]</code>.</p>
+<p>Ejemplos: </p>
+<ul>
+<li>
+<p><ins>Insertar varios documentos en la colección 'usuarios'</ins>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nx">db</span><span class="p">.</span><span class="nx">usuarios</span><span class="p">.</span><span class="nx">insertMany</span><span class="p">([</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nx">nombre</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Ana&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">edad</span><span class="o">:</span><span class="w"> </span><span class="mf">25</span><span class="p">,</span><span class="w"> </span><span class="nx">ciudad</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Madrid&quot;</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nx">nombre</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Carlos&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">edad</span><span class="o">:</span><span class="w"> </span><span class="mf">35</span><span class="p">,</span><span class="w"> </span><span class="nx">ciudad</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Valencia&quot;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="p">]);</span>
+</span></code></pre></div></p>
+</li>
+<li>
+<p><ins>Insertar varios documentos en la colección 'usuarios'</ins>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nx">db</span><span class="p">.</span><span class="nx">usuarios</span><span class="p">.</span><span class="nx">insertMany</span><span class="p">([</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nx">nombre</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Ana&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">edad</span><span class="o">:</span><span class="w"> </span><span class="mf">25</span><span class="p">,</span><span class="w"> </span><span class="nx">ciudad</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Madrid&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">intereses</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;viajes&quot;</span><span class="p">],</span><span class="w"> </span><span class="nx">fechaRegistro</span><span class="o">:</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Date</span><span class="p">(),</span><span class="w"> </span><span class="nx">activo</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nx">nombre</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Carlos&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">edad</span><span class="o">:</span><span class="w"> </span><span class="mf">35</span><span class="p">,</span><span class="w"> </span><span class="nx">ciudad</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Valencia&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">intereses</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;lectura&quot;</span><span class="p">],</span><span class="w"> </span><span class="nx">fechaRegistro</span><span class="o">:</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Date</span><span class="p">(),</span><span class="w"> </span><span class="nx">activo</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="p">]);</span>
+</span></code></pre></div></p>
+</li>
+</ul>
+<p>Observar cómo se trabaja con las fechas</p>
+<h2 id="leerconsultas">Leer/Consultas:</h2>
+<p>Uno de los aspectos más interesantes de las bases de datos es la capacidad para realizar consultas, por lo que ahora vamos a ver de forma muy breve como leer datos, pero más adelante profundizaremos en la realización de consultas más elaboradas.</p>
+<h3 id="find"><code>find()</code></h3>
+<p>Para leer datos de una colección, se utiliza el método <code>find()</code>.</p>
+<ul>
+<li>
+<p><ins>Leer todos los documentos de la colección 'usuarios'</ins>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nx">db</span><span class="p">.</span><span class="nx">usuarios</span><span class="p">.</span><span class="nx">find</span><span class="p">();</span>
+</span></code></pre></div></p>
+</li>
+<li>
+<p><ins>Leer todos los documentos de la colección 'usuarios' y formatear la salida json</ins>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nx">db</span><span class="p">.</span><span class="nx">usuarios</span><span class="p">.</span><span class="nx">find</span><span class="p">().</span><span class="nx">pretty</span><span class="p">();</span>
+</span></code></pre></div></p>
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">funcion <code>pretty()</code></p>
+<p>La función <code>pretty()</code> en MongoDB sigue siendo efectiva, pero su uso ha cambiado con las versiones más recientes. En <em>mongosh</em> (la nueva shell de MongoDB), <code>pretty()</code> no altera el formato de salida, mientras que en la <em>shell legacy</em> (mongo shell), sí lo hacía, mostrando los resultados de manera más legible</p>
+</div>
+<ul>
+<li>
+<p><ins>Leer documentos que coincidan con un criterio específico</ins>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nx">db</span><span class="p">.</span><span class="nx">usuarios</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="w"> </span><span class="nx">ciudad</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Barcelona&quot;</span><span class="w"> </span><span class="p">});</span>
+</span></code></pre></div></p>
+</li>
+<li>
+<p><ins>Leer documentos que coincidan con un criterio específico (por ejemplo, ciudad igual a 'Barcelona' y activo igual a true)</ins>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nx">db</span><span class="p">.</span><span class="nx">usuarios</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="w"> </span><span class="nx">ciudad</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Barcelona&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">activo</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">});</span>
+</span></code></pre></div></p>
+</li>
+</ul>
+<p>Podemos especificar los campos que queremos recuperar en la consulta: </p>
+<ul>
+<li><ins>Leer documentos con proyección (seleccionar campos específicos)</ins>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nx">db</span><span class="p">.</span><span class="nx">usuarios</span><span class="p">.</span><span class="nx">find</span><span class="p">({},</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">nombre</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="nx">edad</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="w"> </span><span class="p">});</span>
+</span></code></pre></div></li>
+</ul>
+<p>El formato a utilizar es <code>NombreDeCampo: 1</code>, o sea, escribimos el nombre del campo, seguido de dos puntos y un uno. </p>
+<p>Lógicamente si ponemos un <strong>1</strong>, significa que queremos ver el campo, y por lo tanto si ponemos un <strong>0</strong>, significa que no queremos que se muestre el campo, pero esto solo funciona con el campo <em>objetctID</em> (<strong><em>_id</em></strong>)</p>
+<ul>
+<li>
+<p><ins>Leer documentos con proyección (seleccionar campos específicos)</ins>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="nx">db</span><span class="p">.</span><span class="nx">usuarios</span><span class="p">.</span><span class="nx">find</span><span class="p">({},</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">nombre</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="nx">edad</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="nx">_id</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="w"> </span><span class="p">});</span>
+</span></code></pre></div></p>
+</li>
+<li>
+<p><ins>Leer todos los eventos que ocurrieron después de una fecha específica</ins>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nx">db</span><span class="p">.</span><span class="nx">eventos</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="w"> </span><span class="nx">fecha</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">$gt</span><span class="o">:</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Date</span><span class="p">(</span><span class="s2">&quot;2024-01-01&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">});</span>
+</span></code></pre></div></p>
+</li>
+<li>
+<p><ins>Leer eventos que ocurrieron en un rango de fechas</ins>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="nx">db</span><span class="p">.</span><span class="nx">eventos</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="w"> </span><span class="nx">fecha</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">$gte</span><span class="o">:</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Date</span><span class="p">(</span><span class="s2">&quot;2024-01-01&quot;</span><span class="p">),</span><span class="w"> </span><span class="nx">$lte</span><span class="o">:</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Date</span><span class="p">(</span><span class="s2">&quot;2024-12-31&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">});</span>
+</span></code></pre></div></p>
+</li>
+</ul>
+<div class="admonition nota">
+<p class="admonition-title">Nota</p>
+<p>No profundizamos más en las búsquedas porque más adelante dedicaremos un punto completo a explicar las búsquedas en más profundidad.</p>
+</div>
+<h2 id="actualizar">Actualizar:</h2>
+<p>Para actualizar documentos en una colección, se utiliza el método <code>updateOne()</code> o <code>updateMany()</code>.</p>
+<h3 id="updateone"><code>updateOne()</code></h3>
+<ul>
+<li><code>db.collection.updateOne(&lt;filter&gt;, &lt;update&gt;)</code></li>
+</ul>
+<p>El método <code>updateOne()</code> se utiliza para actualizar un solo documento que coincida con un criterio específico. Si hay varios documentos que coinciden con el criterio, solo se actualizará el primero que se encuentre.</p>
+<p>En la clausula de actualización tenemos el comando <code>$set</code>. Además debemos tener en cuenta que tanto el <code>&lt;filter&gt;</code> como la <code>&lt;update&gt;</code> son json por lo que deben estar comprendidos entre corchetes:</p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="nx">db</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">updateOne</span><span class="p">({},</span><span class="w"> </span><span class="p">{</span><span class="nx">$set</span><span class="o">:</span><span class="p">{}});</span>
+</span></code></pre></div>
+<p>Veamos algunos ejemplos</p>
+<ul>
+<li>
+<p><ins>Ejemplo de <code>updateOne()</code></ins>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="nx">db</span><span class="p">.</span><span class="nx">usuarios</span><span class="p">.</span><span class="nx">updateOne</span><span class="p">(</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nx">nombre</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Juan&quot;</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nx">$set</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">edad</span><span class="o">:</span><span class="w"> </span><span class="mf">31</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="p">);</span>
+</span></code></pre></div></p>
+</li>
+<li>
+<p><ins>Cambiamos más de un valor</ins>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="nx">db</span><span class="p">.</span><span class="nx">usuarios</span><span class="p">.</span><span class="nx">updateOne</span><span class="p">(</span>
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nx">nombre</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Juan&quot;</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nx">$set</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">edad</span><span class="o">:</span><span class="w"> </span><span class="mf">31</span><span class="p">,</span><span class="w"> </span><span class="nx">ciudad</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Albacete&#39;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="p">);</span>
+</span></code></pre></div></p>
+</li>
+<li>
+<p><ins>Actualizar la fecha de un evento específico</ins>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="nx">db</span><span class="p">.</span><span class="nx">usuarios</span><span class="p">.</span><span class="nx">updateOne</span><span class="p">(</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nx">nombre</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Alberto&quot;</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nx">$set</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">fechaRegistro</span><span class="o">:</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Date</span><span class="p">(</span><span class="s2">&quot;2024-03-20&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="p">);</span>
+</span></code></pre></div></p>
+</li>
+</ul>
+<p>En el primer ejemplo, se actualizará el primer documento de la colección "usuarios" que tenga el campo <code>nombre</code> igual a "Juan". Si hay varios documentos con ese nombre, solo se actualizará uno.</p>
+<p>Una vez realizada la actualización, <em>MongoDB</em> avisa: </p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="p">{</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">  </span><span class="nx">acknowledged</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="w">  </span><span class="nx">insertedId</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="w">  </span><span class="nx">matchedCount</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span>
+</span><span id="__span-20-5"><a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="w">  </span><span class="nx">modifiedCount</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span>
+</span><span id="__span-20-6"><a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="w">  </span><span class="nx">upsertedCount</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span>
+</span><span id="__span-20-7"><a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="updatemany"><code>updateMany()</code></h3>
+<ul>
+<li><code>db.collection.updateMany(&lt;filter&gt;, &lt;update)</code></li>
+</ul>
+<p>Por otro lado, el método <code>updateMany()</code> se utiliza para actualizar múltiples documentos que coincidan con un criterio específico. Todos los documentos que cumplan el criterio serán actualizados.</p>
+<ul>
+<li><ins>Ejemplo de <code>updateMany()</code></ins>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="nx">db</span><span class="p">.</span><span class="nx">usuarios</span><span class="p">.</span><span class="nx">updateMany</span><span class="p">(</span>
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nx">ciudad</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Játiva&quot;</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nx">$set</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">ciudad</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Xàtiva&quot;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-21-4"><a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="p">);</span>
+</span></code></pre></div></li>
+</ul>
+<p>En este ejemplo, se actualizarán todos los documentos de la colección "usuarios" que tengan el campo <code>ciudad</code> igual a "Játiva", estableciendo su valor a "Xàtiva".</p>
+<p>O sea, <code>updateOne()</code> es útil cuando solo quieres actualizar un único documento, mientras que <code>updateMany()</code> es útil cuando necesitas actualizar múltiples documentos que cumplan un criterio específico.</p>
+<p>Además de establecer un valor en una actualización, tenemos otras opciones para las modificaciones a aplicar. Utiliza operadores como:<br />
+- <code>$set</code>: Para establecer un nuevo valor.<br />
+- <code>$unset</code>: Para eliminar un campo.<br />
+- <code>$inc</code>: Para incrementar un valor numérico.<br />
+- <code>$push</code>: Para agregar un elemento a un array.  </p>
+<ul>
+<li><ins>En el siguiente ejemplo, incrementamos un año la edad de los usuarios con un determinado nombre.</ins></li>
+</ul>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="nx">db</span><span class="p">.</span><span class="nx">usuarios</span><span class="p">.</span><span class="nx">updateMany</span><span class="p">(</span>
+</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nx">nombre</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Alberto&quot;</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nx">$inc</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">edad</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-22-4"><a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="replaceone"><code>replaceOne()</code></h3>
+<ul>
+<li><code>db.collection.replaceOne(&lt;filter&gt;, &lt;update&gt;)</code></li>
+</ul>
+<p>Reemplazo completo de un documento. En este caso, al reemplazar el documento que encontramos por una nuevo, no necesitamos el comando <code>$set</code></p>
+<ul>
+<li><ins>Ejemplo donde reemplaza el primer registro qe encuentra con el filtro aplicado</ins>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="nx">db</span><span class="p">.</span><span class="nx">usuarios</span><span class="p">.</span><span class="nx">replaceOne</span><span class="p">(</span>
+</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nx">nombre</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Alberto&quot;</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="w">    </span><span class="p">{</span><span class="w">     </span>
+</span><span id="__span-23-4"><a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="w">        </span><span class="nx">nombre</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Alberto D.&quot;</span><span class="p">,</span>
+</span><span id="__span-23-5"><a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a><span class="w">        </span><span class="nx">edad</span><span class="o">:</span><span class="w"> </span><span class="mf">18</span><span class="p">,</span>
+</span><span id="__span-23-6"><a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a><span class="w">        </span><span class="nx">ciudad</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Xàtiva&quot;</span><span class="p">,</span>
+</span><span id="__span-23-7"><a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a><span class="w">        </span><span class="nx">intereses</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;Baloncesto&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Informática&quot;</span><span class="p">],</span>
+</span><span id="__span-23-8"><a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a><span class="w">        </span><span class="nx">fechaRegistro</span><span class="o">:</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Date</span><span class="p">(),</span>
+</span><span id="__span-23-9"><a id="__codelineno-23-9" name="__codelineno-23-9" href="#__codelineno-23-9"></a><span class="w">        </span><span class="nx">activo</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span>
+</span><span id="__span-23-10"><a id="__codelineno-23-10" name="__codelineno-23-10" href="#__codelineno-23-10"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-23-11"><a id="__codelineno-23-11" name="__codelineno-23-11" href="#__codelineno-23-11"></a><span class="p">);</span>
+</span></code></pre></div></li>
+</ul>
+<p>En este caso, vamos a ver su ejecución, donde veremos incluso que al cambiar el nombre, este campo también cambia aunque se el utilizado para hacer la búsqueda:</p>
+<div align="center">
+    <a class="glightbox" href="../../images/MongoDB/MongoDB20.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/MongoDB/MongoDB20.png" alt="MongoDB" width="70%" /></a>
+</div>
+
+<h2 id="eliminar">Eliminar:</h2>
+<p>Para eliminar documentos de una colección, se utiliza el método <code>deleteOne()</code> o <code>deleteMany()</code>.</p>
+<p>En <em>MongoDB</em>, tanto <code>deleteOne()</code> como <code>deleteMany()</code> son métodos utilizados para eliminar documentos de una colección. Aquí tienes las diferencias entre ellos:</p>
+<h3 id="deleteone"><code>deleteOne()</code></h3>
+<p>El método <code>deleteOne()</code> se utiliza para eliminar un solo documento que coincida con un criterio específico. <strong>Si hay varios documentos</strong> que coinciden con el criterio, <strong>solo se eliminará el primero</strong> que se encuentre.</p>
+<ul>
+<li><ins>Ejemplo de <code>deleteOne()</code></ins>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="nx">db</span><span class="p">.</span><span class="nx">usuarios</span><span class="p">.</span><span class="nx">deleteOne</span><span class="p">({</span><span class="w"> </span><span class="nx">nombre</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Juan&quot;</span><span class="w"> </span><span class="p">});</span>
+</span></code></pre></div></li>
+</ul>
+<p>En este ejemplo, se eliminará el primer documento de la colección "usuarios" que tenga el campo <code>nombre</code> igual a "Juan". Si hay varios documentos con ese nombre, solo se eliminará uno.</p>
+<h3 id="deletemany"><code>deleteMany()</code></h3>
+<p>Por otro lado, el método <code>deleteMany()</code> se utiliza para eliminar varios documentos que coincidan con un criterio específico. Todos los documentos que cumplan el criterio serán eliminados.</p>
+<ul>
+<li><ins>Ejemplo de <code>deleteMany()</code></ins>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="nx">db</span><span class="p">.</span><span class="nx">usuarios</span><span class="p">.</span><span class="nx">deleteMany</span><span class="p">({</span><span class="w"> </span><span class="nx">activo</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="p">});</span>
+</span></code></pre></div></li>
+</ul>
+<p>En este ejemplo, se eliminarán todos los documentos de la colección "usuarios" que tengan el campo <code>activo</code> igual a false.</p>
+<p>Otros ejemplos</p>
+<ul>
+<li>
+<p><ins>Eliminar varios documentos que cumplan el criterio especificado</ins>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="nx">db</span><span class="p">.</span><span class="nx">usuarios</span><span class="p">.</span><span class="nx">deleteMany</span><span class="p">({</span><span class="w"> </span><span class="nx">ciudad</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Xàtiva&quot;</span><span class="w"> </span><span class="p">});</span>
+</span></code></pre></div></p>
+</li>
+<li>
+<p><ins>Eliminar eventos que ocurrieron antes de una fecha específica</ins>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="nx">db</span><span class="p">.</span><span class="nx">eventos</span><span class="p">.</span><span class="nx">deleteMany</span><span class="p">({</span><span class="w"> </span><span class="nx">fecha</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">$lt</span><span class="o">:</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Date</span><span class="p">(</span><span class="s2">&quot;2024-03-01&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">});</span>
+</span></code></pre></div></p>
+</li>
+</ul>
+<div class="admonition danger">
+<p class="admonition-title">Cuidado</p>
+<p>Como siempre debemos tener cuidad a la hora de borrar, de echo si hacemos </p>
+<p><div class="language-js highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="nx">db</span><span class="p">.</span><span class="nx">usuarios</span><span class="p">.</span><span class="nx">deleteMany</span><span class="p">({});</span>
+</span></code></pre></div>
+Nos borrará <strong>todos</strong> los documentos de la colección.</p>
+</div>
+<div class="admonition nota">
+<p class="admonition-title">Nota</p>
+<p>Siempre se debe pasar un json dentro de la condición, o sea, dentro de los paréntesis deben haber llaves:</p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="nx">db</span><span class="p">.</span><span class="nx">usuarios</span><span class="p">.</span><span class="nx">deleteMany</span><span class="p">();</span><span class="w">     </span><span class="c1">//error</span>
+</span><span id="__span-29-2"><a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="nx">db</span><span class="p">.</span><span class="nx">usuarios</span><span class="p">.</span><span class="nx">deleteMany</span><span class="p">({});</span><span class="w">   </span><span class="c1">//correcto: json vacío</span>
+</span></code></pre></div>
+</div>
+<p>Ahora que ya tenemos más herramientas y hemos visto las operaciones básicas de <em>MongoDB</em> en la siguiente sección vamos a profundizar sobre las consultas de los datos, aunque ya las hemos visto brevemente con anterioridad.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.indexes", "navigation.instant", "navigation.instant.progress", "toc.follow", "navigation.top", "content.code.copy"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+    
+  <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(() => { lightbox.reload() });
+</script></body>
+</html>

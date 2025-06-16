@@ -1,0 +1,2410 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Elasticsearch. Operaciones básicas  de ingesta y consulta de datos">
+      
+      
+      
+        <link rel="canonical" href="https://sergio-apuntes.github.io/sbd/ElasticStack/2_elastic_operaciones/">
+      
+      
+        <link rel="prev" href="../1_elastic_stack/">
+      
+      
+        <link rel="next" href="../3_elastic_kibana/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>2. Elasticsearch. Operaciones - Apuntes Sistemas en Big Data</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+   <link href="../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+    html.glightbox-open { overflow: initial; height: 100%; }
+    .gslide-title { margin-top: 0px; user-select: text; }
+    .gslide-desc { color: #666; user-select: text; }
+    .gslide-image img { background: white; }
+    .gscrollbar-fixer { padding-right: 15px; }
+    .gdesc-inner { font-size: 0.75rem; }
+    body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+    body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+    body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="../../assets/javascripts/glightbox.min.js"></script></head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#primeros-pasos" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../.." title="Apuntes Sistemas en Big Data" class="md-header__button md-logo" aria-label="Apuntes Sistemas en Big Data" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Apuntes Sistemas en Big Data
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              2. Elasticsearch. Operaciones
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Apuntes Sistemas en Big Data" class="md-nav__button md-logo" aria-label="Apuntes Sistemas en Big Data" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Apuntes Sistemas en Big Data
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introducción
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    NoSQL
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            NoSQL
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../noSQL/1_NoSQL%20Intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1. Introducción
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../noSQL/2_NoSQL%20NoSoloSQL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2. No Solo SQL
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../noSQL/3_NoSQL%20ModeloDatos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3. Modelos de datos
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../noSQL/4_NoSQL%20Consistencia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4. Consistencia
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    MongoDB
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            MongoDB
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MongoDB/1_mongodb%20Introducci%C3%B3n./" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1. Introducción a MongoDB
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MongoDB/2_mongodb%20MongoDB/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2. MongoDB
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MongoDB/3_mongodb%20ModeladoDatos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3. Diseño de modelado de bases de datos. schemaless
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MongoDB/4_mongodb%20Instalaci%C3%B3n/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4. Instalación
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MongoDB/5_mongodb%20PrimerosPasos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    5. Primeros pasos
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MongoDB/6_mongodb%20OperacionesCRUD/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    6. Operaciones con datos CRUD
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MongoDB/7_mongodb%20OperacionesDatos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    7. Consulta de datos
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    ETL con Apache NiFi
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            ETL con Apache NiFi
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ApacheNiFi/1_ETL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1. ETL con Apache NiFi
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ApacheNiFi/2_PostgreSQL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2. PostgreSQL
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ApacheNiFi/3_ApacheNiFi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3. Apache NiFi
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Elasctic Stack
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Elasctic Stack
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1_elastic_stack/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1. Introducción
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    2. Elasticsearch. Operaciones
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    2. Elasticsearch. Operaciones
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#primeros-pasos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Primeros pasos
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Primeros pasos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#operaciones-basicas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Operaciones básicas
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#el-metodo-_bulk" class="md-nav__link">
+    <span class="md-ellipsis">
+      El método _bulk
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="El método _bulk">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ingestion-de-documentos-masiva" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ingestión de documentos masiva
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#y-mas-cosas-anadir-actualizar-y-borrar" class="md-nav__link">
+    <span class="md-ellipsis">
+      y mas cosas: añadir, actualizar y borrar
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usando-_bulk-para-operaciones-masiva" class="md-nav__link">
+    <span class="md-ellipsis">
+      Usando _bulk para operaciones masiva
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#el-metodo-get" class="md-nav__link">
+    <span class="md-ellipsis">
+      El método GET
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#consulta-de-datos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consulta de datos.
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Consulta de datos.">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#un-poco-de-teoria" class="md-nav__link">
+    <span class="md-ellipsis">
+      Un poco de teoría
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consultas-dsl" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consultas DSL
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Consultas DSL">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#match" class="md-nav__link">
+    <span class="md-ellipsis">
+      match
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#match_phrase" class="md-nav__link">
+    <span class="md-ellipsis">
+      match_phrase
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#range" class="md-nav__link">
+    <span class="md-ellipsis">
+      range
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#busquedas-combinadas-y-buenas-practicas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Búsquedas combinadas y buenas prácticas
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#definiendo-un-indice-mappings-y-analizadores" class="md-nav__link">
+    <span class="md-ellipsis">
+      Definiendo un índice: Mappings y Analizadores
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Definiendo un índice: Mappings y Analizadores">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mappings" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mappings
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Mappings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dynamic Mapping
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#explicit-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      Explicit mapping
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analizadores-de-textos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Analizadores de textos
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Analizadores de textos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#analizadores-en-elasticsearch" class="md-nav__link">
+    <span class="md-ellipsis">
+      Analizadores en Elasticsearch
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analizadores-personalizados" class="md-nav__link">
+    <span class="md-ellipsis">
+      Analizadores personalizados
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#definiendo-un-indice-con-mapping-y-analizador" class="md-nav__link">
+    <span class="md-ellipsis">
+      Definiendo un índice con mapping y analizador
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3_elastic_kibana/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3. Kibana
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4_elastic_python/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4. Elasticsearch. Acceso desde cliente Python
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5_elastic_nifi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    5. Elastic stack y Apache Nifi
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#primeros-pasos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Primeros pasos
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Primeros pasos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#operaciones-basicas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Operaciones básicas
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#el-metodo-_bulk" class="md-nav__link">
+    <span class="md-ellipsis">
+      El método _bulk
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="El método _bulk">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ingestion-de-documentos-masiva" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ingestión de documentos masiva
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#y-mas-cosas-anadir-actualizar-y-borrar" class="md-nav__link">
+    <span class="md-ellipsis">
+      y mas cosas: añadir, actualizar y borrar
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usando-_bulk-para-operaciones-masiva" class="md-nav__link">
+    <span class="md-ellipsis">
+      Usando _bulk para operaciones masiva
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#el-metodo-get" class="md-nav__link">
+    <span class="md-ellipsis">
+      El método GET
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#consulta-de-datos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consulta de datos.
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Consulta de datos.">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#un-poco-de-teoria" class="md-nav__link">
+    <span class="md-ellipsis">
+      Un poco de teoría
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consultas-dsl" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consultas DSL
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Consultas DSL">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#match" class="md-nav__link">
+    <span class="md-ellipsis">
+      match
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#match_phrase" class="md-nav__link">
+    <span class="md-ellipsis">
+      match_phrase
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#range" class="md-nav__link">
+    <span class="md-ellipsis">
+      range
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#busquedas-combinadas-y-buenas-practicas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Búsquedas combinadas y buenas prácticas
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#definiendo-un-indice-mappings-y-analizadores" class="md-nav__link">
+    <span class="md-ellipsis">
+      Definiendo un índice: Mappings y Analizadores
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Definiendo un índice: Mappings y Analizadores">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mappings" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mappings
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Mappings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dynamic Mapping
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#explicit-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      Explicit mapping
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analizadores-de-textos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Analizadores de textos
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Analizadores de textos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#analizadores-en-elasticsearch" class="md-nav__link">
+    <span class="md-ellipsis">
+      Analizadores en Elasticsearch
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analizadores-personalizados" class="md-nav__link">
+    <span class="md-ellipsis">
+      Analizadores personalizados
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#definiendo-un-indice-con-mapping-y-analizador" class="md-nav__link">
+    <span class="md-ellipsis">
+      Definiendo un índice con mapping y analizador
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+  <h1>2. Elasticsearch. Operaciones</h1>
+
+<h2 id="primeros-pasos">Primeros pasos</h2>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK51.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK51.png" alt="ELK" width="50%" /></a>
+</div>
+
+<p>Como hemos visto anteriormente, un índice esta compuesto por diversos documentos. Cada elemento o registro que se inserta en un índice es considerado un documento, y en ellos se representan los datos almacenados sobre los que más tarde realizaremos operaciones.</p>
+<p>Nosotros para comenzar a conocer las operaciones o posibilidades de elasticserach, tendremos en cuenta los siguientes conceptos.:</p>
+<ul>
+<li>Los datos introducidos en un índice tienen el mismo formato que un fichero JSON.</li>
+<li>Este fichero es lo que se llama un <strong>documento</strong>, que se indexa dentro de un índice</li>
+<li>Los <strong>indices</strong> son independiente uno de otros, no se pueden hace <strong><em>joins</em></strong> entre diferentes índices.</li>
+<li>Para indexar un documento, se hace mediante una API de índice, mediante un <code>PUT</code>o un <code>POST</code></li>
+<li>Cuando hacemos la primera ingesta en un indice, elastic define automáticamente si no la hemos definido previamente.</li>
+</ul>
+<h3 id="operaciones-basicas">Operaciones básicas</h3>
+<ul>
+<li><strong>Creación de un índice con <code>PUT</code></strong></li>
+</ul>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nx">PUT</span><span class="w"> </span><span class="nx">mi_indice</span>
+</span></code></pre></div>
+<p>o especificando <em>shards</em> y réplicas
+<div class="language-js highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nx">PUT</span><span class="w"> </span><span class="nx">mi_indice</span><span class="w"> </span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="p">{</span><span class="w"> </span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="s2">&quot;settings&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="s2">&quot;number_of_shards&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">2</span><span class="p">,</span><span class="w"> </span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="s2">&quot;number_of_replicas&quot;</span><span class="o">:</span><span class="mf">2</span><span class="w"> </span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="p">}</span>
+</span></code></pre></div></p>
+<ul>
+<li><strong>Eliminar un índice con <code>DELETE</code></strong></li>
+</ul>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nx">DELETE</span><span class="w"> </span><span class="nx">mi_indice</span>
+</span></code></pre></div>
+<ul>
+<li><strong>Creación de un índice con <code>POST</code></strong></li>
+</ul>
+<p><div class="language-js highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nx">POST</span><span class="w"> </span><span class="nx">mi_indice</span><span class="o">/</span><span class="nx">_doc</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="p">{</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="s2">&quot;Nombre&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Julian&quot;</span><span class="p">,</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="s2">&quot;Apellido&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Juli Joli&quot;</span><span class="p">,</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span><span class="s2">&quot;Edad&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">25</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="p">}</span>
+</span></code></pre></div>
+La creación de un indice así como la inserción o actualización de documentos en el mismo se puede realizar mediante <code>PUT</code> o mediante <code>POST</code>. En los ejemplos anteriores, con <code>PUT</code> simplemente se crea un índice y con <code>POST</code> se introduce in documento en un índice, y en el caso de que el índice no exista, se crea.</p>
+<p>La principal diferencia entre <code>PUT</code> y <code>POST</code> en Elasticsearch radica en cómo manejan la identificación de documentos y la indexación. <code>PUT</code> se utiliza para operaciones de indexación o reindexación específicas con una <em>ID</em> explícita, mientras que <code>POST</code> se utiliza para operaciones de indexación más flexibles donde Elasticsearch puede generar automáticamente la <em>ID</em> del documento si no se especifica. Esto se traduce en que <code>PUT</code> es <em>idempotente</em>, mientras que <code>POST</code> no lo es.</p>
+<p>En todo caso, <code>PUT</code> se suele utilizar normalmente para la creación de índices y <code>POST</code> para la inserción y actualización de documentos.</p>
+<ul>
+<li><strong>Consulta de los datos de un índice</strong></li>
+</ul>
+<p><div class="language-js highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nx">GET</span><span class="w"> </span><span class="nx">mi_indice</span><span class="o">/</span><span class="nx">_search</span>
+</span></code></pre></div>
+Obtenemos todos los <strong><em>hits</em></strong> (registros) del índice. Posteriormente profundizaremos sobre esta opción que es la más potente de elastic</p>
+<ul>
+<li><strong>Introducimos un documento con un índice concreto</strong></li>
+</ul>
+<p><div class="language-js highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nx">POST</span><span class="w"> </span><span class="nx">mi_indice</span><span class="o">/</span><span class="nx">_doc</span><span class="o">/</span><span class="mf">1</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="p">{</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="s2">&quot;Nombre&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Pedro&quot;</span><span class="p">,</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="s2">&quot;Apellido&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Pedrito Pedrete&quot;</span><span class="p">,</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">  </span><span class="s2">&quot;Edad&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">24</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="p">}</span>
+</span></code></pre></div>
+Asignamos un <code>id</code> específico a este documento</p>
+<ul>
+<li><strong>Modificación de un documento por índice</strong></li>
+</ul>
+<p><div class="language-js highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nx">POST</span><span class="w"> </span><span class="nx">mi_indice</span><span class="o">/</span><span class="nx">_doc</span><span class="o">/</span><span class="mf">1</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="p">{</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="s2">&quot;Nombre&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Juan&quot;</span><span class="p">,</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span><span class="s2">&quot;Apellido&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Juanito Juante&quot;</span><span class="p">,</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">  </span><span class="s2">&quot;Edad&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">26</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="p">}</span>
+</span></code></pre></div>
+En este caso, machacamos el registro anterior con esta nuevo.</p>
+<ul>
+<li><strong>Actualización mediante <code>_update</code></strong></li>
+</ul>
+<p><div class="language-js highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nx">POST</span><span class="w"> </span><span class="nx">mi_indice</span><span class="o">/</span><span class="nx">_update</span><span class="o">/</span><span class="mf">1</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="p">{</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span><span class="s2">&quot;doc&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">  </span><span class="p">{</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">    </span><span class="s2">&quot;edad&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;62&quot;</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="p">}</span>
+</span></code></pre></div>
+Utilizando <code>_update</code> podemos actualizar un campo del documento, en este caso referenciado por un <code>id</code></p>
+<p><div class="language-js highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nx">POST</span><span class="w"> </span><span class="nx">mi_indice</span><span class="o">/</span><span class="nx">_update</span><span class="o">/</span><span class="mf">1</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="p">{</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span><span class="s2">&quot;doc&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">  </span><span class="p">{</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">    </span><span class="s2">&quot;Localidad&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Xativa&quot;</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="p">}</span>
+</span></code></pre></div>
+Observar el resultado, añadimos un nuevo campo sobre el documento existente.</p>
+<ul>
+<li><strong>Eliminar un documento concreto por <code>id</code></strong>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nx">DELETE</span><span class="w"> </span><span class="nx">mi_indice</span><span class="o">/</span><span class="nx">_doc</span><span class="o">/</span><span class="mf">1</span>
+</span></code></pre></div>
+Eliminamos selectivamente el documento. Observar el <code>_doc</code></li>
+</ul>
+<h3 id="el-metodo-_bulk">El método <code>_bulk</code></h3>
+<h4 id="ingestion-de-documentos-masiva">Ingestión de documentos masiva</h4>
+<p>Este método nos permite ingestar mas de un documento de una única vez</p>
+<p><div class="language-js highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nx">POST</span><span class="w"> </span><span class="nx">mi_indice</span><span class="o">/</span><span class="nx">_bulk</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="p">{</span><span class="s2">&quot;index&quot;</span><span class="o">:</span><span class="p">{</span><span class="s2">&quot;_id&quot;</span><span class="o">:</span><span class="mf">3</span><span class="p">}}</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="p">{</span><span class="s2">&quot;Nombre&quot;</span><span class="o">:</span><span class="s2">&quot;Evaristo&quot;</span><span class="p">,</span><span class="s2">&quot;Apellido&quot;</span><span class="o">:</span><span class="s2">&quot;Evarist Evaristate&quot;</span><span class="p">,</span><span class="s2">&quot;Edad&quot;</span><span class="o">:</span><span class="mf">16</span><span class="p">}</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="p">{</span><span class="s2">&quot;index&quot;</span><span class="o">:</span><span class="p">{</span><span class="s2">&quot;_id&quot;</span><span class="o">:</span><span class="mf">4</span><span class="p">}}</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="p">{</span><span class="s2">&quot;Nombre&quot;</span><span class="o">:</span><span class="s2">&quot;Dorotea&quot;</span><span class="p">,</span><span class="s2">&quot;Apellido&quot;</span><span class="o">:</span><span class="s2">&quot;Dori Dorita&quot;</span><span class="p">,</span><span class="s2">&quot;Edad&quot;</span><span class="o">:</span><span class="mf">19</span><span class="p">}</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="p">{</span><span class="s2">&quot;index&quot;</span><span class="o">:</span><span class="p">{</span><span class="s2">&quot;_id&quot;</span><span class="o">:</span><span class="mf">5</span><span class="p">}}</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="p">{</span><span class="s2">&quot;Nombre&quot;</span><span class="o">:</span><span class="s2">&quot;Hortensia&quot;</span><span class="p">,</span><span class="s2">&quot;Apellido&quot;</span><span class="o">:</span><span class="s2">&quot;Hori Hortensi&quot;</span><span class="p">,</span><span class="s2">&quot;Edad&quot;</span><span class="o">:</span><span class="mf">26</span><span class="p">}</span>
+</span></code></pre></div>
+Introduce los tres registros simultáneamente. Observar que se especifica el <code>id</code> y que se omite el <code>_doc</code></p>
+<p><div class="language-js highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nx">POST</span><span class="w"> </span><span class="nx">mi_indice</span><span class="o">/</span><span class="nx">_bulk</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="p">{</span><span class="s2">&quot;index&quot;</span><span class="o">:</span><span class="p">{}}</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="p">{</span><span class="s2">&quot;Nombre&quot;</span><span class="o">:</span><span class="s2">&quot;Lola&quot;</span><span class="p">,</span><span class="s2">&quot;Apellido&quot;</span><span class="o">:</span><span class="s2">&quot;Lolita Loleira&quot;</span><span class="p">,</span><span class="s2">&quot;Edad&quot;</span><span class="o">:</span><span class="mf">20</span><span class="p">}</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="p">{</span><span class="s2">&quot;index&quot;</span><span class="o">:</span><span class="p">{}}</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="p">{</span><span class="s2">&quot;Nombre&quot;</span><span class="o">:</span><span class="s2">&quot;Silvino&quot;</span><span class="p">,</span><span class="s2">&quot;Apellido&quot;</span><span class="o">:</span><span class="s2">&quot;Silva Silvando&quot;</span><span class="p">,</span><span class="s2">&quot;Edad&quot;</span><span class="o">:</span><span class="mf">21</span><span class="p">}</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="p">{</span><span class="s2">&quot;index&quot;</span><span class="o">:</span><span class="p">{}}</span>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="p">{</span><span class="s2">&quot;Nombre&quot;</span><span class="o">:</span><span class="s2">&quot;Torcuato&quot;</span><span class="p">,</span><span class="s2">&quot;Apellido&quot;</span><span class="o">:</span><span class="s2">&quot;Torcu Torcu&quot;</span><span class="p">,</span><span class="s2">&quot;Edad&quot;</span><span class="o">:</span><span class="mf">22</span><span class="p">}</span>
+</span></code></pre></div>
+En este caso, se inserta, pero ahora el <code>id</code> se genera automáticamente.</p>
+<p>y esto que viene a continuación, también funciona:</p>
+<p><div class="language-js highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nx">POST</span><span class="w"> </span><span class="nx">mi_indice</span><span class="o">/</span><span class="nx">_bulk</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="p">{</span><span class="w"> </span><span class="s2">&quot;index&quot;</span><span class="o">:</span><span class="p">{</span><span class="s2">&quot;_id&quot;</span><span class="o">:</span><span class="mf">10</span><span class="p">}</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="p">{</span><span class="w"> </span><span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="s2">&quot;john doe&quot;</span><span class="p">,</span><span class="s2">&quot;age&quot;</span><span class="o">:</span><span class="mf">25</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="p">{</span><span class="w"> </span><span class="s2">&quot;index&quot;</span><span class="o">:</span><span class="p">{</span><span class="s2">&quot;_id&quot;</span><span class="o">:</span><span class="mf">11</span><span class="p">}</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="p">{</span><span class="w"> </span><span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="s2">&quot;mary smith&quot;</span><span class="p">,</span><span class="s2">&quot;age&quot;</span><span class="o">:</span><span class="mf">32</span><span class="w"> </span><span class="p">}</span>
+</span></code></pre></div>
+Otros campos, y sin problemas</p>
+<h4 id="y-mas-cosas-anadir-actualizar-y-borrar">y mas cosas: añadir, actualizar y borrar</h4>
+<p>Veamos el siguiente ejemplo, donde <code>_bulk</code> realiza varias operaciones de una única vez:</p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="nx">POST</span><span class="w"> </span><span class="nx">mi_indice</span><span class="o">/</span><span class="nx">_bulk</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="p">{</span><span class="w"> </span><span class="s2">&quot;index&quot;</span><span class="o">:</span><span class="p">{</span><span class="s2">&quot;_id&quot;</span><span class="o">:</span><span class="mf">3</span><span class="p">}}</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="p">{</span><span class="w"> </span><span class="s2">&quot;Apellidos&quot;</span><span class="o">:</span><span class="s2">&quot;Evar Eviris&quot;</span><span class="p">,</span><span class="s2">&quot;age&quot;</span><span class="o">:</span><span class="mf">26</span><span class="p">}</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="p">{</span><span class="w"> </span><span class="s2">&quot;delete&quot;</span><span class="o">:</span><span class="p">{</span><span class="s2">&quot;_id&quot;</span><span class="o">:</span><span class="mf">4</span><span class="p">}}</span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="p">{</span><span class="w"> </span><span class="s2">&quot;update&quot;</span><span class="o">:</span><span class="p">{</span><span class="s2">&quot;_id&quot;</span><span class="o">:</span><span class="mf">10</span><span class="p">}}</span>
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="p">{</span><span class="w"> </span><span class="s2">&quot;doc&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="s2">&quot;John Doe&quot;</span><span class="p">,</span><span class="s2">&quot;age&quot;</span><span class="o">:</span><span class="mf">26</span><span class="p">}}</span>
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="p">{</span><span class="w"> </span><span class="s2">&quot;create&quot;</span><span class="o">:</span><span class="p">{</span><span class="s2">&quot;_id&quot;</span><span class="o">:</span><span class="mf">8</span><span class="p">}}</span>
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="p">{</span><span class="w"> </span><span class="s2">&quot;Nombre&quot;</span><span class="o">:</span><span class="s2">&quot;Gervasio&quot;</span><span class="p">,</span><span class="s2">&quot;Apellidos&quot;</span><span class="o">:</span><span class="s2">&quot;Ger Gervi&quot;</span><span class="p">,</span><span class="s2">&quot;age&quot;</span><span class="o">:</span><span class="mf">22</span><span class="p">}</span>
+</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="p">{</span><span class="w"> </span><span class="s2">&quot;create&quot;</span><span class="o">:</span><span class="p">{}}</span>
+</span><span id="__span-13-10"><a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="p">{</span><span class="w"> </span><span class="s2">&quot;Nombre&quot;</span><span class="o">:</span><span class="s2">&quot;Tomasa&quot;</span><span class="p">,</span><span class="s2">&quot;Apellidos&quot;</span><span class="o">:</span><span class="s2">&quot;Tomi Toma&quot;</span><span class="p">,</span><span class="s2">&quot;age&quot;</span><span class="o">:</span><span class="mf">23</span><span class="p">}</span>
+</span></code></pre></div>
+<p>Como se puede ver, en una misma ejecución, hemos realizado
+- Una actualización del <code>id</code> 3 (porque ya existía)
+- Un borrado del <code>id</code> 4
+- Una actualización del <code>id</code> 10
+- Una inserción del <code>id</code> 8
+- Una inserción con un <code>id</code> automático
+Observar que cada uno de estos elementos tiene una respuesta en su ejecución.</p>
+<h4 id="usando-_bulk-para-operaciones-masiva">Usando <code>_bulk</code> para operaciones masiva</h4>
+<p>Podemos tener fichero tipo <code>json</code> con un listado de operaciones como las anteriores y lanzarlos directamente sobre elastic, de forma que realizará todas las operaciones simultáneamente:</p>
+<p>Dado un fichero llamado <a href="../../files/vehiculos_aux.json">vehiculos_aux.json</a>, su ingesta se realizaría desde la línea de comandos, ya que no hay forma de hacerlo desde la interface de <code>kibana</code>.</p>
+<p>El comando para tal efecto sería: </p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>curl<span class="w"> </span>--cacert<span class="w"> </span>http_ca.crt<span class="w"> </span>-u<span class="w"> </span>elastic:<span class="nv">$ELASTIC_PASSWORD</span><span class="w"> </span>https://localhost:9200/_bulk<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Content-type: application/json&quot;</span><span class="w"> </span>--data-binary<span class="w"> </span>@vehiculos_aux.json<span class="w"> </span>
+</span></code></pre></div>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK28.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK28.png" alt="ELK" width="50%" /></a>
+</div>
+
+<p>Volvemos a la interfaz y si tecleamos </p>
+<p><div class="language-js highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="nx">GET</span><span class="w"> </span><span class="nx">vehiculos_test</span><span class="o">/</span><span class="nx">_search</span>
+</span></code></pre></div>
+Obtendremos un resultado similar al siguiente, donde podemos ver que se ha creado un índice con más de 10000 registros, llamado *vehiculos_test", tal y como se especificaba en el fichero</p>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK29.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK29.png" alt="ELK" width="30%" /></a>
+</div>
+
+<p>Para mas información en <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html">documentación oficial de elastic del API de Bulk</a></p>
+<p>También existen implementaciones en <em>python</em>, <em>perl</em>, <em>javascript</em> y otro lenguajes para pasar un fichero JSON a un fichero preparado para ser tratado con <code>_bulk</code>ç</p>
+<h3 id="el-metodo-get">El método <code>GET</code></h3>
+<p>El método <code>GET</code> en Elasticsearch se utiliza principalmente para realizar operaciones de lectura y recuperación de datos. </p>
+<p>En apartados anteriores hemos visto como la API <code>GET</code> también se puede utilizar para obtener información sobre el estado del <strong><em>cluster</em></strong>, ahora veremos cómo recuperar documentos individuales, realizar búsquedas, obtener información sobre los mappings de índice y otros fines de lectura.</p>
+<p>A continuación, se presentan algunos ejemplos de cómo se puede utilizar el método GET en Elasticsearch:</p>
+<ul>
+<li>
+<p><strong>Listado de los índices del cluster</strong>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="nx">GET</span><span class="w"> </span><span class="nx">_cat</span><span class="o">/</span><span class="nx">indices</span><span class="o">/?</span><span class="nx">v</span>
+</span></code></pre></div></p>
+</li>
+<li>
+<p><strong>Recuperar un documento por su ID:</strong>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="nx">GET</span><span class="w"> </span><span class="nx">mi_indice</span><span class="o">/</span><span class="nx">_doc</span><span class="o">/</span><span class="mf">1</span>
+</span></code></pre></div>
+Esta solicitud recupera un <em>hit</em> (documento) específico de un índice por su ID.</p>
+</li>
+<li>
+<p><strong>Obtener información sobre un índice:</strong>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="nx">GET</span><span class="w"> </span><span class="nx">mi_indice</span>
+</span></code></pre></div>
+Esta solicitud devuelve información sobre un índice específico, incluidos los mappings, la configuración y la cantidad de documentos.</p>
+</li>
+<li>
+<p><strong>Realizar una búsqueda:</strong>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="nx">GET</span><span class="w"> </span><span class="nx">mi_indice</span><span class="o">/</span><span class="nx">_search</span>
+</span></code></pre></div>
+Esta solicitud realiza una búsqueda en un índice específico y devuelve los <em>hits</em> (documentos) que coinciden con los criterios de búsqueda especificados.</p>
+</li>
+</ul>
+<p>Más información sobre el <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/search-search.html">API <code>_search</code> en la documentación oficial de elastic</a></p>
+<p>Observar el encabezado donde se muestran por ejemplo la cantidad de registro con <code>value</code> y la exactitud de este valor mediante <code>relation</code>, así un <code>eq</code> indica un valor exactos, <code>gte</code> más de las indicadas... </p>
+<p>Así, en el ejemplo del apartado anterior, al ejecutar la consulta del índice importado</p>
+<p><div class="language-js highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="nx">GET</span><span class="w"> </span><span class="nx">vehiculos_test</span><span class="o">/</span><span class="nx">_search</span>
+</span></code></pre></div>
+el resultado es el siguiente, donde indica que hay más de 10.000 <em>hits</em>, y cómo podemos ver en el resultado si lo ejecutamos, sólo nos muestra unos 10 <em>hits</em>, o sea, no los muestra todos. Esto se hace por cuestiones de optimización.</p>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK30.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK30.png" alt="ELK" width="30%" /></a>
+</div>
+
+<p>Si dentro de la búsqueda incluimos el siguiente JSON indicando <code>track_total_hits</code>, entonces nos indicará exactamente la cantidad de registros. Ahora Elastic se tomará su tiempo, para calcular la cantidad exacta de <em>hits</em>, cosa que antes no ha hecho </p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="nx">GET</span><span class="w"> </span><span class="nx">vehiculos_test</span><span class="o">/</span><span class="nx">_search</span>
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="p">{</span>
+</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="w">  </span><span class="s2">&quot;track_total_hits&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-21-4"><a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="w">  </span><span class="s2">&quot;size&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">5000</span>
+</span><span id="__span-21-5"><a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>En el caso anterior, hemos añadido que nos muestre 5000 <em>hits</em>.</p>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK32.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK32.png" alt="ELK" width="30%" /></a>
+</div>
+
+<p>En este caso, se obtienen 5000 <em>hits</em>, pero por contra se han utilizado 25ms para obtener estos datos. Por este motivo, elastic esta preparado para ofrecer como máximo 10.000 documentos. Existe otra <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/scroll-api.html">API llamada <code>scroll</code></a> que permite recuperar todos los documentos, pero en bloques limitados, de forma que cada petición nos ofrece una cantidad de todos ellos.</p>
+<ul>
+<li>
+<p><strong>Obtener información sobre el cluster:</strong>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="nx">GET</span><span class="w"> </span><span class="o">/</span><span class="nx">_cluster</span><span class="o">/</span><span class="nx">state</span>
+</span></code></pre></div>
+Esta solicitud devuelve información sobre el estado actual del cluster, incluidos los nodos, los shards y la configuración.</p>
+</li>
+<li>
+<p><strong>Obtener información sobre nodos individuales:</strong>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="nx">GET</span><span class="w"> </span><span class="o">/</span><span class="nx">_nodes</span>
+</span></code></pre></div>
+Esta solicitud devuelve información sobre todos los nodos en el cluster, incluyendo estadísticas de uso de recursos y configuración.</p>
+</li>
+<li>
+<p><strong>Obtener información sobre mappings de índice:</strong>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="nx">GET</span><span class="w"> </span><span class="nx">mi_indice</span><span class="o">/</span><span class="nx">_mapping</span>
+</span></code></pre></div>
+Esta solicitud devuelve el mapping de un índice específico, que describe la estructura de los documentos en el índice.</p>
+</li>
+</ul>
+<p>O sea, vemos los campos y la tipificación de datos establecida.</p>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK31.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK31.png" alt="ELK" width="30%" /></a>
+</div>
+
+<p>Como se puede ver en la captura anterior aparecen todos los campos introducidos en los diferentes documentos de introducidos en el índice, y su tipificación básica.</p>
+<h2 id="consulta-de-datos">Consulta de datos.</h2>
+<h3 id="un-poco-de-teoria">Un poco de teoría</h3>
+<p>Elastic hace una búsqueda indexada de los elementos, por lo que a la hora de responde puede devolver respuesta ordenadas de forma más o menos acertada</p>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK33.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK33.png" alt="ELK" width="40%" /></a>
+</div>
+
+<p>En Elasticsearch, al igual que en otros motores de búsqueda, se utilizan varios conceptos importantes para evaluar y medir el rendimiento de las consultas. Estos conceptos incluyen la relevancia, la precisión y el recall. Aquí tienes una descripción de cada uno de ellos:</p>
+<ol>
+<li><strong>Relevancia:</strong></li>
+<li>La relevancia se refiere a la medida en que los resultados devueltos por una consulta son pertinentes o adecuados para la intención del usuario.</li>
+<li>En el contexto de Elasticsearch, la relevancia se determina mediante un algoritmo de puntuación que asigna una puntuación de relevancia a cada documento en función de su similitud con los términos de búsqueda y otros factores como la frecuencia de los términos, la longitud del documento, etc.</li>
+<li>
+<p>Elasticsearch utiliza el modelo de puntuación TF-IDF (Term Frequency-Inverse Document Frequency) como uno de los factores para calcular la relevancia de los documentos.</p>
+</li>
+<li>
+<p><strong>Precisión:</strong></p>
+</li>
+<li>La precisión se refiere a la proporción de documentos relevantes entre todos los documentos devueltos por una consulta.</li>
+<li>En otras palabras, la precisión mide qué tan útiles son los resultados devueltos por una consulta en relación con la cantidad total de resultados.</li>
+<li>
+<p>Una alta precisión significa que la mayoría de los documentos devueltos son relevantes para la consulta, mientras que una baja precisión indica que muchos de los documentos devueltos son irrelevantes.</p>
+</li>
+<li>
+<p><strong>Recall:</strong></p>
+</li>
+<li>El recall, también conocido como exhaustividad, se refiere a la proporción de documentos relevantes recuperados por una consulta en relación con todos los documentos relevantes en la colección.</li>
+<li>En otras palabras, el recall mide qué tan bien una consulta recupera todos los documentos relevantes en el conjunto de datos.</li>
+<li>Un alto recall significa que la mayoría de los documentos relevantes se recuperan en la consulta, mientras que un bajo recall indica que muchos documentos relevantes se pierden.</li>
+</ol>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK34.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK34.png" alt="ELK" width="35%" /></a>
+</div>
+
+<p>Elasticsearch utiliza una puntuación (<strong><em>score</em></strong>) para determinar la clasificación de documentos coincidentes</p>
+<h3 id="consultas-dsl">Consultas DSL</h3>
+<p>Elasticsearch posibilita usar JSON para definir consulta DSL (Lenguaje de Dominio Específico).</p>
+<p>Vamos a ver cómo podemos lanzar diferentes tipos de Query para obtener los <em>hits</em> que mas relevancia tienen para nosotros, para ello vamos a utilizar el índice que obtendremos de la ingesta del fichero <a href="../../files/restaurantes_es.json">restaurantes_es.json</a> </p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>curl<span class="w"> </span>--cacert<span class="w"> </span>http_ca.crt<span class="w"> </span>-u<span class="w"> </span>elastic:<span class="nv">$ELASTIC_PASSWORD</span><span class="w"> </span>https://localhost:9200/_bulk<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Content-type: application/json&quot;</span><span class="w"> </span>--data-binary<span class="w"> </span>@restaurantes_es.json<span class="w"> </span>
+</span></code></pre></div>
+<p>Una vez introducidos los datos, verificamos y revisamos su estructura:</p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="nx">GET</span><span class="w"> </span><span class="nx">restaurantes</span><span class="o">/</span><span class="nx">_search</span>
+</span></code></pre></div>
+<h4 id="match"><code>match</code></h4>
+<p>El primer tipo de consulta que vamos a utilizar es el <code>match query</code></p>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK41.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK41.png" alt="ELK" width="70%" /></a>
+</div>
+
+<p>Así pues, al ejecutar la siguiente consulta para buscar "<em>Cocina Tradicional</em>", obtendremos los siguientes registros:</p>
+<p><div class="language-js highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="nx">GET</span><span class="w"> </span><span class="nx">restaurantes</span><span class="o">/</span><span class="nx">_search</span>
+</span><span id="__span-27-2"><a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="p">{</span>
+</span><span id="__span-27-3"><a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="w">  </span><span class="s2">&quot;size&quot;</span><span class="o">:</span><span class="mf">50</span><span class="p">,</span>
+</span><span id="__span-27-4"><a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a><span class="w">  </span><span class="s2">&quot;query&quot;</span><span class="o">:</span><span class="p">{</span>
+</span><span id="__span-27-5"><a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a><span class="w">    </span><span class="s2">&quot;match&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-27-6"><a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a><span class="w">      </span><span class="s2">&quot;DESCRIPCION&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;cocina tradicional&quot;</span>
+</span><span id="__span-27-7"><a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-27-8"><a id="__codelineno-27-8" name="__codelineno-27-8" href="#__codelineno-27-8"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-27-9"><a id="__codelineno-27-9" name="__codelineno-27-9" href="#__codelineno-27-9"></a><span class="p">}</span>
+</span></code></pre></div>
+Como se puede observar, la consulta ha tenido éxito, ha obtenido un total de 17 registros y podemos observar en los registros del resultado que contiene en la <em>descripción</em> el literal buscado.</p>
+<blockquote>
+<p><strong>Nota</strong>: se ha especificado un <code>"size":50</code> porque como por defecto solo muestra los 10 primeros documentos, para que los muestre todo, en este caso serán 17</p>
+</blockquote>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK42.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK42.png" alt="ELK" width="70%" /></a>
+</div>
+
+<p>En los últimos registros podremos ver que exactamente no obtenemos el literal "<em>Cocina Tradicional</em>"</p>
+<p>Esto es porque realmente ha hecho un <strong><em>or lógico</em></strong> entre <em>cocina</em> y <em>tradicional</em>.</p>
+<p>Si queremos afinar más la búsqueda y queremos exigir que existan los dos terminos, entonces necesitamos el <strong><em>operador lógico and</em></strong> de la siguiente manera</p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="nx">GET</span><span class="w"> </span><span class="nx">restaurantes</span><span class="o">/</span><span class="nx">_search</span>
+</span><span id="__span-28-2"><a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="p">{</span>
+</span><span id="__span-28-3"><a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="w">  </span><span class="s2">&quot;size&quot;</span><span class="o">:</span><span class="mf">50</span><span class="p">,</span>
+</span><span id="__span-28-4"><a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a><span class="w">  </span><span class="s2">&quot;query&quot;</span><span class="o">:</span><span class="p">{</span>
+</span><span id="__span-28-5"><a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a><span class="w">    </span><span class="s2">&quot;match&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-28-6"><a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a><span class="w">      </span><span class="s2">&quot;DESCRIPCION&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-28-7"><a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a><span class="w">        </span><span class="s2">&quot;query&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;cocina tradicional&quot;</span><span class="p">,</span>
+</span><span id="__span-28-8"><a id="__codelineno-28-8" name="__codelineno-28-8" href="#__codelineno-28-8"></a><span class="w">        </span><span class="s2">&quot;operator&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;and&quot;</span>
+</span><span id="__span-28-9"><a id="__codelineno-28-9" name="__codelineno-28-9" href="#__codelineno-28-9"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-28-10"><a id="__codelineno-28-10" name="__codelineno-28-10" href="#__codelineno-28-10"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-28-11"><a id="__codelineno-28-11" name="__codelineno-28-11" href="#__codelineno-28-11"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-28-12"><a id="__codelineno-28-12" name="__codelineno-28-12" href="#__codelineno-28-12"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Ahora nos responde 8 registros y veremos que en todos exige las dos palabras, aunque puede que no se encuentren de forma consecutiva.</p>
+<p>Otra forma de obligar a la consulta a un mínimo de coincidencia es mediante el operador <code>minimum_should_match</code> donde es especifica que como mínimo de todas las palabras a buscar, se deben encontrar una cantidad mínima de ellas. </p>
+<p>Veamos el ejemplo buscando "<em>cocina tradicional canaria</em>"</p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="nx">GET</span><span class="w"> </span><span class="nx">restaurantes</span><span class="o">/</span><span class="nx">_search</span>
+</span><span id="__span-29-2"><a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="p">{</span>
+</span><span id="__span-29-3"><a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a><span class="w">  </span><span class="s2">&quot;query&quot;</span><span class="o">:</span><span class="p">{</span>
+</span><span id="__span-29-4"><a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a><span class="w">    </span><span class="s2">&quot;match&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-29-5"><a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a><span class="w">      </span><span class="s2">&quot;DESCRIPCION&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-29-6"><a id="__codelineno-29-6" name="__codelineno-29-6" href="#__codelineno-29-6"></a><span class="w">        </span><span class="s2">&quot;query&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;cocina tradicional canaria&quot;</span><span class="p">,</span>
+</span><span id="__span-29-7"><a id="__codelineno-29-7" name="__codelineno-29-7" href="#__codelineno-29-7"></a><span class="w">        </span><span class="s2">&quot;minimum_should_match&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">2</span>
+</span><span id="__span-29-8"><a id="__codelineno-29-8" name="__codelineno-29-8" href="#__codelineno-29-8"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-29-9"><a id="__codelineno-29-9" name="__codelineno-29-9" href="#__codelineno-29-9"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-29-10"><a id="__codelineno-29-10" name="__codelineno-29-10" href="#__codelineno-29-10"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-29-11"><a id="__codelineno-29-11" name="__codelineno-29-11" href="#__codelineno-29-11"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>En este caso, nos devuelve 8 registros. </p>
+<p>Observar que tenemos una puntuación para cada uno de los documentos obtenidos en la búsqueda identificada por el campo <code>max_score</code></p>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK43.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK43.png" alt="ELK" width="50%" /></a>
+</div>
+
+<p>Así pues, <code>max_score</code> es un campo que se devuelve en los resultados de una consulta de búsqueda y que indica la puntuación máxima de relevancia entre todos los documentos recuperados por esa consulta. Este campo se utiliza para proporcionar una medida relativa de la relevancia de los documentos devueltos en comparación con otros documentos en el conjunto de resultados.</p>
+<p>El valor de <code>max_score</code> es útil para los usuarios y los desarrolladores de aplicaciones para comprender la distribución de relevancia en los resultados de la búsqueda y para determinar la importancia relativa de los documentos devueltos. También puede ser utilizado para normalizar las puntuaciones de relevancia de otros documentos en el conjunto de resultados, si es necesario.</p>
+<p>Básicamente depende de 3 factores:</p>
+<ul>
+<li><strong>Frecuencia del termino</strong>: Cuanto más aparece un termino en un campo, más puntúa.</li>
+<li><strong>Frecuencia inversa del documento</strong>: Cuanto más documentos contienen el termino, menos importante es.</li>
+<li><strong>Longitud del campo</strong>: Los campo más cortos son más relevantes que los largos.</li>
+</ul>
+<h4 id="match_phrase"><code>match_phrase</code></h4>
+<p>Para <strong>buscar frase</strong> y no términos separados utilizamos el operados <code>match_phrase</code></p>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK44.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK44.png" alt="ELK" width="70%" /></a>
+</div>
+
+<p>Entonces, si buscamos el literal exacto</p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-30-1"><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="nx">GET</span><span class="w"> </span><span class="nx">restaurantes</span><span class="o">/</span><span class="nx">_search</span>
+</span><span id="__span-30-2"><a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a><span class="p">{</span>
+</span><span id="__span-30-3"><a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a><span class="w">  </span><span class="s2">&quot;query&quot;</span><span class="o">:</span><span class="p">{</span>
+</span><span id="__span-30-4"><a id="__codelineno-30-4" name="__codelineno-30-4" href="#__codelineno-30-4"></a><span class="w">    </span><span class="s2">&quot;match_phrase&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-30-5"><a id="__codelineno-30-5" name="__codelineno-30-5" href="#__codelineno-30-5"></a><span class="w">      </span><span class="s2">&quot;DESCRIPCION&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-30-6"><a id="__codelineno-30-6" name="__codelineno-30-6" href="#__codelineno-30-6"></a><span class="w">        </span><span class="s2">&quot;query&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;cocina tradicional&quot;</span>
+</span><span id="__span-30-7"><a id="__codelineno-30-7" name="__codelineno-30-7" href="#__codelineno-30-7"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-30-8"><a id="__codelineno-30-8" name="__codelineno-30-8" href="#__codelineno-30-8"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-30-9"><a id="__codelineno-30-9" name="__codelineno-30-9" href="#__codelineno-30-9"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-30-10"><a id="__codelineno-30-10" name="__codelineno-30-10" href="#__codelineno-30-10"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>En este caso nos devuelve solo 7 registros. Si buscamos la canaria, nos reduce la cantidad de elementos encontrados.</p>
+<p>De las misma forma que el <code>minimum_should_match</code> nos introducía una variación sobre una búsqueda normal con <code>match</code>, ahora tenemos el parámetro de <code>slop</code> que nos indica el número de términos que esperamos encontrar mínimo de entre todos los términos indicados. </p>
+<p>O sea, con la siguiente búsqueda:</p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-31-1"><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="nx">GET</span><span class="w"> </span><span class="nx">restaurantes</span><span class="o">/</span><span class="nx">_search</span>
+</span><span id="__span-31-2"><a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a><span class="p">{</span>
+</span><span id="__span-31-3"><a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a><span class="w">  </span><span class="s2">&quot;query&quot;</span><span class="o">:</span><span class="p">{</span>
+</span><span id="__span-31-4"><a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a><span class="w">    </span><span class="s2">&quot;match_phrase&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-31-5"><a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a><span class="w">      </span><span class="s2">&quot;DESCRIPCION&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-31-6"><a id="__codelineno-31-6" name="__codelineno-31-6" href="#__codelineno-31-6"></a><span class="w">        </span><span class="s2">&quot;query&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;cocina tradicional&quot;</span><span class="p">,</span>
+</span><span id="__span-31-7"><a id="__codelineno-31-7" name="__codelineno-31-7" href="#__codelineno-31-7"></a><span class="w">        </span><span class="s2">&quot;slop&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">10</span>
+</span><span id="__span-31-8"><a id="__codelineno-31-8" name="__codelineno-31-8" href="#__codelineno-31-8"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-31-9"><a id="__codelineno-31-9" name="__codelineno-31-9" href="#__codelineno-31-9"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-31-10"><a id="__codelineno-31-10" name="__codelineno-31-10" href="#__codelineno-31-10"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-31-11"><a id="__codelineno-31-11" name="__codelineno-31-11" href="#__codelineno-31-11"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Permitimos que haya hasta <strong>10 palabras</strong> entre "<em>cocina</em>" y "<em>tradicional</em>" puesto que el <code>slot</code> tiene un valor de 10. Si lo cambiamos a 1 por ejemplo, permitiría encontrar el literal "<em>cocina canaria tradicional</em>" pero no el de "<em>cocina procedente de canarias tradicional</em>" puesto que tiene más términos entre los dos indicados.</p>
+<h4 id="range"><code>range</code></h4>
+<p>Las <strong>consultas de rangos</strong> son adecuadas para hacer consultas numéricas y especialmente de fechas.</p>
+<p>Elastic permit el uso de <strong>Date math</strong> que es un lenguage <em>user fiendly</em> que nos permite especificar fechas una forma más lógica y sencilla de entender.</p>
+<p>Per ejemplo, la siguiente consulta:</p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-32-1"><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="nx">GET</span><span class="w"> </span><span class="nx">restaurantes</span><span class="o">/</span><span class="nx">_search</span>
+</span><span id="__span-32-2"><a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="p">{</span>
+</span><span id="__span-32-3"><a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="w">  </span><span class="s2">&quot;query&quot;</span><span class="o">:</span><span class="p">{</span>
+</span><span id="__span-32-4"><a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a><span class="w">    </span><span class="s2">&quot;range&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-32-5"><a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a><span class="w">      </span><span class="s2">&quot;FECHA_MODIFICACION&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-32-6"><a id="__codelineno-32-6" name="__codelineno-32-6" href="#__codelineno-32-6"></a><span class="w">        </span><span class="s2">&quot;gte&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;2024-02-11&quot;</span><span class="p">,</span>
+</span><span id="__span-32-7"><a id="__codelineno-32-7" name="__codelineno-32-7" href="#__codelineno-32-7"></a><span class="w">        </span><span class="s2">&quot;lte&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;2024-08-11&quot;</span>
+</span><span id="__span-32-8"><a id="__codelineno-32-8" name="__codelineno-32-8" href="#__codelineno-32-8"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-32-9"><a id="__codelineno-32-9" name="__codelineno-32-9" href="#__codelineno-32-9"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-32-10"><a id="__codelineno-32-10" name="__codelineno-32-10" href="#__codelineno-32-10"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-32-11"><a id="__codelineno-32-11" name="__codelineno-32-11" href="#__codelineno-32-11"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>es similar a </p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-33-1"><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="nx">GET</span><span class="w"> </span><span class="nx">restaurantes</span><span class="o">/</span><span class="nx">_search</span>
+</span><span id="__span-33-2"><a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a><span class="p">{</span>
+</span><span id="__span-33-3"><a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a><span class="w">  </span><span class="s2">&quot;query&quot;</span><span class="o">:</span><span class="p">{</span>
+</span><span id="__span-33-4"><a id="__codelineno-33-4" name="__codelineno-33-4" href="#__codelineno-33-4"></a><span class="w">    </span><span class="s2">&quot;range&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-33-5"><a id="__codelineno-33-5" name="__codelineno-33-5" href="#__codelineno-33-5"></a><span class="w">      </span><span class="s2">&quot;FECHA_MODIFICACION&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-33-6"><a id="__codelineno-33-6" name="__codelineno-33-6" href="#__codelineno-33-6"></a><span class="w">        </span><span class="s2">&quot;gte&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;now-6M&quot;</span>
+</span><span id="__span-33-7"><a id="__codelineno-33-7" name="__codelineno-33-7" href="#__codelineno-33-7"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-33-8"><a id="__codelineno-33-8" name="__codelineno-33-8" href="#__codelineno-33-8"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-33-9"><a id="__codelineno-33-9" name="__codelineno-33-9" href="#__codelineno-33-9"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-33-10"><a id="__codelineno-33-10" name="__codelineno-33-10" href="#__codelineno-33-10"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Ejemplo de uso de <strong>Date math</strong> usando la fecha de hoy:</p>
+<ul>
+<li><strong>Búsqueda de documentos desde la fecha de hoy hasta hace una semana:</strong></li>
+</ul>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-34-1"><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="p">{</span>
+</span><span id="__span-34-2"><a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a><span class="w">  </span><span class="s2">&quot;query&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-34-3"><a id="__codelineno-34-3" name="__codelineno-34-3" href="#__codelineno-34-3"></a><span class="w">    </span><span class="s2">&quot;range&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-34-4"><a id="__codelineno-34-4" name="__codelineno-34-4" href="#__codelineno-34-4"></a><span class="w">      </span><span class="s2">&quot;fecha&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-34-5"><a id="__codelineno-34-5" name="__codelineno-34-5" href="#__codelineno-34-5"></a><span class="w">        </span><span class="s2">&quot;gte&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;now-1w/d&quot;</span><span class="p">,</span>
+</span><span id="__span-34-6"><a id="__codelineno-34-6" name="__codelineno-34-6" href="#__codelineno-34-6"></a><span class="w">        </span><span class="s2">&quot;lte&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;now/d&quot;</span>
+</span><span id="__span-34-7"><a id="__codelineno-34-7" name="__codelineno-34-7" href="#__codelineno-34-7"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-34-8"><a id="__codelineno-34-8" name="__codelineno-34-8" href="#__codelineno-34-8"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-34-9"><a id="__codelineno-34-9" name="__codelineno-34-9" href="#__codelineno-34-9"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-34-10"><a id="__codelineno-34-10" name="__codelineno-34-10" href="#__codelineno-34-10"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Esto buscará documentos con un campo "fecha" dentro del rango de hace una semana hasta la fecha actual.</p>
+<ul>
+<li><strong>Búsqueda de documentos desde el comienzo del mes actual hasta la fecha de hoy:</strong></li>
+</ul>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-35-1"><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="p">{</span>
+</span><span id="__span-35-2"><a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a><span class="w">  </span><span class="s2">&quot;query&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-35-3"><a id="__codelineno-35-3" name="__codelineno-35-3" href="#__codelineno-35-3"></a><span class="w">    </span><span class="s2">&quot;range&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-35-4"><a id="__codelineno-35-4" name="__codelineno-35-4" href="#__codelineno-35-4"></a><span class="w">      </span><span class="s2">&quot;fecha&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-35-5"><a id="__codelineno-35-5" name="__codelineno-35-5" href="#__codelineno-35-5"></a><span class="w">        </span><span class="s2">&quot;gte&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;now/M&quot;</span><span class="p">,</span>
+</span><span id="__span-35-6"><a id="__codelineno-35-6" name="__codelineno-35-6" href="#__codelineno-35-6"></a><span class="w">        </span><span class="s2">&quot;lte&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;now/d&quot;</span>
+</span><span id="__span-35-7"><a id="__codelineno-35-7" name="__codelineno-35-7" href="#__codelineno-35-7"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-35-8"><a id="__codelineno-35-8" name="__codelineno-35-8" href="#__codelineno-35-8"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-35-9"><a id="__codelineno-35-9" name="__codelineno-35-9" href="#__codelineno-35-9"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-35-10"><a id="__codelineno-35-10" name="__codelineno-35-10" href="#__codelineno-35-10"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Esto buscará documentos con un campo "fecha" dentro del rango desde el primer día del mes actual hasta la fecha actual.</p>
+<ul>
+<li><strong>Búsqueda de documentos desde la fecha de hoy hasta hace tres meses:</strong></li>
+</ul>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-36-1"><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a><span class="p">{</span>
+</span><span id="__span-36-2"><a id="__codelineno-36-2" name="__codelineno-36-2" href="#__codelineno-36-2"></a><span class="w">  </span><span class="s2">&quot;query&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-36-3"><a id="__codelineno-36-3" name="__codelineno-36-3" href="#__codelineno-36-3"></a><span class="w">    </span><span class="s2">&quot;range&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-36-4"><a id="__codelineno-36-4" name="__codelineno-36-4" href="#__codelineno-36-4"></a><span class="w">      </span><span class="s2">&quot;fecha&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-36-5"><a id="__codelineno-36-5" name="__codelineno-36-5" href="#__codelineno-36-5"></a><span class="w">        </span><span class="s2">&quot;gte&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;now-3M/d&quot;</span><span class="p">,</span>
+</span><span id="__span-36-6"><a id="__codelineno-36-6" name="__codelineno-36-6" href="#__codelineno-36-6"></a><span class="w">        </span><span class="s2">&quot;lte&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;now/d&quot;</span>
+</span><span id="__span-36-7"><a id="__codelineno-36-7" name="__codelineno-36-7" href="#__codelineno-36-7"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-36-8"><a id="__codelineno-36-8" name="__codelineno-36-8" href="#__codelineno-36-8"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-36-9"><a id="__codelineno-36-9" name="__codelineno-36-9" href="#__codelineno-36-9"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-36-10"><a id="__codelineno-36-10" name="__codelineno-36-10" href="#__codelineno-36-10"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Esto buscará documentos con un campo "fecha" dentro del rango de hace tres meses hasta la fecha actual.</p>
+<p>Si buscamos estrictamente el formato de las fechas en elastic, podemos simplificar en la siguiente imagen:</p>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK45.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK45.png" alt="ELK" width="50%" /></a>
+</div>
+
+<p>Más información sobre <strong>Date Math</strong> en la documentación de elastic: <a href="https://www.elastic.co/guide/en/elasticsearch/client/net-api/7.17/date-math-expressions.html">Date math expressions</a></p>
+<h3 id="busquedas-combinadas-y-buenas-practicas">Búsquedas combinadas y buenas prácticas</h3>
+<p>Veamos como podemos operar con todo lo visto anteriormente media su combinación. </p>
+<p>Para ello utilizaremos las <strong>bool query</strong> que están compuestas de varias clausulas como son: 
+- <strong>must</strong>, que establece condiciones que son de obligado cumplimiento
+- <strong>must_not</strong>, que es lo contrario del anterior. Elementos que no queremos encontrarnos.
+- <strong>should</strong>, clausula permisiva que abre la consulta a textos o números que pueden estar o no, o incluso que se asemejen a una condición <strong><em>or</em></strong>. En este caso no se excluyen documentos y se pueden aplicar todas las clausulas vistas anteriormente.
+- <strong>filter</strong>, donde filtramos y ordenamos los documentos obtenidos. Esta clausula no afecta al <code>score</code> y se aplica una vez obtenidos los resultados. Es suele filtrar por fecha, números... </p>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK46.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK46.png" alt="ELK" width="30%" /></a>
+</div>
+
+<p>Por ejemplo:</p>
+<p>Hacemos una búsqueda donde se encuentre el literal "<em>cocina</em>" o "<em>tradicional</em>" y además queremos aplicar un filtro para que nos muestre solo los resultados entre unas fechas dadas.</p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-37-1"><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a><span class="nx">GET</span><span class="w"> </span><span class="nx">restaurantes</span><span class="o">/</span><span class="nx">_search</span>
+</span><span id="__span-37-2"><a id="__codelineno-37-2" name="__codelineno-37-2" href="#__codelineno-37-2"></a><span class="p">{</span>
+</span><span id="__span-37-3"><a id="__codelineno-37-3" name="__codelineno-37-3" href="#__codelineno-37-3"></a><span class="w">  </span><span class="s2">&quot;query&quot;</span><span class="o">:</span><span class="p">{</span>
+</span><span id="__span-37-4"><a id="__codelineno-37-4" name="__codelineno-37-4" href="#__codelineno-37-4"></a><span class="w">    </span><span class="s2">&quot;bool&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-37-5"><a id="__codelineno-37-5" name="__codelineno-37-5" href="#__codelineno-37-5"></a><span class="w">      </span><span class="s2">&quot;must&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-37-6"><a id="__codelineno-37-6" name="__codelineno-37-6" href="#__codelineno-37-6"></a><span class="w">        </span><span class="p">{</span>
+</span><span id="__span-37-7"><a id="__codelineno-37-7" name="__codelineno-37-7" href="#__codelineno-37-7"></a><span class="w">          </span><span class="s2">&quot;match&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-37-8"><a id="__codelineno-37-8" name="__codelineno-37-8" href="#__codelineno-37-8"></a><span class="w">            </span><span class="s2">&quot;DESCRIPCION&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;cocina tradicional.&quot;</span>
+</span><span id="__span-37-9"><a id="__codelineno-37-9" name="__codelineno-37-9" href="#__codelineno-37-9"></a><span class="w">          </span><span class="p">}</span>
+</span><span id="__span-37-10"><a id="__codelineno-37-10" name="__codelineno-37-10" href="#__codelineno-37-10"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-37-11"><a id="__codelineno-37-11" name="__codelineno-37-11" href="#__codelineno-37-11"></a><span class="w">      </span><span class="p">],</span>
+</span><span id="__span-37-12"><a id="__codelineno-37-12" name="__codelineno-37-12" href="#__codelineno-37-12"></a><span class="w">      </span><span class="s2">&quot;filter&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-37-13"><a id="__codelineno-37-13" name="__codelineno-37-13" href="#__codelineno-37-13"></a><span class="w">        </span><span class="p">{</span>
+</span><span id="__span-37-14"><a id="__codelineno-37-14" name="__codelineno-37-14" href="#__codelineno-37-14"></a><span class="w">          </span><span class="s2">&quot;range&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-37-15"><a id="__codelineno-37-15" name="__codelineno-37-15" href="#__codelineno-37-15"></a><span class="w">            </span><span class="s2">&quot;FECHA_MODIFICACION&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-37-16"><a id="__codelineno-37-16" name="__codelineno-37-16" href="#__codelineno-37-16"></a><span class="w">              </span><span class="s2">&quot;gte&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;2024-02-01&quot;</span><span class="p">,</span>
+</span><span id="__span-37-17"><a id="__codelineno-37-17" name="__codelineno-37-17" href="#__codelineno-37-17"></a><span class="w">              </span><span class="s2">&quot;lte&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;now&quot;</span>
+</span><span id="__span-37-18"><a id="__codelineno-37-18" name="__codelineno-37-18" href="#__codelineno-37-18"></a><span class="w">            </span><span class="p">}</span>
+</span><span id="__span-37-19"><a id="__codelineno-37-19" name="__codelineno-37-19" href="#__codelineno-37-19"></a><span class="w">          </span><span class="p">}</span>
+</span><span id="__span-37-20"><a id="__codelineno-37-20" name="__codelineno-37-20" href="#__codelineno-37-20"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-37-21"><a id="__codelineno-37-21" name="__codelineno-37-21" href="#__codelineno-37-21"></a><span class="w">      </span><span class="p">]</span>
+</span><span id="__span-37-22"><a id="__codelineno-37-22" name="__codelineno-37-22" href="#__codelineno-37-22"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-37-23"><a id="__codelineno-37-23" name="__codelineno-37-23" href="#__codelineno-37-23"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-37-24"><a id="__codelineno-37-24" name="__codelineno-37-24" href="#__codelineno-37-24"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Recordad que si cambiamos <code>match</code> por <code>match_phrase</code>, entonces exigiremos el literal.</p>
+<p>En el siguiente ejemplo, buscamos un restaurante de precio <em>gourmet</em> donde puede ser que sirvan o <strong>carne</strong> o <strong>pescado</strong> o ninguna de las dos cosas;</p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-38-1"><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a><span class="nx">GET</span><span class="w"> </span><span class="nx">restaurantes</span><span class="o">/</span><span class="nx">_search</span>
+</span><span id="__span-38-2"><a id="__codelineno-38-2" name="__codelineno-38-2" href="#__codelineno-38-2"></a><span class="p">{</span>
+</span><span id="__span-38-3"><a id="__codelineno-38-3" name="__codelineno-38-3" href="#__codelineno-38-3"></a><span class="w">  </span><span class="s2">&quot;query&quot;</span><span class="o">:</span><span class="p">{</span>
+</span><span id="__span-38-4"><a id="__codelineno-38-4" name="__codelineno-38-4" href="#__codelineno-38-4"></a><span class="w">    </span><span class="s2">&quot;bool&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-38-5"><a id="__codelineno-38-5" name="__codelineno-38-5" href="#__codelineno-38-5"></a><span class="w">      </span><span class="s2">&quot;must&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-38-6"><a id="__codelineno-38-6" name="__codelineno-38-6" href="#__codelineno-38-6"></a><span class="w">        </span><span class="p">{</span>
+</span><span id="__span-38-7"><a id="__codelineno-38-7" name="__codelineno-38-7" href="#__codelineno-38-7"></a><span class="w">          </span><span class="s2">&quot;match&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-38-8"><a id="__codelineno-38-8" name="__codelineno-38-8" href="#__codelineno-38-8"></a><span class="w">            </span><span class="s2">&quot;PRECIO&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;gourmet&quot;</span>
+</span><span id="__span-38-9"><a id="__codelineno-38-9" name="__codelineno-38-9" href="#__codelineno-38-9"></a><span class="w">          </span><span class="p">}</span>
+</span><span id="__span-38-10"><a id="__codelineno-38-10" name="__codelineno-38-10" href="#__codelineno-38-10"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-38-11"><a id="__codelineno-38-11" name="__codelineno-38-11" href="#__codelineno-38-11"></a><span class="w">      </span><span class="p">],</span>
+</span><span id="__span-38-12"><a id="__codelineno-38-12" name="__codelineno-38-12" href="#__codelineno-38-12"></a><span class="w">      </span><span class="s2">&quot;should&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-38-13"><a id="__codelineno-38-13" name="__codelineno-38-13" href="#__codelineno-38-13"></a><span class="w">        </span><span class="p">{</span>
+</span><span id="__span-38-14"><a id="__codelineno-38-14" name="__codelineno-38-14" href="#__codelineno-38-14"></a><span class="w">          </span><span class="s2">&quot;match&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-38-15"><a id="__codelineno-38-15" name="__codelineno-38-15" href="#__codelineno-38-15"></a><span class="w">            </span><span class="s2">&quot;DESCRIPCION&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;carne&quot;</span>
+</span><span id="__span-38-16"><a id="__codelineno-38-16" name="__codelineno-38-16" href="#__codelineno-38-16"></a><span class="w">          </span><span class="p">}</span>
+</span><span id="__span-38-17"><a id="__codelineno-38-17" name="__codelineno-38-17" href="#__codelineno-38-17"></a><span class="w">        </span><span class="p">},</span>
+</span><span id="__span-38-18"><a id="__codelineno-38-18" name="__codelineno-38-18" href="#__codelineno-38-18"></a><span class="w">        </span><span class="p">{</span>
+</span><span id="__span-38-19"><a id="__codelineno-38-19" name="__codelineno-38-19" href="#__codelineno-38-19"></a><span class="w">          </span><span class="s2">&quot;match&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-38-20"><a id="__codelineno-38-20" name="__codelineno-38-20" href="#__codelineno-38-20"></a><span class="w">            </span><span class="s2">&quot;DESCRIPCION&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;pescado&quot;</span>
+</span><span id="__span-38-21"><a id="__codelineno-38-21" name="__codelineno-38-21" href="#__codelineno-38-21"></a><span class="w">          </span><span class="p">}</span>
+</span><span id="__span-38-22"><a id="__codelineno-38-22" name="__codelineno-38-22" href="#__codelineno-38-22"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-38-23"><a id="__codelineno-38-23" name="__codelineno-38-23" href="#__codelineno-38-23"></a><span class="w">      </span><span class="p">]</span>
+</span><span id="__span-38-24"><a id="__codelineno-38-24" name="__codelineno-38-24" href="#__codelineno-38-24"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-38-25"><a id="__codelineno-38-25" name="__codelineno-38-25" href="#__codelineno-38-25"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-38-26"><a id="__codelineno-38-26" name="__codelineno-38-26" href="#__codelineno-38-26"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Si queremos que se cumpla alguna de las condiciones del parámetro <code>should</code>, debemos introducir el <code>minimun_should_match</code>, y ahora deberá cumplirse obligatoriamente la cantidad que se especifique.</p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-39-1"><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="nx">GET</span><span class="w"> </span><span class="nx">restaurantes</span><span class="o">/</span><span class="nx">_search</span>
+</span><span id="__span-39-2"><a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a><span class="p">{</span>
+</span><span id="__span-39-3"><a id="__codelineno-39-3" name="__codelineno-39-3" href="#__codelineno-39-3"></a><span class="w">  </span><span class="s2">&quot;query&quot;</span><span class="o">:</span><span class="p">{</span>
+</span><span id="__span-39-4"><a id="__codelineno-39-4" name="__codelineno-39-4" href="#__codelineno-39-4"></a><span class="w">    </span><span class="s2">&quot;bool&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-39-5"><a id="__codelineno-39-5" name="__codelineno-39-5" href="#__codelineno-39-5"></a><span class="w">      </span><span class="s2">&quot;must&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-39-6"><a id="__codelineno-39-6" name="__codelineno-39-6" href="#__codelineno-39-6"></a><span class="w">        </span><span class="p">{</span>
+</span><span id="__span-39-7"><a id="__codelineno-39-7" name="__codelineno-39-7" href="#__codelineno-39-7"></a><span class="w">          </span><span class="s2">&quot;match&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-39-8"><a id="__codelineno-39-8" name="__codelineno-39-8" href="#__codelineno-39-8"></a><span class="w">            </span><span class="s2">&quot;PRECIO&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;gourmet&quot;</span>
+</span><span id="__span-39-9"><a id="__codelineno-39-9" name="__codelineno-39-9" href="#__codelineno-39-9"></a><span class="w">          </span><span class="p">}</span>
+</span><span id="__span-39-10"><a id="__codelineno-39-10" name="__codelineno-39-10" href="#__codelineno-39-10"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-39-11"><a id="__codelineno-39-11" name="__codelineno-39-11" href="#__codelineno-39-11"></a><span class="w">      </span><span class="p">],</span>
+</span><span id="__span-39-12"><a id="__codelineno-39-12" name="__codelineno-39-12" href="#__codelineno-39-12"></a><span class="w">      </span><span class="s2">&quot;should&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-39-13"><a id="__codelineno-39-13" name="__codelineno-39-13" href="#__codelineno-39-13"></a><span class="w">        </span><span class="p">{</span>
+</span><span id="__span-39-14"><a id="__codelineno-39-14" name="__codelineno-39-14" href="#__codelineno-39-14"></a><span class="w">          </span><span class="s2">&quot;match&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-39-15"><a id="__codelineno-39-15" name="__codelineno-39-15" href="#__codelineno-39-15"></a><span class="w">            </span><span class="s2">&quot;DESCRIPCION&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;carne&quot;</span>
+</span><span id="__span-39-16"><a id="__codelineno-39-16" name="__codelineno-39-16" href="#__codelineno-39-16"></a><span class="w">          </span><span class="p">}</span>
+</span><span id="__span-39-17"><a id="__codelineno-39-17" name="__codelineno-39-17" href="#__codelineno-39-17"></a><span class="w">        </span><span class="p">},</span>
+</span><span id="__span-39-18"><a id="__codelineno-39-18" name="__codelineno-39-18" href="#__codelineno-39-18"></a><span class="w">        </span><span class="p">{</span>
+</span><span id="__span-39-19"><a id="__codelineno-39-19" name="__codelineno-39-19" href="#__codelineno-39-19"></a><span class="w">          </span><span class="s2">&quot;match&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-39-20"><a id="__codelineno-39-20" name="__codelineno-39-20" href="#__codelineno-39-20"></a><span class="w">            </span><span class="s2">&quot;DESCRIPCION&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;pescado&quot;</span>
+</span><span id="__span-39-21"><a id="__codelineno-39-21" name="__codelineno-39-21" href="#__codelineno-39-21"></a><span class="w">          </span><span class="p">}</span>
+</span><span id="__span-39-22"><a id="__codelineno-39-22" name="__codelineno-39-22" href="#__codelineno-39-22"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-39-23"><a id="__codelineno-39-23" name="__codelineno-39-23" href="#__codelineno-39-23"></a><span class="w">      </span><span class="p">],</span>
+</span><span id="__span-39-24"><a id="__codelineno-39-24" name="__codelineno-39-24" href="#__codelineno-39-24"></a><span class="w">      </span><span class="s2">&quot;minimum_should_match&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span>
+</span><span id="__span-39-25"><a id="__codelineno-39-25" name="__codelineno-39-25" href="#__codelineno-39-25"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-39-26"><a id="__codelineno-39-26" name="__codelineno-39-26" href="#__codelineno-39-26"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-39-27"><a id="__codelineno-39-27" name="__codelineno-39-27" href="#__codelineno-39-27"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>En este caso solo se obtiene un resultado, mientras que en el primero obtenemos 7.</p>
+<p>Realicemos una nueva búsqueda de un restaurante que abra los lunes, que sea cocina canaria o portuguesa</p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-40-1"><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a><span class="nx">GET</span><span class="w"> </span><span class="nx">restaurantes</span><span class="o">/</span><span class="nx">_search</span>
+</span><span id="__span-40-2"><a id="__codelineno-40-2" name="__codelineno-40-2" href="#__codelineno-40-2"></a><span class="p">{</span>
+</span><span id="__span-40-3"><a id="__codelineno-40-3" name="__codelineno-40-3" href="#__codelineno-40-3"></a><span class="w">  </span><span class="s2">&quot;query&quot;</span><span class="o">:</span><span class="p">{</span>
+</span><span id="__span-40-4"><a id="__codelineno-40-4" name="__codelineno-40-4" href="#__codelineno-40-4"></a><span class="w">    </span><span class="s2">&quot;bool&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-40-5"><a id="__codelineno-40-5" name="__codelineno-40-5" href="#__codelineno-40-5"></a><span class="w">      </span><span class="s2">&quot;must&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-40-6"><a id="__codelineno-40-6" name="__codelineno-40-6" href="#__codelineno-40-6"></a><span class="w">        </span><span class="p">{</span>
+</span><span id="__span-40-7"><a id="__codelineno-40-7" name="__codelineno-40-7" href="#__codelineno-40-7"></a><span class="w">          </span><span class="s2">&quot;match&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-40-8"><a id="__codelineno-40-8" name="__codelineno-40-8" href="#__codelineno-40-8"></a><span class="w">            </span><span class="s2">&quot;HORARIO&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;lunes&quot;</span>
+</span><span id="__span-40-9"><a id="__codelineno-40-9" name="__codelineno-40-9" href="#__codelineno-40-9"></a><span class="w">          </span><span class="p">}</span>
+</span><span id="__span-40-10"><a id="__codelineno-40-10" name="__codelineno-40-10" href="#__codelineno-40-10"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-40-11"><a id="__codelineno-40-11" name="__codelineno-40-11" href="#__codelineno-40-11"></a><span class="w">      </span><span class="p">],</span>
+</span><span id="__span-40-12"><a id="__codelineno-40-12" name="__codelineno-40-12" href="#__codelineno-40-12"></a><span class="w">      </span><span class="s2">&quot;should&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-40-13"><a id="__codelineno-40-13" name="__codelineno-40-13" href="#__codelineno-40-13"></a><span class="w">        </span><span class="p">{</span>
+</span><span id="__span-40-14"><a id="__codelineno-40-14" name="__codelineno-40-14" href="#__codelineno-40-14"></a><span class="w">          </span><span class="s2">&quot;match&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-40-15"><a id="__codelineno-40-15" name="__codelineno-40-15" href="#__codelineno-40-15"></a><span class="w">            </span><span class="s2">&quot;DESCRIPCION&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;canaria&quot;</span>
+</span><span id="__span-40-16"><a id="__codelineno-40-16" name="__codelineno-40-16" href="#__codelineno-40-16"></a><span class="w">          </span><span class="p">}</span>
+</span><span id="__span-40-17"><a id="__codelineno-40-17" name="__codelineno-40-17" href="#__codelineno-40-17"></a><span class="w">        </span><span class="p">},</span>
+</span><span id="__span-40-18"><a id="__codelineno-40-18" name="__codelineno-40-18" href="#__codelineno-40-18"></a><span class="w">        </span><span class="p">{</span>
+</span><span id="__span-40-19"><a id="__codelineno-40-19" name="__codelineno-40-19" href="#__codelineno-40-19"></a><span class="w">          </span><span class="s2">&quot;match&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-40-20"><a id="__codelineno-40-20" name="__codelineno-40-20" href="#__codelineno-40-20"></a><span class="w">            </span><span class="s2">&quot;DESCRIPCION&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;portuguesa&quot;</span>
+</span><span id="__span-40-21"><a id="__codelineno-40-21" name="__codelineno-40-21" href="#__codelineno-40-21"></a><span class="w">          </span><span class="p">}</span>
+</span><span id="__span-40-22"><a id="__codelineno-40-22" name="__codelineno-40-22" href="#__codelineno-40-22"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-40-23"><a id="__codelineno-40-23" name="__codelineno-40-23" href="#__codelineno-40-23"></a><span class="w">      </span><span class="p">],</span>
+</span><span id="__span-40-24"><a id="__codelineno-40-24" name="__codelineno-40-24" href="#__codelineno-40-24"></a><span class="w">      </span><span class="s2">&quot;minimum_should_match&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span>
+</span><span id="__span-40-25"><a id="__codelineno-40-25" name="__codelineno-40-25" href="#__codelineno-40-25"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-40-26"><a id="__codelineno-40-26" name="__codelineno-40-26" href="#__codelineno-40-26"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-40-27"><a id="__codelineno-40-27" name="__codelineno-40-27" href="#__codelineno-40-27"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Al final se trata de ir buscando y revisando los resultado obtenidos, por ejemplo los últimos registros, para en caso de no ser deseados añadir restricciones para que no aparezcan estos documentos.</p>
+<p>En general, estas son las búsquedas que podemos realizar. Se podrían optimizar pero esto ya es cuestión de analizar y afinar tal y como hemos comentado.</p>
+<h2 id="definiendo-un-indice-mappings-y-analizadores">Definiendo un índice: Mappings y Analizadores</h2>
+<h3 id="mappings">Mappings</h3>
+<p>El <strong>mapping</strong> es la definición de cómo se estructuran los datos dentro de un índice. Especifica qué campos existen en los documentos, el tipo de datos de cada campo y cómo se indexan y almacenan los datos. </p>
+<p>Cuando creamos un índice sin especificar nada, elastic crea automáticamente el <strong>mapping</strong> en función de los datos introducidos en los documentos, pero si queremos optimizar, entonces podría ser adecuado definir nosotros los <strong>mappings</strong> para después obtener mejor resultado de nuestras consultas.</p>
+<p>Así pues, en el mapping definimos 
+- Nombre de los campos
+- Tipos de datos de los campos
+- Como los campos tienen que guardar los datos.</p>
+<p>Aquí tienes una descripción general de los conceptos relacionados con el mapping en Elasticsearch:</p>
+<p><strong>Campos:</strong>
+Los campos son los componentes individuales de un documento en Elasticsearch. Cada documento está compuesto por múltiples campos que representan diferentes atributos o propiedades de los datos.</p>
+<p>Por ejemplo, en un índice de documentos de productos, los campos pueden incluir "nombre", "precio", "descripción", etc.</p>
+<p><strong>Tipos de datos:</strong>
+Elasticsearch admite una variedad de tipos de datos, incluyendo texto, numérico, fecha, booleano, geo, y más.
+Por ejemplo, el tipo de datos "texto" se utiliza para campos que contienen texto libre, mientras que el tipo de datos "numérico" se utiliza para campos que contienen valores numéricos.</p>
+<p>Tipos de datos más comunes</p>
+<table>
+<thead>
+<tr>
+<th>Tipo de Datos</th>
+<th>Tipo en Mapping</th>
+<th>Descripción</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Texto</td>
+<td>"text"</td>
+<td>Cadena de texto analizada token a token</td>
+<td>"description": "Lorem ipsum dolor sit amet"</td>
+</tr>
+<tr>
+<td>Keyword</td>
+<td>"keyword"</td>
+<td>Cadena de texto no analizada a base de tokens separados</td>
+<td>"category": "electronics"</td>
+</tr>
+<tr>
+<td>Numérico</td>
+<td>"integer", "float", "double", "long", etc.</td>
+<td>Datos numéricos</td>
+<td>"age": 30</td>
+</tr>
+<tr>
+<td>Fecha</td>
+<td>"date"</td>
+<td>Fecha y/u hora</td>
+<td>"timestamp": "2023-11-16T12:00:00"</td>
+</tr>
+<tr>
+<td>Booleano</td>
+<td>"boolean"</td>
+<td>Valor booleano</td>
+<td>"is_active": true</td>
+</tr>
+<tr>
+<td>Binario</td>
+<td>"binary"</td>
+<td>Datos binarios, como imágenes o archivos</td>
+<td>"avatar": <Base64 encoded data></td>
+</tr>
+<tr>
+<td>Geo Point</td>
+<td>"geo_point"</td>
+<td>Punto geográfico</td>
+<td -74.0060="-74.0060" 40.7128_="40.7128," _lat_:="&quot;lat&quot;:" _lon_:="&quot;lon&quot;:">"location":</td>
+</tr>
+<tr>
+<td>Geo Shape</td>
+<td>"geo_shape"</td>
+<td>Forma geoespacial compleja</td>
+<td 0.0_="0.0]" 1.0_="1.0]," _="]" _100.0_="[100.0," _101.0_="[101.0," _Polygon_="&quot;Polygon&quot;," _coordinates_:="&quot;coordinates&quot;:" _type_:="&quot;type&quot;:">"area":</td>
+</tr>
+<tr>
+<td>Nested</td>
+<td>"nested"</td>
+<td>Objeto anidado</td>
+<td>"comments": [ {"user": "John", "comment": "Great post!"}, {"user": "Alice", "comment": "Nice article!"} ]</td>
+</tr>
+<tr>
+<td>Object</td>
+<td>"object"</td>
+<td>Objeto JSON</td>
+<td Main="Main" St_="St&quot;," York_="York&quot;," _10001_="&quot;10001&quot;" _123="&quot;123" _New="&quot;New" _city_:="&quot;city&quot;:" _street_:="&quot;street&quot;:" _zip_:="&quot;zip&quot;:">"address":</td>
+</tr>
+<tr>
+<td>IP</td>
+<td>"ip"</td>
+<td>Dirección IP IPv4 o IPv6</td>
+<td>"client_ip": "192.168.0.1"</td>
+</tr>
+</tbody>
+</table>
+<p>También podemos a encontrarnos con campos que puedan tener multi-tipado, se llaman <strong>multi-fields</strong>.</p>
+<p>Com puedes ver, se pueden definir tipos de datos especiales como, coordenadas, figuras, iso países...</p>
+<h4 id="dynamic-mapping">Dynamic Mapping</h4>
+<p>Elasticsearch genera automáticamente el mapping de campos cuando se indexa un documento por primera vez si se habilita el mapeo dinámico.</p>
+<p>Para ver el mapping generado por nuestro ejemplo de restaurantes:</p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-41-1"><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a><span class="nx">GET</span><span class="w"> </span><span class="nx">restaurantes</span><span class="o">/</span><span class="nx">_mapping</span>
+</span></code></pre></div>
+<p>Como se puede ver, el mapeo se ha creado automáticamente aunque puede no ser muy eficiente y en ocasiones nos suele interesar especificar donde van textos (<code>text</code>) con descripciones largas o campos con claves (<code>keyword</code>) donde posteriormente habrá búsquedas.  </p>
+<blockquote>
+<p>Los campos de tipo <code>text</code> <strong>se analizan durante el proceso de indexación</strong>. Esto significa que se descomponen en términos individuales (tokens) para permitir búsquedas parciales y coincidencias.</p>
+<p>Los campos de tipo <code>keyword</code> <strong>no</strong> se analizan durante la indexación. Se almacenan tal como están.Son ideales para búsquedas exactas. Puedes buscar valores exactos sin descomponerlos en tokens.</p>
+</blockquote>
+<p>El mapeo dinámico permite que Elasticsearch detecte automáticamente la estructura de los datos cuando se indexa un documento por primera vez y genere el mapping en función de los campos encontrados en el documento. Esto puede ser conveniente, pero puede llevar a mapping no deseado o inconsistente si los documentos tienen diferentes estructuras.</p>
+<h4 id="explicit-mapping">Explicit mapping</h4>
+<p>El <strong>mapeo explícito</strong> implica definir manualmente el mapping de un índice antes de indexar cualquier documento. Esto proporciona un control preciso sobre la estructura de los datos.</p>
+<p>Por ejemplo, para crear el mapping de nuestro índice de restaurantes, primero borramos el índice y después lo volvemos a crear. Comúnmente lo que se hace es que se importa un conjuntos de datos, se obtienen el <strong>mapeo dinámico</strong> y a partir de este, se analiza y optimiza generando un <strong>mapeo explicito</strong></p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-42-1"><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a><span class="nx">DELETE</span><span class="w"> </span><span class="nx">restaurantes</span><span class="w">                 </span><span class="c1">// primer borramos el índice existente</span>
+</span><span id="__span-42-2"><a id="__codelineno-42-2" name="__codelineno-42-2" href="#__codelineno-42-2"></a>
+</span><span id="__span-42-3"><a id="__codelineno-42-3" name="__codelineno-42-3" href="#__codelineno-42-3"></a><span class="nx">PUT</span><span class="w"> </span><span class="nx">restaurantes</span>
+</span><span id="__span-42-4"><a id="__codelineno-42-4" name="__codelineno-42-4" href="#__codelineno-42-4"></a><span class="p">{</span>
+</span><span id="__span-42-5"><a id="__codelineno-42-5" name="__codelineno-42-5" href="#__codelineno-42-5"></a><span class="w">  </span><span class="s2">&quot;mappings&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+</span><span id="__span-42-6"><a id="__codelineno-42-6" name="__codelineno-42-6" href="#__codelineno-42-6"></a><span class="w">    </span><span class="s2">&quot;properties&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-42-7"><a id="__codelineno-42-7" name="__codelineno-42-7" href="#__codelineno-42-7"></a><span class="w">      </span><span class="s2">&quot;DESCRIPCION&quot;</span><span class="o">:</span><span class="p">{</span>
+</span><span id="__span-42-8"><a id="__codelineno-42-8" name="__codelineno-42-8" href="#__codelineno-42-8"></a><span class="w">        </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;text&quot;</span><span class="w">              </span><span class="c1">// Se ha dejado solo texto </span>
+</span><span id="__span-42-9"><a id="__codelineno-42-9" name="__codelineno-42-9" href="#__codelineno-42-9"></a><span class="w">      </span><span class="p">},</span>
+</span><span id="__span-42-10"><a id="__codelineno-42-10" name="__codelineno-42-10" href="#__codelineno-42-10"></a><span class="w">      </span><span class="s2">&quot;DIRECCION&quot;</span><span class="o">:</span><span class="p">{</span>
+</span><span id="__span-42-11"><a id="__codelineno-42-11" name="__codelineno-42-11" href="#__codelineno-42-11"></a><span class="w">        </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;keyword&quot;</span><span class="w">           </span><span class="c1">// Lo dejamos como palabras clave</span>
+</span><span id="__span-42-12"><a id="__codelineno-42-12" name="__codelineno-42-12" href="#__codelineno-42-12"></a><span class="w">      </span><span class="p">},</span>
+</span><span id="__span-42-13"><a id="__codelineno-42-13" name="__codelineno-42-13" href="#__codelineno-42-13"></a><span class="w">      </span><span class="s2">&quot;ESPECIALIDAD&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-42-14"><a id="__codelineno-42-14" name="__codelineno-42-14" href="#__codelineno-42-14"></a><span class="w">        </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;keyword&quot;</span><span class="w">           </span><span class="c1">// Lo dejamos como palabras clave</span>
+</span><span id="__span-42-15"><a id="__codelineno-42-15" name="__codelineno-42-15" href="#__codelineno-42-15"></a><span class="w">      </span><span class="p">},</span>
+</span><span id="__span-42-16"><a id="__codelineno-42-16" name="__codelineno-42-16" href="#__codelineno-42-16"></a><span class="w">      </span><span class="s2">&quot;FECHA_MODIFICACION&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-42-17"><a id="__codelineno-42-17" name="__codelineno-42-17" href="#__codelineno-42-17"></a><span class="w">        </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;date&quot;</span>
+</span><span id="__span-42-18"><a id="__codelineno-42-18" name="__codelineno-42-18" href="#__codelineno-42-18"></a><span class="w">      </span><span class="p">},</span>
+</span><span id="__span-42-19"><a id="__codelineno-42-19" name="__codelineno-42-19" href="#__codelineno-42-19"></a><span class="w">      </span><span class="s2">&quot;HORARIO&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-42-20"><a id="__codelineno-42-20" name="__codelineno-42-20" href="#__codelineno-42-20"></a><span class="w">        </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;text&quot;</span><span class="p">,</span>
+</span><span id="__span-42-21"><a id="__codelineno-42-21" name="__codelineno-42-21" href="#__codelineno-42-21"></a><span class="w">        </span><span class="s2">&quot;fields&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-42-22"><a id="__codelineno-42-22" name="__codelineno-42-22" href="#__codelineno-42-22"></a><span class="w">          </span><span class="s2">&quot;keyword&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-42-23"><a id="__codelineno-42-23" name="__codelineno-42-23" href="#__codelineno-42-23"></a><span class="w">            </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;keyword&quot;</span><span class="p">,</span>
+</span><span id="__span-42-24"><a id="__codelineno-42-24" name="__codelineno-42-24" href="#__codelineno-42-24"></a><span class="w">            </span><span class="s2">&quot;ignore_above&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">256</span>
+</span><span id="__span-42-25"><a id="__codelineno-42-25" name="__codelineno-42-25" href="#__codelineno-42-25"></a><span class="w">          </span><span class="p">}</span>
+</span><span id="__span-42-26"><a id="__codelineno-42-26" name="__codelineno-42-26" href="#__codelineno-42-26"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-42-27"><a id="__codelineno-42-27" name="__codelineno-42-27" href="#__codelineno-42-27"></a><span class="w">      </span><span class="p">},</span>
+</span><span id="__span-42-28"><a id="__codelineno-42-28" name="__codelineno-42-28" href="#__codelineno-42-28"></a><span class="w">      </span><span class="s2">&quot;ID&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-42-29"><a id="__codelineno-42-29" name="__codelineno-42-29" href="#__codelineno-42-29"></a><span class="w">        </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;long&quot;</span>
+</span><span id="__span-42-30"><a id="__codelineno-42-30" name="__codelineno-42-30" href="#__codelineno-42-30"></a><span class="w">      </span><span class="p">},</span>
+</span><span id="__span-42-31"><a id="__codelineno-42-31" name="__codelineno-42-31" href="#__codelineno-42-31"></a><span class="w">      </span><span class="s2">&quot;LATITUD&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-42-32"><a id="__codelineno-42-32" name="__codelineno-42-32" href="#__codelineno-42-32"></a><span class="w">        </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;float&quot;</span>
+</span><span id="__span-42-33"><a id="__codelineno-42-33" name="__codelineno-42-33" href="#__codelineno-42-33"></a><span class="w">      </span><span class="p">},</span>
+</span><span id="__span-42-34"><a id="__codelineno-42-34" name="__codelineno-42-34" href="#__codelineno-42-34"></a><span class="w">      </span><span class="s2">&quot;LONGITUD&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-42-35"><a id="__codelineno-42-35" name="__codelineno-42-35" href="#__codelineno-42-35"></a><span class="w">        </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;float&quot;</span>
+</span><span id="__span-42-36"><a id="__codelineno-42-36" name="__codelineno-42-36" href="#__codelineno-42-36"></a><span class="w">      </span><span class="p">},</span>
+</span><span id="__span-42-37"><a id="__codelineno-42-37" name="__codelineno-42-37" href="#__codelineno-42-37"></a><span class="w">      </span><span class="s2">&quot;NOMBRE&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-42-38"><a id="__codelineno-42-38" name="__codelineno-42-38" href="#__codelineno-42-38"></a><span class="w">        </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;text&quot;</span><span class="p">,</span>
+</span><span id="__span-42-39"><a id="__codelineno-42-39" name="__codelineno-42-39" href="#__codelineno-42-39"></a><span class="w">        </span><span class="s2">&quot;fields&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-42-40"><a id="__codelineno-42-40" name="__codelineno-42-40" href="#__codelineno-42-40"></a><span class="w">          </span><span class="s2">&quot;keyword&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-42-41"><a id="__codelineno-42-41" name="__codelineno-42-41" href="#__codelineno-42-41"></a><span class="w">            </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;keyword&quot;</span><span class="p">,</span>
+</span><span id="__span-42-42"><a id="__codelineno-42-42" name="__codelineno-42-42" href="#__codelineno-42-42"></a><span class="w">            </span><span class="s2">&quot;ignore_above&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">256</span>
+</span><span id="__span-42-43"><a id="__codelineno-42-43" name="__codelineno-42-43" href="#__codelineno-42-43"></a><span class="w">          </span><span class="p">}</span>
+</span><span id="__span-42-44"><a id="__codelineno-42-44" name="__codelineno-42-44" href="#__codelineno-42-44"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-42-45"><a id="__codelineno-42-45" name="__codelineno-42-45" href="#__codelineno-42-45"></a><span class="w">      </span><span class="p">},</span>
+</span><span id="__span-42-46"><a id="__codelineno-42-46" name="__codelineno-42-46" href="#__codelineno-42-46"></a><span class="w">      </span><span class="s2">&quot;POIS&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-42-47"><a id="__codelineno-42-47" name="__codelineno-42-47" href="#__codelineno-42-47"></a><span class="w">        </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;geo_point&quot;</span><span class="w">         </span><span class="c1">// punto geodesico</span>
+</span><span id="__span-42-48"><a id="__codelineno-42-48" name="__codelineno-42-48" href="#__codelineno-42-48"></a><span class="w">      </span><span class="p">},</span>
+</span><span id="__span-42-49"><a id="__codelineno-42-49" name="__codelineno-42-49" href="#__codelineno-42-49"></a><span class="w">      </span><span class="s2">&quot;PRECIO&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-42-50"><a id="__codelineno-42-50" name="__codelineno-42-50" href="#__codelineno-42-50"></a><span class="w">        </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;text&quot;</span><span class="p">,</span>
+</span><span id="__span-42-51"><a id="__codelineno-42-51" name="__codelineno-42-51" href="#__codelineno-42-51"></a><span class="w">        </span><span class="s2">&quot;fields&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-42-52"><a id="__codelineno-42-52" name="__codelineno-42-52" href="#__codelineno-42-52"></a><span class="w">          </span><span class="s2">&quot;keyword&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-42-53"><a id="__codelineno-42-53" name="__codelineno-42-53" href="#__codelineno-42-53"></a><span class="w">            </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;keyword&quot;</span><span class="p">,</span>
+</span><span id="__span-42-54"><a id="__codelineno-42-54" name="__codelineno-42-54" href="#__codelineno-42-54"></a><span class="w">            </span><span class="s2">&quot;ignore_above&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">256</span>
+</span><span id="__span-42-55"><a id="__codelineno-42-55" name="__codelineno-42-55" href="#__codelineno-42-55"></a><span class="w">          </span><span class="p">}</span>
+</span><span id="__span-42-56"><a id="__codelineno-42-56" name="__codelineno-42-56" href="#__codelineno-42-56"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-42-57"><a id="__codelineno-42-57" name="__codelineno-42-57" href="#__codelineno-42-57"></a><span class="w">      </span><span class="p">},</span>
+</span><span id="__span-42-58"><a id="__codelineno-42-58" name="__codelineno-42-58" href="#__codelineno-42-58"></a><span class="w">      </span><span class="s2">&quot;TELEFONO&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-42-59"><a id="__codelineno-42-59" name="__codelineno-42-59" href="#__codelineno-42-59"></a><span class="w">        </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;text&quot;</span><span class="p">,</span>
+</span><span id="__span-42-60"><a id="__codelineno-42-60" name="__codelineno-42-60" href="#__codelineno-42-60"></a><span class="w">        </span><span class="s2">&quot;fields&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-42-61"><a id="__codelineno-42-61" name="__codelineno-42-61" href="#__codelineno-42-61"></a><span class="w">          </span><span class="s2">&quot;keyword&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-42-62"><a id="__codelineno-42-62" name="__codelineno-42-62" href="#__codelineno-42-62"></a><span class="w">            </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;keyword&quot;</span><span class="p">,</span>
+</span><span id="__span-42-63"><a id="__codelineno-42-63" name="__codelineno-42-63" href="#__codelineno-42-63"></a><span class="w">            </span><span class="s2">&quot;ignore_above&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">256</span>
+</span><span id="__span-42-64"><a id="__codelineno-42-64" name="__codelineno-42-64" href="#__codelineno-42-64"></a><span class="w">          </span><span class="p">}</span>
+</span><span id="__span-42-65"><a id="__codelineno-42-65" name="__codelineno-42-65" href="#__codelineno-42-65"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-42-66"><a id="__codelineno-42-66" name="__codelineno-42-66" href="#__codelineno-42-66"></a><span class="w">      </span><span class="p">},</span>
+</span><span id="__span-42-67"><a id="__codelineno-42-67" name="__codelineno-42-67" href="#__codelineno-42-67"></a><span class="w">      </span><span class="s2">&quot;WEB&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-42-68"><a id="__codelineno-42-68" name="__codelineno-42-68" href="#__codelineno-42-68"></a><span class="w">        </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;text&quot;</span><span class="p">,</span>
+</span><span id="__span-42-69"><a id="__codelineno-42-69" name="__codelineno-42-69" href="#__codelineno-42-69"></a><span class="w">        </span><span class="s2">&quot;fields&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-42-70"><a id="__codelineno-42-70" name="__codelineno-42-70" href="#__codelineno-42-70"></a><span class="w">          </span><span class="s2">&quot;keyword&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-42-71"><a id="__codelineno-42-71" name="__codelineno-42-71" href="#__codelineno-42-71"></a><span class="w">            </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;keyword&quot;</span><span class="p">,</span>
+</span><span id="__span-42-72"><a id="__codelineno-42-72" name="__codelineno-42-72" href="#__codelineno-42-72"></a><span class="w">            </span><span class="s2">&quot;ignore_above&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">256</span>
+</span><span id="__span-42-73"><a id="__codelineno-42-73" name="__codelineno-42-73" href="#__codelineno-42-73"></a><span class="w">          </span><span class="p">}</span>
+</span><span id="__span-42-74"><a id="__codelineno-42-74" name="__codelineno-42-74" href="#__codelineno-42-74"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-42-75"><a id="__codelineno-42-75" name="__codelineno-42-75" href="#__codelineno-42-75"></a><span class="w">      </span><span class="p">},</span>
+</span><span id="__span-42-76"><a id="__codelineno-42-76" name="__codelineno-42-76" href="#__codelineno-42-76"></a><span class="w">      </span><span class="s2">&quot;uri&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-42-77"><a id="__codelineno-42-77" name="__codelineno-42-77" href="#__codelineno-42-77"></a><span class="w">        </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;text&quot;</span><span class="p">,</span>
+</span><span id="__span-42-78"><a id="__codelineno-42-78" name="__codelineno-42-78" href="#__codelineno-42-78"></a><span class="w">        </span><span class="s2">&quot;fields&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-42-79"><a id="__codelineno-42-79" name="__codelineno-42-79" href="#__codelineno-42-79"></a><span class="w">          </span><span class="s2">&quot;keyword&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-42-80"><a id="__codelineno-42-80" name="__codelineno-42-80" href="#__codelineno-42-80"></a><span class="w">            </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;keyword&quot;</span><span class="p">,</span>
+</span><span id="__span-42-81"><a id="__codelineno-42-81" name="__codelineno-42-81" href="#__codelineno-42-81"></a><span class="w">            </span><span class="s2">&quot;ignore_above&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">256</span>
+</span><span id="__span-42-82"><a id="__codelineno-42-82" name="__codelineno-42-82" href="#__codelineno-42-82"></a><span class="w">          </span><span class="p">}</span>
+</span><span id="__span-42-83"><a id="__codelineno-42-83" name="__codelineno-42-83" href="#__codelineno-42-83"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-42-84"><a id="__codelineno-42-84" name="__codelineno-42-84" href="#__codelineno-42-84"></a><span class="w">      </span><span class="p">}</span><span class="w">  </span>
+</span><span id="__span-42-85"><a id="__codelineno-42-85" name="__codelineno-42-85" href="#__codelineno-42-85"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-42-86"><a id="__codelineno-42-86" name="__codelineno-42-86" href="#__codelineno-42-86"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-42-87"><a id="__codelineno-42-87" name="__codelineno-42-87" href="#__codelineno-42-87"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>También podemos crear el índice y después añadir al mapping, la sintaxis cambia un poco</p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-43-1"><a id="__codelineno-43-1" name="__codelineno-43-1" href="#__codelineno-43-1"></a><span class="nx">DELETE</span><span class="w"> </span><span class="nx">restaurantes</span><span class="w">               </span><span class="c1">// primer borramos el índice existente</span>
+</span><span id="__span-43-2"><a id="__codelineno-43-2" name="__codelineno-43-2" href="#__codelineno-43-2"></a>
+</span><span id="__span-43-3"><a id="__codelineno-43-3" name="__codelineno-43-3" href="#__codelineno-43-3"></a><span class="nx">PUT</span><span class="w"> </span><span class="nx">restaurantes</span><span class="w">                  </span><span class="c1">// creamos el índice</span>
+</span><span id="__span-43-4"><a id="__codelineno-43-4" name="__codelineno-43-4" href="#__codelineno-43-4"></a>
+</span><span id="__span-43-5"><a id="__codelineno-43-5" name="__codelineno-43-5" href="#__codelineno-43-5"></a><span class="nx">PUT</span><span class="w"> </span><span class="nx">restaurantes</span><span class="o">/</span><span class="nx">_mapping</span><span class="w">         </span><span class="c1">// añadimos el mapping</span>
+</span><span id="__span-43-6"><a id="__codelineno-43-6" name="__codelineno-43-6" href="#__codelineno-43-6"></a><span class="p">{</span>
+</span><span id="__span-43-7"><a id="__codelineno-43-7" name="__codelineno-43-7" href="#__codelineno-43-7"></a><span class="w">  </span><span class="c1">//  &quot;mappings&quot;: {                 // esto ahora se quita   </span>
+</span><span id="__span-43-8"><a id="__codelineno-43-8" name="__codelineno-43-8" href="#__codelineno-43-8"></a><span class="w">  </span><span class="s2">&quot;properties&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-43-9"><a id="__codelineno-43-9" name="__codelineno-43-9" href="#__codelineno-43-9"></a><span class="w">    </span><span class="s2">&quot;DESCRIPCION&quot;</span><span class="o">:</span><span class="p">{</span>
+</span><span id="__span-43-10"><a id="__codelineno-43-10" name="__codelineno-43-10" href="#__codelineno-43-10"></a><span class="w">      </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;text&quot;</span><span class="w">              </span>
+</span><span id="__span-43-11"><a id="__codelineno-43-11" name="__codelineno-43-11" href="#__codelineno-43-11"></a><span class="w">    </span><span class="p">},</span>
+</span><span id="__span-43-12"><a id="__codelineno-43-12" name="__codelineno-43-12" href="#__codelineno-43-12"></a><span class="w">  </span><span class="p">...</span><span class="w">                             </span><span class="c1">// resto del mapping</span>
+</span><span id="__span-43-13"><a id="__codelineno-43-13" name="__codelineno-43-13" href="#__codelineno-43-13"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-43-14"><a id="__codelineno-43-14" name="__codelineno-43-14" href="#__codelineno-43-14"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Puede haber problemas con los datos de fechas y similares. En caso de problema, el documento no se insertará por lo tanto revisamos si hay algún problema tras la ingesta para verificar que todo es correcto.</p>
+<p><strong>No se puede modificar un mapping una vez creado</strong>, como mucho podemos modificar el mapping creando campos nuevos y pasando los datos de los viejos a los nuevos e ir eliminando campos viejos, pero esto no suele ser viable. Algunos cambios, como cambiar el tipo de un campo existente, pueden ser restrictivos y requerir reindexación de los datos existentes, o sea, que para cambiar un tipo de un campo, debemos reintroducir todos los datos del índice.</p>
+<p>Lo adecuado es analizar los datos y crear el mapping antes de su ingesta. Podemos ir cambiado campo a campo y realizar la ingesta de una parte pequeña de los campos tras cada modificación para verificar que todo funciona correctamente. </p>
+<p>Por otra parte, es posible actualizar el mapping de un índice existente para agregar nuevos campos, cambiar tipos de datos, ajustar propiedades de campo, etc.</p>
+<h3 id="analizadores-de-textos">Analizadores de textos</h3>
+<p>Cuando realizamos una búsqueda, podemos ver que en ocasiones dos consultas muy parecidas tiene un <code>score</code>idéntico: </p>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK47.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK47.png" alt="ELK" width="50%" /></a>
+</div>
+
+<p>Esto ocurre porque hay un proceso de análisis que ocurre cuando se ingestan los datos. En este proceso, por ejemplo, se pasa todo a <em>minúsculas</em>, por lo que realmente no importa si las consulta se realizan con mayúsculas o minúsculas. </p>
+<p>Este análisis de datos proporciona la generación de unos <strong>tokens</strong> que son las <em>palabras principales</em> que podemos extraer de cualquier texto:</p>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK48.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK48.png" alt="ELK" width="50%" /></a>
+</div>
+
+<p>De esta manera, para que el análisis se se hace hace de los textos grandes sean mejor “searchables” se parte el texto en TOKENS, los cuales se indexan como un único documento asociados al ID.</p>
+<h4 id="analizadores-en-elasticsearch">Analizadores en Elasticsearch</h4>
+<p>Los analizadores en Elasticsearch se componen de varios componentes que trabajan juntos para procesar y normalizar el texto durante la indexación y la búsqueda. Los componentes principales de un analizador en Elasticsearch:</p>
+<ul>
+<li><strong>Tokenizer (Tokenizador):</strong> Divide el texto en unidades más pequeñas llamadas "tokens" o "tokens". Estos tokens son las unidades básicas de procesamiento en Elasticsearch.Elasticsearch proporciona varios tokenizadores predefinidos, como <code>standard</code>, <code>whitespace</code>, <code>keyword</code>, <code>letter</code>, etc., cada uno de los cuales divide el texto de diferentes maneras.</li>
+<li><strong>Token Filters (Filtros de Tokens):</strong> Procesan los tokens generados por el tokenizador para realizar transformaciones adicionales, como eliminar caracteres especiales, convertir letras a minúsculas, eliminar palabras vacías (stop words), realizar stemming (reducción de palabras a su forma base), etc. Existe una varios filtros de tokens predefinidos y además se pueden crear filtros personalizados según sea necesario.</li>
+<li><strong>Character Filters (Filtros de Caracteres):</strong> Se aplican antes del tokenizador y permiten realizar transformaciones en el texto en bruto antes de que se divida en tokens. Permiten realizar operaciones como eliminar caracteres especiales, convertir caracteres a minúsculas o mayúsculas, reemplazar caracteres por otros, etc.</li>
+<li><strong>Analyzer (Analizador):</strong> Que encapsula el tokenizador, los filtros de tokens y los filtros de caracteres en una configuración coherente que se puede aplicar a un campo durante la indexación y la búsqueda. Los analizadores son la unidad central de procesamiento de texto en Elasticsearch y se pueden configurar y personalizar para satisfacer las necesidades específicas de indexación y búsqueda de una aplicación.</li>
+<li><strong>Analyzer Chains (Cadenas de Analizadores):</strong> Secuencias de analizadores, tokenizadores y filtros que se aplican en orden al texto durante la indexación y la búsqueda. Es común configurar cadenas de analizadores personalizadas que incluyan una combinación específica de tokenizadores y filtros para adaptarse a los requisitos de análisis de texto de una aplicación.</li>
+</ul>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK48.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK48.png" alt="ELK" width="50%" /></a>
+</div>
+
+<h4 id="analizadores-personalizados">Analizadores personalizados</h4>
+<p>Podemos crear un analizador personalizado a partir de una analizador estándar para optimizar las búsquedas en nuestro índice.</p>
+<p>Por ejemplo, los analizadores estándar tipo <code>stop</code> (que eliminan ciertos términos), están muy desarrollados para el idioma inglés en elasticsearch, pero no tanto para nuestro idioma., por lo que podemos definir un analizador personalizado para nuestro índice.</p>
+<p>Para crear un analizador personalizado, se realizará dentro de la sección <code>settings</code> en la definición del índice.</p>
+<p>No vamos a profundizar mucho en el tema, pero un ejemplo sería el siguiente:</p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-44-1"><a id="__codelineno-44-1" name="__codelineno-44-1" href="#__codelineno-44-1"></a><span class="nx">PUT</span><span class="w"> </span><span class="nx">restaurantes</span>
+</span><span id="__span-44-2"><a id="__codelineno-44-2" name="__codelineno-44-2" href="#__codelineno-44-2"></a><span class="p">{</span>
+</span><span id="__span-44-3"><a id="__codelineno-44-3" name="__codelineno-44-3" href="#__codelineno-44-3"></a><span class="w">  </span><span class="s2">&quot;settings&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-44-4"><a id="__codelineno-44-4" name="__codelineno-44-4" href="#__codelineno-44-4"></a><span class="w">    </span><span class="s2">&quot;analysis&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-44-5"><a id="__codelineno-44-5" name="__codelineno-44-5" href="#__codelineno-44-5"></a><span class="w">      </span><span class="s2">&quot;filter&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w">             </span><span class="c1">// definición de filtro</span>
+</span><span id="__span-44-6"><a id="__codelineno-44-6" name="__codelineno-44-6" href="#__codelineno-44-6"></a><span class="w">        </span><span class="s2">&quot;spanish_stop&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-44-7"><a id="__codelineno-44-7" name="__codelineno-44-7" href="#__codelineno-44-7"></a><span class="w">          </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;stop&quot;</span><span class="p">,</span>
+</span><span id="__span-44-8"><a id="__codelineno-44-8" name="__codelineno-44-8" href="#__codelineno-44-8"></a><span class="w">          </span><span class="s2">&quot;stopwords&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&quot;en&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;mi&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;y&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;de&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;contra&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;para&quot;</span><span class="p">]</span>
+</span><span id="__span-44-9"><a id="__codelineno-44-9" name="__codelineno-44-9" href="#__codelineno-44-9"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-44-10"><a id="__codelineno-44-10" name="__codelineno-44-10" href="#__codelineno-44-10"></a><span class="w">      </span><span class="p">},</span><span class="w">    </span>
+</span><span id="__span-44-11"><a id="__codelineno-44-11" name="__codelineno-44-11" href="#__codelineno-44-11"></a><span class="w">      </span><span class="s2">&quot;analyzer&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w">           </span><span class="c1">// definición de analizador</span>
+</span><span id="__span-44-12"><a id="__codelineno-44-12" name="__codelineno-44-12" href="#__codelineno-44-12"></a><span class="w">        </span><span class="s2">&quot;mi_analizador&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-44-13"><a id="__codelineno-44-13" name="__codelineno-44-13" href="#__codelineno-44-13"></a><span class="w">          </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;custom&quot;</span><span class="p">,</span>
+</span><span id="__span-44-14"><a id="__codelineno-44-14" name="__codelineno-44-14" href="#__codelineno-44-14"></a><span class="w">          </span><span class="s2">&quot;char_filter&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[],</span>
+</span><span id="__span-44-15"><a id="__codelineno-44-15" name="__codelineno-44-15" href="#__codelineno-44-15"></a><span class="w">          </span><span class="s2">&quot;tokenizer&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;standard&quot;</span><span class="p">,</span>
+</span><span id="__span-44-16"><a id="__codelineno-44-16" name="__codelineno-44-16" href="#__codelineno-44-16"></a><span class="w">          </span><span class="s2">&quot;filter&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&quot;lowercase&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;spanish_stop&quot;</span><span class="p">]</span>
+</span><span id="__span-44-17"><a id="__codelineno-44-17" name="__codelineno-44-17" href="#__codelineno-44-17"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-44-18"><a id="__codelineno-44-18" name="__codelineno-44-18" href="#__codelineno-44-18"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-44-19"><a id="__codelineno-44-19" name="__codelineno-44-19" href="#__codelineno-44-19"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-44-20"><a id="__codelineno-44-20" name="__codelineno-44-20" href="#__codelineno-44-20"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-44-21"><a id="__codelineno-44-21" name="__codelineno-44-21" href="#__codelineno-44-21"></a><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="definiendo-un-indice-con-mapping-y-analizador">Definiendo un índice con mapping y analizador</h3>
+<p>Visto que podemos definir un mapping especificando los datos de los campos que nos interesen y posteriormente podemos indicar el <strong><em>tokenizador</em></strong>, todo esto, nos permite crear índices optimizados para las búsquedas que vamos a diseñar sobre el índice en cuestión.</p>
+<p>Así pues, para la creación de un índice, podemos especificar las dos partes:</p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-45-1"><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a><span class="nx">PUT</span><span class="w"> </span><span class="nx">restaurantes</span>
+</span><span id="__span-45-2"><a id="__codelineno-45-2" name="__codelineno-45-2" href="#__codelineno-45-2"></a><span class="p">{</span>
+</span><span id="__span-45-3"><a id="__codelineno-45-3" name="__codelineno-45-3" href="#__codelineno-45-3"></a><span class="w">  </span><span class="s2">&quot;settings&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-45-4"><a id="__codelineno-45-4" name="__codelineno-45-4" href="#__codelineno-45-4"></a><span class="w">                    </span><span class="c1">// aqui definimos el tokenizador</span>
+</span><span id="__span-45-5"><a id="__codelineno-45-5" name="__codelineno-45-5" href="#__codelineno-45-5"></a><span class="w">  </span><span class="p">},</span>
+</span><span id="__span-45-6"><a id="__codelineno-45-6" name="__codelineno-45-6" href="#__codelineno-45-6"></a><span class="w">  </span><span class="s2">&quot;mappings&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-45-7"><a id="__codelineno-45-7" name="__codelineno-45-7" href="#__codelineno-45-7"></a><span class="w">                    </span><span class="c1">// aquí cremos el mapeo del índice</span>
+</span><span id="__span-45-8"><a id="__codelineno-45-8" name="__codelineno-45-8" href="#__codelineno-45-8"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-45-9"><a id="__codelineno-45-9" name="__codelineno-45-9" href="#__codelineno-45-9"></a><span class="p">}</span>
+</span></code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Recordad que <strong>NO SE PUEDE CAMBIAR UN MAPPING</strong> y que por ellos se debe probar las veces necesaria hasta alinear la definición con nuestra necesidades y poner un índice en producción.</p>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.indexes", "navigation.instant", "navigation.instant.progress", "toc.follow", "navigation.top", "content.code.copy"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+    
+  <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(() => { lightbox.reload() });
+</script></body>
+</html>

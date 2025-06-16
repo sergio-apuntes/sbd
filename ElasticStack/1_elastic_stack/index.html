@@ -1,0 +1,2476 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Elastic stack. Instalación y compresión.">
+      
+      
+      
+        <link rel="canonical" href="https://sergio-apuntes.github.io/sbd/ElasticStack/1_elastic_stack/">
+      
+      
+        <link rel="prev" href="../../ApacheNiFi/3_ApacheNiFi/">
+      
+      
+        <link rel="next" href="../2_elastic_operaciones/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>1. Introducción - Apuntes Sistemas en Big Data</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+   <link href="../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+    html.glightbox-open { overflow: initial; height: 100%; }
+    .gslide-title { margin-top: 0px; user-select: text; }
+    .gslide-desc { color: #666; user-select: text; }
+    .gslide-image img { background: white; }
+    .gscrollbar-fixer { padding-right: 15px; }
+    .gdesc-inner { font-size: 0.75rem; }
+    body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+    body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+    body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="../../assets/javascripts/glightbox.min.js"></script></head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#elastic-stack" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../.." title="Apuntes Sistemas en Big Data" class="md-header__button md-logo" aria-label="Apuntes Sistemas en Big Data" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Apuntes Sistemas en Big Data
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              1. Introducción
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Apuntes Sistemas en Big Data" class="md-nav__button md-logo" aria-label="Apuntes Sistemas en Big Data" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Apuntes Sistemas en Big Data
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introducción
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    NoSQL
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            NoSQL
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../noSQL/1_NoSQL%20Intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1. Introducción
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../noSQL/2_NoSQL%20NoSoloSQL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2. No Solo SQL
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../noSQL/3_NoSQL%20ModeloDatos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3. Modelos de datos
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../noSQL/4_NoSQL%20Consistencia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4. Consistencia
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    MongoDB
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            MongoDB
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MongoDB/1_mongodb%20Introducci%C3%B3n./" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1. Introducción a MongoDB
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MongoDB/2_mongodb%20MongoDB/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2. MongoDB
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MongoDB/3_mongodb%20ModeladoDatos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3. Diseño de modelado de bases de datos. schemaless
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MongoDB/4_mongodb%20Instalaci%C3%B3n/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4. Instalación
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MongoDB/5_mongodb%20PrimerosPasos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    5. Primeros pasos
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MongoDB/6_mongodb%20OperacionesCRUD/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    6. Operaciones con datos CRUD
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MongoDB/7_mongodb%20OperacionesDatos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    7. Consulta de datos
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    ETL con Apache NiFi
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            ETL con Apache NiFi
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ApacheNiFi/1_ETL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1. ETL con Apache NiFi
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ApacheNiFi/2_PostgreSQL/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2. PostgreSQL
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ApacheNiFi/3_ApacheNiFi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3. Apache NiFi
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Elasctic Stack
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Elasctic Stack
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    1. Introducción
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    1. Introducción
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#elastic-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      Elastic Stack
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Elastic Stack">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#que-es-elastic-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      ¿Qué es Elastic Stack?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#por-que-elastic-stack-en-sistemas-big-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      ¿ Por qué Elastic Stack en Sistemas Big Data?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#elasticsearch" class="md-nav__link">
+    <span class="md-ellipsis">
+      Elasticsearch
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Elasticsearch">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#caracteristicas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Características
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#almacenamiento-de-la-informacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Almacenamiento de la información
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tipos-de-nodos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tipos de nodos
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arquitectura-logica-de-funcionamiento" class="md-nav__link">
+    <span class="md-ellipsis">
+      Arquitectura: Lógica de funcionamiento:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#instalacion-de-elastic" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instalación de elastic
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Instalación de elastic">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#preparacion-para-la-instalacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Preparación para la instalación.
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instalacion-de-docker-docker-compose-y-curl" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instalación de docker, docker-compose y curl
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Instalación de docker, docker-compose y curl">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#un-poco-de-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      Un poco de docker
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#y-un-poco-de-docker-compose" class="md-nav__link">
+    <span class="md-ellipsis">
+      y un poco de docker-compose
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instalacion-de-elasticsearch-en-ubuntu-mediante-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instalación de Elasticsearch en Ubuntu mediante Docker
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Instalación de Elasticsearch en Ubuntu mediante Docker">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#instalando-elasticsearch-en-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instalando ElasticSearch en docker
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comprobando-la-instalacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Comprobando la instalación
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#y-ahora-que-mas-nodos-anadimos-kibana" class="md-nav__link">
+    <span class="md-ellipsis">
+      y ahora qué, ¿más nodos?, ¿añadimos kibana?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instalacion-de-un-cluster-elasticsearch-y-kibana-utilizando-docker-compose" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instalación de un cluster elasticsearch y kibana utilizando docker-compose
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Instalación de un cluster elasticsearch y kibana utilizando docker-compose">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#accediendo-desde-el-terminal-para-verificar-el-estado-del-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      Accediendo desde el terminal para verificar el estado del cluster
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#accediendo-desde-la-interface-de-kibana" class="md-nav__link">
+    <span class="md-ellipsis">
+      Accediendo desde la interface de Kibana
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instalacion-de-elasticsearch-en-un-servidor-linux" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instalación de Elasticsearch en un servidor línux
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Instalación de Elasticsearch en un servidor línux">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#instalacion-de-elastic_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instalación de Elastic
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instalacion-de-kibana" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instalación de Kibana
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instalacion-de-logstash" class="md-nav__link">
+    <span class="md-ellipsis">
+      instalación de Logstash
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instalacion-de-filebeat" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instalación de Filebeat
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#comprendiendo-los-conceptos-de-cluster-indices-y-shards" class="md-nav__link">
+    <span class="md-ellipsis">
+      Comprendiendo los conceptos de cluster, indices y shards
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2_elastic_operaciones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2. Elasticsearch. Operaciones
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3_elastic_kibana/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3. Kibana
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4_elastic_python/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4. Elasticsearch. Acceso desde cliente Python
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5_elastic_nifi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    5. Elastic stack y Apache Nifi
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#elastic-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      Elastic Stack
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Elastic Stack">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#que-es-elastic-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      ¿Qué es Elastic Stack?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#por-que-elastic-stack-en-sistemas-big-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      ¿ Por qué Elastic Stack en Sistemas Big Data?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#elasticsearch" class="md-nav__link">
+    <span class="md-ellipsis">
+      Elasticsearch
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Elasticsearch">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#caracteristicas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Características
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#almacenamiento-de-la-informacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Almacenamiento de la información
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tipos-de-nodos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tipos de nodos
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arquitectura-logica-de-funcionamiento" class="md-nav__link">
+    <span class="md-ellipsis">
+      Arquitectura: Lógica de funcionamiento:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#instalacion-de-elastic" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instalación de elastic
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Instalación de elastic">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#preparacion-para-la-instalacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Preparación para la instalación.
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instalacion-de-docker-docker-compose-y-curl" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instalación de docker, docker-compose y curl
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Instalación de docker, docker-compose y curl">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#un-poco-de-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      Un poco de docker
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#y-un-poco-de-docker-compose" class="md-nav__link">
+    <span class="md-ellipsis">
+      y un poco de docker-compose
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instalacion-de-elasticsearch-en-ubuntu-mediante-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instalación de Elasticsearch en Ubuntu mediante Docker
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Instalación de Elasticsearch en Ubuntu mediante Docker">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#instalando-elasticsearch-en-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instalando ElasticSearch en docker
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comprobando-la-instalacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Comprobando la instalación
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#y-ahora-que-mas-nodos-anadimos-kibana" class="md-nav__link">
+    <span class="md-ellipsis">
+      y ahora qué, ¿más nodos?, ¿añadimos kibana?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instalacion-de-un-cluster-elasticsearch-y-kibana-utilizando-docker-compose" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instalación de un cluster elasticsearch y kibana utilizando docker-compose
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Instalación de un cluster elasticsearch y kibana utilizando docker-compose">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#accediendo-desde-el-terminal-para-verificar-el-estado-del-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      Accediendo desde el terminal para verificar el estado del cluster
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#accediendo-desde-la-interface-de-kibana" class="md-nav__link">
+    <span class="md-ellipsis">
+      Accediendo desde la interface de Kibana
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instalacion-de-elasticsearch-en-un-servidor-linux" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instalación de Elasticsearch en un servidor línux
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Instalación de Elasticsearch en un servidor línux">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#instalacion-de-elastic_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instalación de Elastic
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instalacion-de-kibana" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instalación de Kibana
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instalacion-de-logstash" class="md-nav__link">
+    <span class="md-ellipsis">
+      instalación de Logstash
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instalacion-de-filebeat" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instalación de Filebeat
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#comprendiendo-los-conceptos-de-cluster-indices-y-shards" class="md-nav__link">
+    <span class="md-ellipsis">
+      Comprendiendo los conceptos de cluster, indices y shards
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+  <h1>1. Introducción</h1>
+
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ElasticStackLOGO.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ElasticStackLOGO.png" alt="Logo Elastic" width="15%" /></a>
+</div>
+
+<p>Los sistemas <strong>NoSQL</strong> son una categoría de bases de datos diseñadas para manejar grandes volúmenes de datos no estructurados o semiestructurados en entornos distribuidos y escalables. Estos sistemas proporcionan flexibilidad en el modelado de datos y están optimizados para casos de uso que requieren alta disponibilidad, escalabilidad horizontal y baja latencia de acceso a los datos.</p>
+<h2 id="elastic-stack">Elastic Stack</h2>
+<p><strong><em>Elastic Stack</em></strong> puede ser un ejemplo muy representativo de bases de datos <em>NoSQL</em> con características muy beneficiosas para gestionar y analizar datos en entornos donde se necesite trabajar con grandes volúmenes de datos no tradicionales. </p>
+<h3 id="que-es-elastic-stack">¿Qué es Elastic Stack?</h3>
+<p><strong>Elastic Stack</strong>, anteriormente conocido como <strong><em>ELK Stack</em></strong>, es un conjunto de herramientas de código abierto desarrolladas por Elastic para la búsqueda, análisis y visualización de datos. El nombre <em>Elastic Stack</em> refleja la ampliación del conjunto de herramientas más allá de las tres herramientas originales (<em>Elasticsearch</em>, <em>Logstash</em> y <em>Kibana</em>) para incluir una variedad de productos adicionales que complementan y amplían la funcionalidad del conjunto.</p>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK01.webp" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK01.webp" alt="ELK" width="60%" /></a>
+</div>
+
+<p>El <em>Elastic Stack</em> consta de los siguientes componentes principales:</p>
+<ol>
+<li>
+<p><strong>Elasticsearch</strong>: Es un motor de búsqueda y análisis distribuido basado en <em>Lucene</em>. <em>Elasticsearch</em> se utiliza para indexar, buscar y analizar grandes volúmenes de datos en tiempo real. Proporciona capacidades de búsqueda a escala, incluyendo búsqueda de texto completo, agregaciones, geolocalización y más.</p>
+</li>
+<li>
+<p><strong>Logstash</strong>: Es una herramienta de ingestión de datos que se utiliza para recopilar, procesar y enviar datos de log y otros tipos de datos desde múltiples fuentes a <em>Elasticsearch</em> para su almacenamiento y análisis. Logstash ofrece una amplia gama de filtros y complementos para procesar datos de diferentes formatos y fuentes.</p>
+</li>
+<li>
+<p><strong>Kibana</strong>: Es una plataforma de visualización de datos y análisis que se utiliza para visualizar y explorar los datos almacenados en <em>Elasticsearch</em>. Kibana ofrece una variedad de herramientas de visualización y paneles de control que permiten a los usuarios crear gráficos, tablas y mapas interactivos para analizar y comprender los datos.</p>
+</li>
+<li>
+<p><strong>Beats</strong>: Beats es una familia de agentes ligeros que se utilizan para enviar datos a <em>Elasticsearch</em> o Logstash desde una variedad de fuentes, incluidos logs, métricas del sistema, datos de red y más. Beats simplifica la recopilación y envío de datos, proporcionando una forma eficiente y escalable de enviar datos a la Elastic Stack.</p>
+</li>
+<li>
+<p><strong>Apm-server</strong>: Apm-server es un servidor de recolección de datos de rendimiento de aplicaciones (APM) que se utiliza para recopilar y enviar datos de rendimiento de aplicaciones a <em>Elasticsearch</em>. Ayuda a monitorear y analizar el rendimiento de las aplicaciones y a identificar problemas de rendimiento en tiempo real.</p>
+</li>
+<li>
+<p><strong>Elasticsearch SQL</strong>: Es una capa de SQL que se ejecuta sobre <em>Elasticsearch</em>, lo que permite a los usuarios ejecutar consultas SQL sobre datos indexados en Elasticsearch.</p>
+</li>
+</ol>
+<p>Estos son algunos de los componentes principales del <em>Elastic Stack</em>, pero <em>Elastic</em> también ofrece una variedad de otros productos y soluciones que complementan el conjunto, como <em>Elasticsearch</em> Security, <em>Elasticsearch</em> Machine Learning, Elastic Enterprise Search, Elastic Observability, entre otros.</p>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK02.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK02.png" alt="ELK" width="60%" /></a>
+</div>
+
+<p><em>Elastic Stack</em> es especialmente popular en entornos de desarrollo de software, operaciones de sistemas (DevOps), análisis de seguridad, monitoreo de infraestructura y análisis de registros de aplicaciones. La combinación de <em>Elasticsearch</em>, <em>Logstash</em> y <em>Kibana</em> proporciona una solución completa y escalable para la recopilación, almacenamiento, análisis y visualización de datos.</p>
+<p>Más concretamente <strong>Elasticsearch</strong> es un motor de búsqueda diseñado para escalar horizontalmente, de forma que se puedan ir añadiendo más nodos al clúster a medida que aumente el volumen de datos requerido.</p>
+<p>Su base es una librería de indexación y búsqueda de información textual conocida como <strong><em>Apache Lucene</em></strong>, desarrollada inicialmente en Java aunque disponible también para otros lenguajes.</p>
+<p>El surgimiento de <strong>Elasticsearch</strong> se debió a problemas de escalabilidad detectados en otro motor de búsqueda que también se basa en <strong><em>Apache Lucene</em></strong>, <strong>Apache Solr</strong>. En el siguiente <a href="https://youtu.be/MMWBdSdbu5k?si=5i2jwLVXsC2XoQnD">vídeo</a> se resumen las diferencias principales entre ambos buscadores, que pueden consultarse en detalle en el siguiente <a href="https://sematext.com/blog/side-by-side-with-elasticsearch-and-solr-performance-and-scalability/">enlace</a></p>
+<h3 id="por-que-elastic-stack-en-sistemas-big-data">¿ Por qué <em>Elastic Stack</em> en Sistemas Big Data?</h3>
+<p>Existen varias razones que nos aconsejan dar un vistazo a <em>Elastic Stack</em> (Elasticsearch, Logstash, Kibana) para comprender los Sistemas de Big Data: </p>
+<ol>
+<li>
+<p><strong>Escalabilidad y rendimiento</strong>: <em>Elasticsearch</em>, como parte de ELK, está diseñado para ser altamente escalable y eficiente en términos de rendimiento. Estudiar cómo <em>Elasticsearch</em> maneja grandes volúmenes de datos y consultas en tiempo real proporciona una comprensión práctica de cómo los sistemas de Big Data pueden escalar y procesar datos de manera eficiente.</p>
+</li>
+<li>
+<p><strong>Ingestión de datos</strong>: <em>Logstash</em>, otra parte de ELK, se utiliza para la ingestión de datos, que es un aspecto crítico en los sistemas de Big Data. Aprender sobre Log<em>stash y sus capacidades para recopilar datos de diferentes fuentes, procesarlos y enviarlos a </em>Elasticsearch* para su almacenamiento y análisis proporciona una comprensión sólida de cómo se manejan los datos en sistemas de Big Data.</p>
+</li>
+<li>
+<p><strong>Análisis y visualización de datos</strong>: <em>Kibana</em>, la tercera parte de ELK, es una herramienta poderosa para la visualización y el análisis de datos. Estudiar <em>Kibana</em> te permite aprender cómo crear visualizaciones interactivas, tablas de datos y paneles de control para analizar y comprender datos almacenados en <em>Elasticsearch</em>. Esto es fundamental en los sistemas de Big Data para extraer información significativa de conjuntos de datos masivos.</p>
+</li>
+<li>
+<p><strong>Casos de uso prácticos</strong>: ELK se utiliza en una amplia variedad de casos de uso, incluyendo monitoreo de infraestructura, análisis de logs, observabilidad de aplicaciones, análisis de seguridad, análisis de registros de aplicaciones y más. Estudiar cómo se implementa ELK en estos casos de uso proporciona una comprensión práctica de cómo se utilizan los sistemas de Big Data en entornos del mundo real.</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Elasticsearch ha sido adoptado por algunas marcas importantes, como: Tesco, Linkedin, Foursquare, Facebook, Netflix, Dell, Ebay, Wikipedia, The Guardian, New York Times, Salesforce, Docker, Orange, Groupon, Eventbrite y muchos otros.* <a href="https://apiumhub.com/es/tech-blog-barcelona/usar-elasticsearch-ventajas-libros/">Usar Elasticsearch: ventajas, casos prácticos y libros</a></p>
+</div>
+</li>
+<li>
+<p><strong>Herramientas de código abierto</strong>: ELK es una suite de herramientas de código abierto ampliamente utilizada en la industria. Estudiar ELK te expone a tecnologías de código abierto populares y te proporciona habilidades que son altamente valoradas en el mercado laboral de la tecnología.</p>
+</li>
+</ol>
+<p>En resumen, estudiar ELK te proporciona una comprensión práctica de cómo funcionan y se utilizan los sistemas de Big Data en entornos del mundo real, desde la ingestión de datos hasta el almacenamiento, análisis y visualización de datos. Esto puede ser valioso para aquellos que desean desarrollar habilidades en el campo del análisis de datos y Big Data.</p>
+<h2 id="elasticsearch">Elasticsearch</h2>
+<p><strong>Elasticsearch</strong> es un potente motor de búsqueda y análisis distribuido que se utiliza para buscar, analizar y visualizar grandes volúmenes de datos en tiempo real. En su núcleo, <strong>Elasticsearch</strong> organiza y almacena la información utilizando un enfoque de búsqueda y recuperación de información, similar a un motor de búsqueda web, pero optimizado para una amplia gama de casos de uso y tipos de datos.</p>
+<h3 id="caracteristicas">Características</h3>
+<p>Es una colección de información organizada para un
+posterior aprovechamiento de la misma.</p>
+<p>Esta información debe:</p>
+<ul>
+<li>Ser accesible</li>
+<li>Se pueda gestionar</li>
+<li>Se pueda actualizar</li>
+</ul>
+<p>Las características principales son: </p>
+<ul>
+<li><strong>Distribuido y escalable</strong>. Permite crecer conforme lo hagan las necesidades de forma horizontal.</li>
+<li><strong>Datos en tiempo real</strong>. Los datos están disponibles para su análisis segundos después de haber sido indexados (real time).</li>
+<li><strong>Alta disponibilidad</strong>. Datos replicados a lo largo de distintos nodos permite el fallo de alguno de estos dentro del clúster sin que se vea afectado el funcionamiento.</li>
+<li><strong>Multi-tenancy</strong>. Los índices donde se almacenan la información pueden ser consultados de manera independiente.</li>
+<li><strong>Búsquedas full-text</strong>. Usa <strong><em>Apache Lucene</em></strong> aprovechando sus capacidades de búsqueda de texto, soportando geolocalización, autocompletado, expresiones regulares…</li>
+<li><strong>API Restful</strong>. Proporciona una API sobre <strong>JSON</strong> para realizar consultas e interactuar con Elasticsearch.</li>
+</ul>
+<h3 id="almacenamiento-de-la-informacion">Almacenamiento de la información</h3>
+<p>La información se organiza dentro de elasticsearch en: </p>
+<ul>
+<li>
+<p><strong>Índice</strong>: Colección de documentos con características similares (catálogo de productos, clientes, pedidos…).
+Identificado por un nombre (minúsculas) usado para realizar operaciones como indexado, búsqueda, actualización y borrado de los documentos que contiene.</p>
+</li>
+<li>
+<p><strong>Documento</strong>: Unidad básica de información que puede ser indexada (documento por producto, cliente o pedido) en formato <a href="https://www.w3schools.com/js/js_json_intro.asp">JSON</a>. 
+En un <em>índice</em> se pueden almacenar todos los documentos que se requiera.</p>
+</li>
+<li>
+<p><strong>Shards</strong>: Cuando se almacena gran cantidad de información puede exceder los límites hardware de un nodo. <em>Elasticsearch</em> proporciona la posibilidad de subdividir un índice en distintas partes denominadas <strong>shards</strong>.</p>
+</li>
+<li>Permite subdividir/escalar la información almacenada.</li>
+<li>
+<p>Permite distribuir y paralelizar operaciones.</p>
+</li>
+<li>
+<p><strong>Réplica</strong>: <em>Elasticsearch</em> permite realizar una o más copias de los shards. Su importancia recae en:</p>
+</li>
+<li>Proporciona alta disponibilidad en el caso de que un shard/nodo falle. Importante que las réplicas no se encuentren en el mismo nodo.</li>
+<li>Permite el escalado del volumen de búsquedas ya que estas pueden ejecutarse en paralelo en las réplicas.</li>
+</ul>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK04.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK04.png" alt="ELK" width="60%" /></a>
+</div>
+
+<p>Una vez replicado, cada <strong><em>índice</em></strong> tendrá un <strong><em>shard</em></strong> primario y las réplicas (copias exactas del primario).
+Los <strong><em>shards</em></strong> y <strong><em>réplicas</em></strong> se pueden definir por índice a la hora de creación de los mismos. Las réplicas podrán cambiarse en caliente al contrario que los shards.</p>
+<p>La información se almacena en diferentes sitios de la red (físicamente) pero lógicamente es una única base de datos.</p>
+<ul>
+<li>Transparente para un usuario final.</li>
+<li>Independencia respecto al sistema operativo.</li>
+<li>Procesamiento distribuido de consultas.</li>
+<li>Información fragmentada.</li>
+<li>Réplicas = Alta disponibilidad.</li>
+</ul>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK03.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK03.png" alt="ELK" width="60%" /></a>
+</div>
+
+<h3 id="tipos-de-nodos">Tipos de nodos</h3>
+<p>En <em>Elasticsearch</em>, los nodos son las instancias individuales que forman parte de un clúster y que almacenan, indexan y procesan los datos. Existen varios tipos de nodos en <em>Elasticsearch</em>, cada uno con un propósito específico. A continuación, se describen los tipos principales de nodos:</p>
+<ol>
+<li><strong>Nodos de datos (Data Nodes)</strong>:</li>
+<li>Los nodos de datos son responsables de almacenar y gestionar los datos indexados en Elasticsearch.</li>
+<li>Estos nodos almacenan los shards (fragmentos) de los índices en el clúster.</li>
+<li>Cada nodo de datos contiene una parte del conjunto completo de datos en el clúster.</li>
+<li>
+<p>Los nodos de datos participan en la indexación y búsqueda de datos.</p>
+</li>
+<li>
+<p><strong>Nodos de maestro (Master Nodes)</strong>:</p>
+</li>
+<li>Los nodos maestro son responsables de coordinar las actividades en el clúster y de gestionar los metadatos.</li>
+<li>Controlan las operaciones de indexación, búsqueda, asignación de shards y recuperación en el clúster.</li>
+<li>Los nodos maestro no almacenan datos de índices, pero mantienen un seguimiento del estado del clúster y de la topología.</li>
+<li>
+<p>Los clústeres de <em>Elasticsearch</em> deben tener al menos un nodo maestro para funcionar correctamente.</p>
+</li>
+<li>
+<p><strong>Nodos de coordinación (Coordinating Nodes)</strong>:</p>
+</li>
+<li>Los nodos de coordinación actúan como puntos de entrada para las solicitudes de clientes y distribuyen las solicitudes a los nodos adecuados.</li>
+<li>Ayudan a equilibrar la carga de trabajo y a distribuir las consultas de búsqueda y recuperación en el clúster.</li>
+<li>
+<p>Estos nodos no almacenan datos de índices y no participan en la indexación o búsqueda directa de datos.</p>
+</li>
+<li>
+<p><strong>Nodos de ingestión (Ingest Nodes)</strong>:</p>
+</li>
+<li>Los nodos de ingestión se utilizan para procesar y transformar datos antes de que se almacenen en Elasticsearch.</li>
+<li>Pueden aplicar transformaciones, análisis de texto y enriquecimiento de datos antes de indexarlos en el clúster.</li>
+<li>
+<p>Estos nodos son útiles para la preparación y limpieza de datos antes de su almacenamiento en el índice.</p>
+</li>
+<li>
+<p><strong>Nodos de cliente (Client Nodes)</strong>:</p>
+</li>
+<li>Los nodos de cliente son nodos dedicados exclusivamente a recibir solicitudes de clientes y reenviarlas al nodo adecuado para su procesamiento.</li>
+<li>Ayudan a distribuir la carga de trabajo al actuar como intermediarios entre los clientes y los nodos de datos, coordinación o ingestión.</li>
+</ol>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK05.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK05.png" alt="ELK" width="60%" /></a>
+</div>
+
+<h3 id="arquitectura-logica-de-funcionamiento">Arquitectura: Lógica de funcionamiento:</h3>
+<p>La arquitectura de funcionamiento de un sistema elastic stack sería el representado por la siguiente imagen.</p>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK06.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK06.png" alt="ELK" width="70%" /></a>
+</div>
+
+<p>Y en cuanto a las comunicaciones entre los diferentes elementos, debemos tener en cuenta : </p>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK52.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK52.png" alt="ELK" width="40%" /></a>
+</div>
+
+<p>Elasticsearch incluye 2 protocolos de comunicación:
+1. Protocolo nativo en binario llamado <strong>Transport Client</strong>. Puerto <strong>9300</strong> por defecto
+   - Sólo pensado para el lenguaje Java. <br />
+   - Se utiliza para comunicar Elastic con el resto de aplicaciones del Stack
+2. Protocolo HTTP: <em>API REST</em>. Puerto <strong>9200</strong> por defecto
+   - Forma más común de conexión
+   - REST es un protocolo de uso general de operaciones y herramientas de test conocidas
+   - Posibilidad de implementar clientes en cualquier lenguaje de programación: <em>java</em>, <em>python</em>, <em>javascript</em> ...</p>
+<h2 id="instalacion-de-elastic">Instalación de elastic</h2>
+<p>Tenemos diferentes opciones para la instalación de elastic stack, de hecho no es necesario instalar todo el sistema completo, si no que podemos instalar elementos separados de ellos, por ejemplo <strong>Elasticsearch</strong> y <strong>Kibana</strong> por separado.</p>
+<p>Además podemos realizar instalación de diferentes nodos en diferentes equipos para que funcionen de forma connjunta o podemos instalarlos mediante <strong>docker</strong> en mismo sistema.</p>
+<h3 id="preparacion-para-la-instalacion">Preparación para la instalación.</h3>
+<p>Nosotros vamos a utilizar un equipo Ubuntu Desktop, aunque realmente sería más eficiente un Ubuntu Server o similar. Si embargo, para que sea más sencillo y poder acceder posteriormente desde mismo equipo, instalaremos un máquina con experiencia de usuario.</p>
+<p>Una configuración de esta máquina en <strong><em>Oracle VM VirtualBox</em></strong> podría ser la siguiente:</p>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK07.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK07.png" alt="ELK" width="50%" /></a>
+</div>
+
+<p>Observar que se ha incluido una cantidad elevada de memoria: 10GB (en un equipo de 16GB), se ha asignado más de un procesador y un mínimo de 50GB de disco duro.</p>
+<p>Una vez instalado el sistema, es aconsejable instalar los VirtualBox Guest Additions.</p>
+<p>Seleccionamos su instalación y abrimos un terminal en el medio que lo contiene: </p>
+<p><div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>sudo apt update
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>sudo apt upgrade                # opcional. Puede tardar mucho
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>sudo apt install gcc make perl  # opcional y aconsejable, para poder recompilar el núcleo 
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>sudo ./VBoxLinuxAdditions.run   # instalación
+</span></code></pre></div>
+Antes de seguir, también es aconsejable hacer una copia de seguridad o una instantánea, por si algo sale mal.</p>
+<hr>
+
+<p>También es interesante habilitar el usuario <em>root</em> y trabajar con este usuario </p>
+<p>Una vez preparado nuestro sistema, vamos a ver diferentes instalaciones. Realizaremos dos: en primer lugar instalaremos <em>Elasticsearch</em> sobre un <strong>docker</strong> sobre la máquina, y posteriormente instalaremos un cluster aprovechando la tecnología <strong>docker-compose</strong>. Por supuesto también podemos realizar una instalación directa sobre nuestra máquina, pero en este caso, como la finalidad es montar un cluster para ver su comportamiento, optaremos por obviar esta variante. </p>
+<h3 id="instalacion-de-docker-docker-compose-y-curl">Instalación de <code>docker</code>, <code>docker-compose</code> y <code>curl</code></h3>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK02.webp" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK02.webp" alt="ELK" width="40%" /></a>
+</div>
+
+<p><strong>Docker</strong> es una plataforma de código abierto diseñada para facilitar la creación, implementación y ejecución de aplicaciones en contenedores. Un contenedor es una unidad ligera de software que contiene todo lo necesario para ejecutar una aplicación, incluidas las bibliotecas, las herramientas del sistema, el código y las dependencias. <strong>Docker</strong> proporciona una forma estandarizada de empaquetar y distribuir aplicaciones, lo que facilita la creación de entornos de desarrollo consistentes y portátiles.</p>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK35.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK35.png" alt="ELK" width="40%" /></a>
+</div>
+
+<p><strong>Docker Compose</strong>, por otro lado, es una herramienta que permite definir y gestionar aplicaciones <strong><em>multi-contenedor</em></strong>. Con Docker Compose, se puede definir la configuración de una aplicación en un archivo YAML, especificando los servicios, imágenes de contenedor, volúmenes, redes y otros detalles necesarios para ejecutar tu aplicación. Docker Compose simplifica la gestión de aplicaciones complejas al permitirte definir y controlar todos los componentes de tu aplicación desde un solo lugar.</p>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK03.webp" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK03.webp" alt="ELK" width="40%" /></a>
+</div>
+
+<p>Para instalar Docker y Docker Compose en Ubuntu 22.04, puedes seguir estos pasos:</p>
+<p>1.- Actualiza el índice de paquetes de Ubuntu:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>sudo<span class="w"> </span>apt<span class="w"> </span>update
+</span></code></pre></div>
+<p>2.- Instala los paquetes necesarios para permitir que apt utilice un repositorio sobre HTTPS:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>apt-transport-https<span class="w"> </span>ca-certificates<span class="w"> </span>curl<span class="w"> </span>software-properties-common
+</span></code></pre></div>
+<p>3.- Descarga e importa la clave GPG oficial de Docker:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://download.docker.com/linux/ubuntu/gpg<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>gpg<span class="w"> </span>--dearmor<span class="w"> </span>-o<span class="w"> </span>/usr/share/keyrings/docker-archive-keyring.gpg
+</span></code></pre></div>
+<p>4.- Agrega el repositorio de Docker al sistema:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nb">echo</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="s2">&quot;deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="s2">  </span><span class="k">$(</span>lsb_release<span class="w"> </span>-cs<span class="k">)</span><span class="s2"> stable&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/apt/sources.list.d/docker.list<span class="w"> </span>&gt;<span class="w"> </span>/dev/null
+</span></code></pre></div>
+<p>5.- Actualiza el índice de paquetes nuevamente:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>sudo<span class="w"> </span>apt<span class="w"> </span>update
+</span></code></pre></div>
+<p>6.- Instala la versión de Docker que prefieras. Puedes elegir entre la versión comunitaria (Docker CE) o la versión empresarial (Docker EE). Para instalar la versión comunitaria, ejecuta:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>docker-ce<span class="w"> </span>docker-ce-cli<span class="w"> </span>containerd.io
+</span></code></pre></div>
+<p>7.- Instala <em>docker-compose</em>, ejecuta:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>docker-compose
+</span></code></pre></div>
+<p>8.- Verifica que Docker se haya instalado correctamente ejecutando el siguiente comando para verificar la versión:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>docker<span class="w"> </span>--version
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>docker-compose<span class="w"> </span>--version
+</span></code></pre></div>
+<p>9.- Para permitir que tu usuario actual ejecute comandos de Docker sin necesidad de usar <code>sudo</code>, agrega tu usuario al grupo <code>docker</code>:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>sudo<span class="w"> </span>usermod<span class="w"> </span>-aG<span class="w"> </span>docker<span class="w"> </span><span class="nv">$USER</span>
+</span></code></pre></div>
+<p>10.- Cierra la sesión actual y vuelve a iniciarla para que los cambios surtan efecto.</p>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK08.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK08.png" alt="ELK" width="50%" /></a>
+</div>
+
+<p>Ya que nos estamos preparando, podemos instalar también <code>curl</code>, que nos permitirá contactar desde la línea de comandos con el servidor Elasticsearh.</p>
+<p>Para ello :</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>curl
+</span></code></pre></div>
+<p>Más información sobre <code>curl</code> en la <a href="https://es.wikipedia.org/wiki/CURL">Wikipedia</a> o en la red</p>
+<h4 id="un-poco-de-docker">Un poco de <code>docker</code></h4>
+<p>Aquí tienes una tabla que muestra algunas opciones típicas del comando <code>docker</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Comando y Opción</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>docker run &lt;imagen&gt;</code></td>
+<td>Crea y ejecuta un nuevo contenedor basado en la imagen especificada.</td>
+</tr>
+<tr>
+<td><code>docker ps</code></td>
+<td>Muestra una lista de los contenedores en ejecución.</td>
+</tr>
+<tr>
+<td><code>docker images</code></td>
+<td>Lista las imágenes Docker descargadas en el sistema.</td>
+</tr>
+<tr>
+<td><code>docker pull &lt;imagen&gt;</code></td>
+<td>Descarga una imagen de Docker del registro público o privado.</td>
+</tr>
+<tr>
+<td><code>docker build &lt;ruta&gt;</code></td>
+<td>Construye una imagen Docker desde un Dockerfile ubicado en la ruta especificada.</td>
+</tr>
+<tr>
+<td><code>docker push &lt;imagen&gt;</code></td>
+<td>Sube una imagen de Docker al registro remoto.</td>
+</tr>
+<tr>
+<td><code>docker stop &lt;contenedor&gt;</code></td>
+<td>Detiene un contenedor en ejecución.</td>
+</tr>
+<tr>
+<td><code>docker start &lt;contenedor&gt;</code></td>
+<td>Inicia un contenedor detenido.</td>
+</tr>
+<tr>
+<td><code>docker rm &lt;contenedor&gt;</code></td>
+<td>Elimina uno o varios contenedores.</td>
+</tr>
+<tr>
+<td><code>docker rmi &lt;imagen&gt;</code></td>
+<td>Elimina una o varias imágenes de Docker del sistema.</td>
+</tr>
+<tr>
+<td><code>docker exec -it &lt;contenedor&gt; &lt;comando&gt;</code></td>
+<td>Ejecuta un comando dentro de un contenedor en ejecución. Ej. <code>docker exec --user='root' -it es01 /bin/bash</code></td>
+</tr>
+<tr>
+<td><code>docker logs &lt;contenedor&gt;</code></td>
+<td>Muestra los registros de salida de un contenedor en ejecución.</td>
+</tr>
+<tr>
+<td><code>docker inspect &lt;objeto&gt;</code></td>
+<td>Muestra información detallada sobre un contenedor, imagen o red de Docker.</td>
+</tr>
+</tbody>
+</table>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK36.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK36.png" alt="ELK" width="50%" /></a>
+</div>
+
+<p>Ejemplos de uso de comando <code>docker</code></p>
+<ul>
+<li>
+<p>listar contenedores activos
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>docker<span class="w"> </span>ps
+</span></code></pre></div></p>
+</li>
+<li>
+<p>operaciones con contenedores
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>docker<span class="w"> </span>start<span class="w"> </span>es01<span class="w">       </span><span class="c1"># inicia el contenedor es01</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>docker<span class="w"> </span>stop<span class="w"> </span>es01<span class="w">        </span><span class="c1"># lo para</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>docker<span class="w"> </span>restart<span class="w"> </span>es01<span class="w">     </span><span class="c1"># lo reinicia   </span>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>docker<span class="w"> </span>rm<span class="w"> </span>es01<span class="w">          </span><span class="c1"># lo elimina</span>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>docker<span class="w"> </span><span class="nb">kill</span><span class="w"> </span>es01<span class="w">        </span><span class="c1"># lo .... </span>
+</span></code></pre></div></p>
+</li>
+<li>
+<p>entrar en el terminal de un contenedor 
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>es01<span class="w"> </span>/bin/bash
+</span></code></pre></div></p>
+</li>
+<li>
+<p>copiar desde y hacia un contenedor.
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>docker<span class="w"> </span>cp<span class="w"> </span>es01:/usr/share/elasticsearch/config/certs/http_ca.crt<span class="w"> </span>.
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>docker<span class="w"> </span>cp<span class="w"> </span>elasticsearch.yml<span class="w"> </span>es01:/usr/share/elasticsearch/config/elasticsearch.yml<span class="w"> </span>
+</span></code></pre></div></p>
+</li>
+<li>
+<p>eliminar y crear interfaces de red
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>docker<span class="w"> </span>network<span class="w"> </span>create<span class="w"> </span>elastic
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>docker<span class="w"> </span>network<span class="w"> </span>rm<span class="w"> </span>elastic
+</span></code></pre></div></p>
+</li>
+</ul>
+<h4 id="y-un-poco-de-docker-compose">y un poco de <code>docker-compose</code></h4>
+<p>Aquí tienes algunos usos típicos de comandos docker-compose:</p>
+<table>
+<thead>
+<tr>
+<th>Comando</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>docker-compose up</code></td>
+<td>Construye, crea y arranca todos los servicios definidos en el archivo <code>docker-compose.yml</code>. Si no existe, Docker Compose construirá las imágenes necesarias.</td>
+</tr>
+<tr>
+<td><code>docker-compose up -d</code></td>
+<td>Similar a <code>docker-compose up</code>, pero ejecuta los servicios en segundo plano (modo detached). Útil para ejecutar servicios en el fondo sin bloquear la terminal.</td>
+</tr>
+<tr>
+<td><code>docker-compose down</code></td>
+<td>Detiene y elimina todos los contenedores, redes y volúmenes creados por <code>docker-compose up</code>.</td>
+</tr>
+<tr>
+<td><code>docker-compose ps</code></td>
+<td>Muestra el estado de los servicios definidos en el archivo <code>docker-compose.yml</code>. Proporciona información sobre los contenedores en ejecución, sus puertos mapeados y el estado.</td>
+</tr>
+<tr>
+<td><code>docker-compose logs</code></td>
+<td>Muestra los logs de todos los servicios o de un servicio específico definido en <code>docker-compose.yml</code>. Puedes usar opciones adicionales para controlar el formato y la salida de los logs.</td>
+</tr>
+<tr>
+<td><code>docker-compose exec &lt;servicio&gt; &lt;comando&gt;</code></td>
+<td>Ejecuta un comando dentro de un contenedor de un servicio específico. Útil para ejecutar comandos en el contexto de un servicio en ejecución.</td>
+</tr>
+<tr>
+<td><code>docker-compose build</code></td>
+<td>Construye o reconstruye los servicios definidos en <code>docker-compose.yml</code>. Útil cuando se realizan cambios en Dockerfiles o archivos de configuración y se necesita actualizar las imágenes.</td>
+</tr>
+<tr>
+<td><code>docker-compose restart &lt;servicio&gt;</code></td>
+<td>Reinicia un servicio específico definido en <code>docker-compose.yml</code>. Esto detiene y vuelve a arrancar el contenedor del servicio.</td>
+</tr>
+<tr>
+<td><code>docker-compose stop</code></td>
+<td>Detiene los contenedores de los servicios definidos en <code>docker-compose.yml</code> sin eliminarlos. Útil para detener servicios sin eliminar los recursos asociados.</td>
+</tr>
+<tr>
+<td><code>docker-compose start</code></td>
+<td>Arranca todos los servicios previamente creados. Útil para volver a arrancar los contenedores del servicio.</td>
+</tr>
+</tbody>
+</table>
+<div align="center">
+   <a class="glightbox" href="../../images/ELK/ELK50.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK50.png" alt="docker-compose" width="90%" /></a>
+</div>
+
+<h3 id="instalacion-de-elasticsearch-en-ubuntu-mediante-docker">Instalación de <code>Elasticsearch</code> en Ubuntu mediante <code>Docker</code></h3>
+<p>Antes de nada, para evitar problemas con los contenedores, es recomendable cambiar los siguientes parámetros del sistema:</p>
+<p><div class="language-bash highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># Deshabilitar swapping</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>sudo<span class="w"> </span>swapoff<span class="w"> </span>-a
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="c1"># Memória virtual</span>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>sudo<span class="w"> </span>sysctl<span class="w"> </span>-w<span class="w"> </span>vm.max_map_count<span class="o">=</span><span class="m">262144</span>
+</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="c1"># Number or threads</span>
+</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>sudo<span class="w"> </span>sysctl<span class="w"> </span>-w<span class="w"> </span>fs.file-max<span class="o">=</span><span class="m">65536</span>
+</span></code></pre></div>
+podemos incluir todo esto en un fichero de configuración y ejecutar directamente. </p>
+<h4 id="instalando-elasticsearch-en-docker">Instalando <code>ElasticSearch</code> en <code>docker</code></h4>
+<p>Para instalar elastic en docker seguimos: </p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="c1"># instalamos elacticseach sobre docker</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>docker<span class="w"> </span>network<span class="w"> </span>create<span class="w"> </span>elastic
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>docker<span class="w"> </span>pull<span class="w"> </span>docker.elastic.co/elasticsearch/elasticsearch:8.12.0
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>docker<span class="w"> </span>run<span class="w"> </span>--name<span class="w"> </span>elasticsearch<span class="w"> </span>--net<span class="w"> </span>elastic<span class="w"> </span>-p<span class="w"> </span><span class="m">9200</span>:9200<span class="w"> </span>-p<span class="w"> </span><span class="m">9300</span>:9300<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;discovery.type=single-node&quot;</span><span class="w"> </span>-it<span class="w"> </span>docker.elastic.co/elasticsearch/elasticsearch:8.12.0
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>
+</span><span id="__span-17-6"><a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="c1"># Para la ejecución es recomendable asignar más de 1GB, para evitar problemas</span>
+</span><span id="__span-17-7"><a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a>docker<span class="w"> </span>run<span class="w"> </span>--name<span class="w"> </span>elasticsearch<span class="w"> </span>--net<span class="w"> </span>elastic<span class="w"> </span>-p<span class="w"> </span><span class="m">9200</span>:9200<span class="w"> </span>-p<span class="w"> </span><span class="m">9300</span>:9300<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;discovery.type=single-node&quot;</span><span class="w"> </span>-it<span class="w"> </span>-m<span class="w"> </span>2GB<span class="w"> </span>docker.elastic.co/elasticsearch/elasticsearch:8.12.0
+</span></code></pre></div>
+<p>Al terminal la instalación y puesta en marcha del contenedor nos aparece la siguiente información donde tenemos contraseña de acceso y tokens (claves) para poder unir <code>Kibana</code> u otros nodos de <em>Elasticsearch</em>. Esta información es importante retenerla.</p>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK10.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK10.png" alt="ELK" width="50%" /></a>
+</div>
+
+<h4 id="comprobando-la-instalacion">Comprobando la instalación</h4>
+<p>Una vez llegados a este punto, dejamos el contenedor funcionando y nos <em>abrimos un nuevo terminal</em>. </p>
+<p>Nos preparamos para trabajar de creando una variable para guardar la contraseña anterior y copiando el certificado de autentificación en nuestro equipo.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">ELASTIC_PASSWORD</span><span class="o">=</span><span class="s2">&quot;ar+cS5jc7JzL_AzppMrt&quot;</span>
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="c1"># Copy the http_ca.crt SSL certificate from the container to your local machine.</span>
+</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>docker<span class="w"> </span>cp<span class="w"> </span>elasticsearch:/usr/share/elasticsearch/config/certs/http_ca.crt<span class="w"> </span>.
+</span><span id="__span-18-5"><a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>
+</span><span id="__span-18-6"><a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="c1"># si no estamos en el root, debemos hacer que nuestro usuario tenga acceso al certificado</span>
+</span><span id="__span-18-7"><a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>sudo<span class="w"> </span>chmod<span class="w"> </span>o+r<span class="w"> </span>http_ca.crt
+</span></code></pre></div>
+<p>y realizamos la comprobación de que <em>Elasticsearch</em> esta funcionando.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>curl<span class="w"> </span>--cacert<span class="w"> </span>http_ca.crt<span class="w"> </span>-u<span class="w"> </span>elastic:<span class="nv">$ELASTIC_PASSWORD</span><span class="w"> </span>https://localhost:9200
+</span></code></pre></div>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK11.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK11.png" alt="ELK" width="50%" /></a>
+</div>
+
+<p>Como podemos ver, obtenemos la respuesta mediante un JSON que nos indica que el servidor esta en marcha y nos muestra datos como el nombre de nodo y las versiones de elastic así como de <code>Lucene</code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Cuando hacemos <code>export ELASTIC_PASSWORD=</code>, datos el valor a esta variable hasta el momento en que se reinicia el equipo. Para mantener esta variable siempre en el sistema, incluso después de reinicios, se debería incluir en el fichero <code>/etc/environment</code> </p>
+</div>
+<p>También podemos consulta el estado del servidor o cluster de servidores: </p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>curl<span class="w"> </span>--cacert<span class="w"> </span>http_ca.crt<span class="w"> </span>-u<span class="w"> </span>elastic:<span class="nv">$ELASTIC_PASSWORD</span><span class="w"> </span>https://localhost:9200/_cluster/health?pretty<span class="w"> </span>
+</span></code></pre></div>
+<p>Como vemos en la siguiente imagen, realmente hemos creado un cluster con un solo nodo, que será el master.</p>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK12.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK12.png" alt="ELK" width="50%" /></a>
+</div>
+
+<p>Además podemos ver el status del cluster: <strong>green</strong>. los posibles estados de un cluster son: </p>
+<table>
+<thead>
+<tr>
+<th>Estado del Cluster</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Green</td>
+<td>Todos los nodos en el clúster están activos y operativos. Todas las réplicas y shards primarios están presentes y asignados. El clúster está completamente funcional y no hay pérdida de datos incluso en el caso de la falla de un nodo.</td>
+</tr>
+<tr>
+<td>Yellow</td>
+<td>Todos los nodos en el clúster están activos y operativos, pero algunas réplicas de shards no están asignadas. Esto puede ocurrir cuando se agrega un nuevo nodo al clúster y las réplicas aún no se han asignado completamente, o si un nodo se ha caído y las réplicas no se han restaurado. A pesar de que algunas réplicas no están asignadas, la funcionalidad de búsqueda y recuperación no se ve afectada.</td>
+</tr>
+<tr>
+<td>Red</td>
+<td>Al menos un shard primario o una réplica está ausente o no asignada. Esto puede deberse a la pérdida de datos debido a la falta de réplicas suficientes o a la falta de asignación de un shard primario. El clúster puede seguir funcionando, pero la pérdida de datos es posible y se requiere intervención para restaurar la integridad del clúster.</td>
+</tr>
+<tr>
+<td>Gray</td>
+<td>Este estado puede indicar un error en el proceso de monitoreo del clúster o una incapacidad para determinar el estado real del clúster. Esto puede ocurrir cuando los nodos no pueden comunicarse entre sí o si hay problemas con el monitoreo y la recopilación de datos del estado del clúster. Se requiere una revisión para diagnosticar y resolver la causa del estado de clúster en gris.</td>
+</tr>
+</tbody>
+</table>
+<p>Estos son algunos de los estados comunes del clúster en <em>Elasticsearch</em> y sus descripciones asociadas. Es importante monitorear el estado del clúster regularmente para garantizar la disponibilidad y la integridad de los datos en Elasticsearch.</p>
+<p>Otras consultas que podemos hacer sobre el cluster son : </p>
+<ul>
+<li>
+<p>Información detallada del cluster
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>sudo<span class="w"> </span>curl<span class="w"> </span>--cacert<span class="w"> </span>http_ca.crt<span class="w"> </span>-u<span class="w"> </span>elastic:<span class="nv">$ELASTIC_PASSWORD</span><span class="w"> </span>-XGET<span class="w"> </span><span class="s1">&#39;https://localhost:9200/_cluster/stats?human&amp;pretty&#39;</span>
+</span></code></pre></div></p>
+</li>
+<li>
+<p>Listado de nodos del cluster
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>curl<span class="w"> </span>--cacert<span class="w"> </span>http_ca.crt<span class="w"> </span>-u<span class="w"> </span>elastic:<span class="nv">$ELASTIC_PASSWORD</span><span class="w"> </span>https://localhost:9200/_cat/nodes?v
+</span></code></pre></div></p>
+</li>
+<li>
+<p>Información sobre el listado de nodos
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>curl<span class="w"> </span>--cacert<span class="w"> </span>http_ca.crt<span class="w"> </span>-u<span class="w"> </span>elastic:<span class="nv">$ELASTIC_PASSWORD</span><span class="w"> </span>-XGET<span class="w"> </span><span class="s1">&#39;https://localhost:9200/_nodes?pretty&#39;</span>
+</span></code></pre></div></p>
+</li>
+</ul>
+<p>También podemos introducir nuestro primer índice con algunos datos (o documentos).</p>
+<p>Veamos cómo se insertaría un índice y cómo se consulta: </p>
+<ul>
+<li>Añadir al indice test</li>
+</ul>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>curl<span class="w"> </span>--cacert<span class="w"> </span>http_ca.crt<span class="w"> </span>-u<span class="w"> </span>elastic:<span class="nv">$ELASTIC_PASSWORD</span><span class="w"> </span>-XPOST<span class="w"> </span>https://localhost:9200/test/_bulk?pretty<span class="w"> </span>-d<span class="s1">&#39;</span>
+</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="s1">{ &quot;index&quot; : {} }</span>
+</span><span id="__span-24-3"><a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="s1">{ &quot;num&quot;: &quot;2015/56&quot;, &quot;cliente&quot;: 13, &quot;importe&quot;:189 }</span>
+</span><span id="__span-24-4"><a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="s1">{ &quot;index&quot; : {} }</span>
+</span><span id="__span-24-5"><a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="s1">{ &quot;num&quot;: &quot;2015/57&quot;, &quot;cliente&quot;: 45, &quot;importe&quot;:190 }</span>
+</span><span id="__span-24-6"><a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a><span class="s1">&#39;</span><span class="w"> </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span>
+</span></code></pre></div>
+<ul>
+<li>obtener todo lo que hay en indice test</li>
+</ul>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>curl<span class="w"> </span>--cacert<span class="w"> </span>http_ca.crt<span class="w"> </span>-u<span class="w"> </span>elastic:<span class="nv">$ELASTIC_PASSWORD</span><span class="w"> </span>-XGET<span class="w"> </span>https://localhost:9200/test/_search?pretty
+</span></code></pre></div>
+<h4 id="y-ahora-que-mas-nodos-anadimos-kibana">y ahora qué, ¿más nodos?, ¿añadimos <code>kibana</code>?</h4>
+<p>Podríamos añadir más nodos, como se indica el manual con la siguiente instrucciones, pero nosotros de momento no lo vamos a hacer: </p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>docker<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span><span class="nv">ENROLLMENT_TOKEN</span><span class="o">=</span><span class="s2">&quot;&lt;token&gt;&quot;</span><span class="w"> </span>--name<span class="w"> </span>es02<span class="w"> </span>--net<span class="w"> </span>elastic<span class="w"> </span>-it<span class="w"> </span>-m<span class="w"> </span>1GB<span class="w"> </span>docker.elastic.co/elasticsearch/elasticsearch:8.12.0
+</span></code></pre></div>
+<p>y podíamos añadir <code>kibana</code>, tal y como se especifica en las web de elastic.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="c1"># pull the Kibana Docker image.</span>
+</span><span id="__span-27-2"><a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>docker<span class="w"> </span>pull<span class="w"> </span>docker.elastic.co/kibana/kibana:8.12.0
+</span><span id="__span-27-3"><a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a>
+</span><span id="__span-27-4"><a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a><span class="c1"># Start a Kibana container.</span>
+</span><span id="__span-27-5"><a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a>docker<span class="w"> </span>run<span class="w"> </span>--name<span class="w"> </span>kibana<span class="w"> </span>--net<span class="w"> </span>elastic<span class="w"> </span>-p<span class="w"> </span><span class="m">5601</span>:5601<span class="w"> </span>docker.elastic.co/kibana/kibana:8.12.0
+</span></code></pre></div>
+<p>Con esto, iniciamos el contenedor, si todo funciona bien, nos da un enlace desde el que acceder a kibana: </p>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK13.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK13.png" alt="ELK" width="50%" /></a>
+</div>
+
+<p>Si abrimos el enlace accedemos al punto de unión de Kibana con Elastic, donde nos solicita que introduzcamos el token para unirnos con elastic</p>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK14.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK14.png" alt="ELK" width="50%" /></a>
+</div>
+
+<p>y ya tenemos funcionando elastic y kibana. Nos solicita la contraseña, que es la misma de elastic.</p>
+<p>Si en un momento determinado perdemos la contraseña, o pasan mas de 30 minutos y tenemos que regenerar el token de unión de kibana, entonces ejecutamos: </p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>elasticsearch<span class="w"> </span>/usr/share/elasticsearch/bin/elasticsearch-reset-password<span class="w"> </span>-u<span class="w"> </span>elastic
+</span><span id="__span-28-2"><a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>elasticsearch<span class="w"> </span>/usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token<span class="w"> </span>-s<span class="w"> </span>kibana
+</span></code></pre></div>
+<p>Sin embargo, pero las limitaciones de ejecución con muchas, por lo que vamos a continuar con una solución más completa</p>
+<h3 id="instalacion-de-un-cluster-elasticsearch-y-kibana-utilizando-docker-compose">Instalación de un cluster <code>elasticsearch</code> y <code>kibana</code> utilizando <code>docker-compose</code></h3>
+<p>Vamos a realizar una instalación de un cluster de 3 nodos elasticsearch mas un nodo kibana utilizando <code>docker-compose</code></p>
+<p>Par ello, seguimos con las indicaciones que nos ofrece la <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#docker-compose-file">web de elastic</a>, con alguna mínima modificación.</p>
+<p>Los pasos serán: </p>
+<ul>
+<li>Creamos una carpeta donde vamos a alojar la "<em>composición</em>"</li>
+<li>Descargamos los ficheros </li>
+<li><a href="https://github.com/elastic/elasticsearch/blob/8.12/docs/reference/setup/install/docker/.env">.env</a></li>
+<li><a href="https://github.com/elastic/elasticsearch/blob/8.12/docs/reference/setup/install/docker/docker-compose.yml">.docker-compose.yml</a></li>
+<li>Editamos <code>.env</code> y realizamos los cambios indicados en la web de elastic</li>
+</ul>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK16.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK16.png" alt="ELK" width="60%" /></a>
+</div>
+<p>Además se han realizado otros cambios, como asignar más memoria. En concreto en la imagen se ve una configuración con 1,5 GB por nodo. Es posible que funcione con 1 GB  o tal vez necesites 2GB, según versiones y equipos.</p>
+<p>Ahora ya ejecutamos el comando para iniciar el sistema:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>sudo<span class="w"> </span>docker-compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span><span class="c1"># iniciamos el sistema. La opción -d permite una visualización sencilla </span>
+</span><span id="__span-29-2"><a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>sudo<span class="w"> </span>docker-compose<span class="w"> </span>ps<span class="w">    </span><span class="c1"># mediante este comando, podemos ver si los diferentes contenedores están activos.</span>
+</span></code></pre></div>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK17.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK17.png" alt="ELK" width="60%" /></a>
+</div>
+
+<p>Con el comando <code>docker-compose ps</code> comprobamos que todos los nodos están activos y con esto, ya podemos intentar entrar en kibana de nuevo (http://127.0.0.1:5601/), pero ahora con la nueva contraseña: <em>changeme</em></p>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK18.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK18.png" alt="ELK" width="40%" /></a>
+</div>
+
+<p>Por último, si queremos detener o eliminar el sistema ejecutaremos</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-30-1"><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>sudo<span class="w"> </span>docker-compose<span class="w"> </span>stop<span class="w">    </span><span class="c1"># detiene los servicios </span>
+</span><span id="__span-30-2"><a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a>sudo<span class="w"> </span>docker-compose<span class="w"> </span>down<span class="w">    </span><span class="c1"># esta opción elimina los contenedores</span>
+</span><span id="__span-30-3"><a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a>sudo<span class="w"> </span>docker-compose<span class="w"> </span>down<span class="w"> </span>-v<span class="w"> </span><span class="c1"># además de eliminar los contenedores y los volúmenes de datos</span>
+</span><span id="__span-30-4"><a id="__codelineno-30-4" name="__codelineno-30-4" href="#__codelineno-30-4"></a>
+</span><span id="__span-30-5"><a id="__codelineno-30-5" name="__codelineno-30-5" href="#__codelineno-30-5"></a>sudo<span class="w"> </span>docker-compose<span class="w"> </span>start<span class="w">   </span><span class="c1"># si hemos parado, si hemos eliminado: up</span>
+</span></code></pre></div>
+<p><strong>Correspondencia de Volúmenes de los contenedores y datos en local</strong></p>
+<p>Mediante la definición del <code>volume</code>, podemos almacenar los datos de los nodos en local, con la finalidad de preservar los datos en caso de que los nodos tengan cualquier problema. Esto se aplica a este ejemplo tal como se puede ver en el fichero de configuración <a href="https://github.com/elastic/elasticsearch/blob/8.12/docs/reference/setup/install/docker/docker-compose.yml">.docker-compose.yml</a>. </p>
+<p>Podemos comprobar dónde se encuentran mediante el comando: </p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-31-1"><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>docker<span class="w"> </span>volume<span class="w"> </span>ls<span class="w">                        </span><span class="c1"># listamos todos los volúmenes</span>
+</span><span id="__span-31-2"><a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a>docker<span class="w"> </span>volume<span class="w"> </span>inspect<span class="w"> </span>elastic_esdata01<span class="w">  </span><span class="c1"># inspeccionamos un volumen en concreto</span>
+</span></code></pre></div>
+<div align="center">
+   <a class="glightbox" href="../../images/ELK/ELK19.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK19.png" alt="ELK" width="50%" /></a>
+</div>
+
+<h4 id="accediendo-desde-el-terminal-para-verificar-el-estado-del-cluster">Accediendo desde el terminal para verificar el estado del cluster</h4>
+<p>Si queremos acceder al elastic desde la línea de comando, ejecutamos una secuencia similar a la anterior, pero <strong>ojo</strong>, ahora la ubicación del certificado ha cambiado, tal y como se puede observar en el fichero de configuración <a href="https://github.com/elastic/elasticsearch/blob/8.12/docs/reference/setup/install/docker/docker-compose.yml"><code>docker-compose.yml</code></a>.</p>
+<p>Así pues ejecutamos:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-32-1"><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">ELASTIC_PASSWORD</span><span class="o">=</span><span class="s2">&quot;changeme&quot;</span>
+</span><span id="__span-32-2"><a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a>
+</span><span id="__span-32-3"><a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="c1"># Copy the http_ca.crt SSL certificate from the container to your local machine.</span>
+</span><span id="__span-32-4"><a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a>sudo<span class="w"> </span>docker<span class="w"> </span>cp<span class="w"> </span>elastic_es01_1:/usr/share/elasticsearch/config/certs/ca/ca.crt<span class="w"> </span>./http_ca.crt
+</span><span id="__span-32-5"><a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a>
+</span><span id="__span-32-6"><a id="__codelineno-32-6" name="__codelineno-32-6" href="#__codelineno-32-6"></a><span class="c1"># si no estamos en el root, debemos hacer que nuestro usuario tenga acceso al certificado</span>
+</span><span id="__span-32-7"><a id="__codelineno-32-7" name="__codelineno-32-7" href="#__codelineno-32-7"></a>sudo<span class="w"> </span>chmod<span class="w"> </span>o+r<span class="w"> </span>http_ca.crt
+</span></code></pre></div>
+<p>Ahora, podemos comprobar de nuevo el estado del cluster: </p>
+<p><div class="language-bash highlight"><pre><span></span><code><span id="__span-33-1"><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a>sudo<span class="w"> </span>curl<span class="w"> </span>--cacert<span class="w"> </span>http_ca.crt<span class="w"> </span>-u<span class="w"> </span>elastic:<span class="nv">$ELASTIC_PASSWORD</span><span class="w"> </span>https://localhost:9200/_cat/health?pretty<span class="w"> </span>
+</span><span id="__span-33-2"><a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a>sudo<span class="w"> </span>curl<span class="w"> </span>--cacert<span class="w"> </span>http_ca.crt<span class="w"> </span>-u<span class="w"> </span>elastic:<span class="nv">$ELASTIC_PASSWORD</span><span class="w"> </span>https://localhost:9200/_cluster/health?pretty<span class="w"> </span>
+</span></code></pre></div>
+y obtenemos la salida del estado:</p>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK20.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK20.png" alt="ELK" width="60%" /></a>
+</div>
+
+<p>Observar que si en algún momento cae alguno de los elementos del cluster, el estado se verá comprometido, y podrá incluso estar en riesgo de perdida de datos, tal y como se puede ver en la siguiente captura:</p>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK21.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK21.png" alt="ELK" width="60%" /></a>
+</div>
+
+<p>También podemos pregunta sobre el cluster de nodos: </p>
+<p><div class="language-bash highlight"><pre><span></span><code><span id="__span-34-1"><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a>curl<span class="w"> </span>--cacert<span class="w"> </span>http_ca.crt<span class="w"> </span>-u<span class="w"> </span>elastic:<span class="nv">$ELASTIC_PASSWORD</span><span class="w"> </span>https://localhost:9200/_cat/nodes?v
+</span></code></pre></div>
+En esta captura podemos apreciar tanto los nodos que componen el cluster, las direcciones, ip, como porcentajes de memoria, cpu, de carga, los roles que tiene cada nodo y quién esta actuando de <em>nodo master</em></p>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK24.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK24.png" alt="ELK" width="70%" /></a>
+</div>
+
+<p>Otra forma para comprobar el estado de salud del cluster sería mediante </p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-35-1"><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a>curl<span class="w"> </span>--cacert<span class="w"> </span>http_ca.crt<span class="w"> </span>-u<span class="w"> </span>elastic:<span class="nv">$ELASTIC_PASSWORD</span><span class="w"> </span>https://localhost:9200/_cat/health?v
+</span></code></pre></div>
+<p>Aquí obtenemos el estado, así como la cantidad de nodos destinados a datos, <em>shards</em>, etc... </p>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK25.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK25.png" alt="ELK" width="90%" /></a>
+</div>
+
+<h4 id="accediendo-desde-la-interface-de-kibana">Accediendo desde la interface de <code>Kibana</code></h4>
+<p>Trabajar desde el terminal puede ser engorroso, por ello, podemos aprovechar el interface que nos ofrece <code>kibana</code> para poder realizar las mismas operaciones que estamos realizando desde la línea de comando, y por supuesto, en un futuro, nos facilitará la interacción con <code>Elasticsearch</code> gracias a su terminal.</p>
+<p>Así pues entramos en <code>Kibana</code>, que nos pedirá usuario (<em>elastic</em>) y contraseña (<em>changeme</em>), y buscamos la opción de <strong><em>Dev Tools</em></strong> dentro de la sección  <strong><em>management</em></strong></p>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK26.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK26.png" alt="ELK" width="50%" /></a>
+</div>
+
+<p>Aquí podemos lanzar nuestras peticiones sin necesidad de especificar todas las opciones de seguridad necesarias desde la línea de comandos, y además nos permite mantener un historial sencillo de utilizar.</p>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK27.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK27.png" alt="ELK" width="60%" /></a>
+</div>
+
+<h3 id="instalacion-de-elasticsearch-en-un-servidor-linux">Instalación de <code>Elasticsearch</code> en un servidor línux</h3>
+<p>Por último, vamos a presentar otra opción para la instalación del sistema <code>Elastic stack</code> en un equipo tipo Ubuntu Server.</p>
+<p>Para ello, como en las secciones anteriores, seguimos los pasos indicados por el propio fabricante: <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/deb.html">Install <em>Elasticsearch</em> with Debian Package</a></p>
+<p>En primer lugar importamos claves y preparamos el sistema para instalar</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-36-1"><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a>wget<span class="w"> </span>-qO<span class="w"> </span>-<span class="w"> </span>https://artifacts.elastic.co/GPG-KEY-elasticsearch<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>gpg<span class="w"> </span>--dearmor<span class="w"> </span>-o<span class="w"> </span>/usr/share/keyrings/elasticsearch-keyring.gpg
+</span><span id="__span-36-2"><a id="__codelineno-36-2" name="__codelineno-36-2" href="#__codelineno-36-2"></a>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>apt-transport-https
+</span><span id="__span-36-3"><a id="__codelineno-36-3" name="__codelineno-36-3" href="#__codelineno-36-3"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/8.x/apt stable main&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/apt/sources.list.d/elastic-8.x.list
+</span></code></pre></div>
+<h4 id="instalacion-de-elastic_1">Instalación de <code>Elastic</code></h4>
+<p>Una vez realizados los pasos anteriores, para la instalación de elastic</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-37-1"><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a>sudo<span class="w"> </span>apt-get<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>elasticsearch<span class="w"> </span>
+</span></code></pre></div>
+<blockquote>
+<p><strong>Nota</strong>: para instalar elastic, kibana y logstash de una vez:
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-38-1"><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a>sudo<span class="w"> </span>apt-get<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>elasticsearch<span class="w"> </span>logstash<span class="w"> </span>kibana
+</span></code></pre></div></p>
+</blockquote>
+<p>Todo esto generará una salida donde tendremos una imagen similar a la obtenida en la <a href="#instalando-elasticsearch-en-docker">instalación de ElasticSearch con Docker</a></p>
+<p>Posteriormente, realizamos otros cambios, como por ejemplo el fichero <code>/etc/default/elasticsearch</code> que tiene variables internas de elastic</p>
+<p>Es recomendable activar <em>autoindices</em>, editamos fichero de configuración</p>
+<p><div class="language-bash highlight"><pre><span></span><code><span id="__span-39-1"><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a>sudo<span class="w"> </span>nano<span class="w"> </span>/etc/elasticsearch/elasticsearch.yml
+</span></code></pre></div>
+e incluyendo las línea: </p>
+<div class="language-js highlight"><pre><span></span><code><span id="__span-40-1"><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a><span class="nx">action</span><span class="p">.</span><span class="nx">auto_create_index</span><span class="o">:</span><span class="w"> </span><span class="p">.</span><span class="nx">monitoring</span><span class="o">*</span><span class="p">,.</span><span class="nx">watches</span><span class="p">,.</span><span class="nx">triggered_watches</span><span class="p">,.</span><span class="nx">watcher</span><span class="o">-</span><span class="nx">history</span><span class="o">*</span><span class="p">,.</span><span class="nx">ml</span><span class="o">*</span>
+</span><span id="__span-40-2"><a id="__codelineno-40-2" name="__codelineno-40-2" href="#__codelineno-40-2"></a><span class="nx">network</span><span class="p">.</span><span class="nx">host</span><span class="o">:</span><span class="w"> </span><span class="mf">0.0.0.0</span>
+</span></code></pre></div>
+<p>Se debe habilitar el servicio: </p>
+<p><div class="language-bash highlight"><pre><span></span><code><span id="__span-41-1"><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>daemon-reload
+</span><span id="__span-41-2"><a id="__codelineno-41-2" name="__codelineno-41-2" href="#__codelineno-41-2"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>elasticsearch.service
+</span><span id="__span-41-3"><a id="__codelineno-41-3" name="__codelineno-41-3" href="#__codelineno-41-3"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>elasticsearch.service
+</span></code></pre></div>
+y ya tenemos el sistema listo para comprobar que esta funcionando</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-42-1"><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a>curl<span class="w"> </span>--cacert<span class="w"> </span>/etc/elasticsearch/certs/http_ca.crt<span class="w"> </span>-u<span class="w"> </span>elastic:<span class="nv">$ELASTIC_PASSWORD</span><span class="w"> </span>https://localhost:9200<span class="w"> </span>
+</span></code></pre></div>
+<p>Las principales rutas del servicio Elasticse`arch son:</p>
+<table>
+<thead>
+<tr>
+<th>Carpeta</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/etc/elasticsearch</td>
+<td>Contiene los archivos de configuración de <em>Elasticsearch</em></td>
+</tr>
+<tr>
+<td>/var/lib/elasticsearch</td>
+<td>Directorio principal de datos de <em>Elasticsearch</em></td>
+</tr>
+<tr>
+<td>/var/log/elasticsearch</td>
+<td>Archivos de registro de <em>Elasticsearch</em></td>
+</tr>
+<tr>
+<td>/usr/share/elasticsearch</td>
+<td>Directorio de instalación de <em>Elasticsearch</em></td>
+</tr>
+<tr>
+<td>/usr/share/elasticsearch/bin</td>
+<td>Contiene los binarios y scripts de <em>Elasticsearch</em></td>
+</tr>
+<tr>
+<td>/usr/share/elasticsearch/config</td>
+<td>Contiene archivos de configuración predeterminados de <em>Elasticsearch</em></td>
+</tr>
+<tr>
+<td>/usr/share/elasticsearch/data</td>
+<td>Directorio de datos de <em>Elasticsearch</em></td>
+</tr>
+<tr>
+<td>/usr/share/elasticsearch/logs</td>
+<td>Directorio de registros de <em>Elasticsearch</em></td>
+</tr>
+<tr>
+<td>/usr/share/elasticsearch/plugins</td>
+<td>Directorio de plugins de <em>Elasticsearch</em></td>
+</tr>
+</tbody>
+</table>
+<h4 id="instalacion-de-kibana">Instalación de <code>Kibana</code></h4>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-43-1"><a id="__codelineno-43-1" name="__codelineno-43-1" href="#__codelineno-43-1"></a>sudo<span class="w"> </span>apt-get<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>kibana
+</span></code></pre></div>
+<p>Para la configuración de <code>Kibana</code>, según la misma web del fabricante, seguimos los pasos y después también tenemos que habilitar el acceso desde cualquier equipo. Esto se hace mediante el fichero: </p>
+<p><div class="language-bash highlight"><pre><span></span><code><span id="__span-44-1"><a id="__codelineno-44-1" name="__codelineno-44-1" href="#__codelineno-44-1"></a>sudo<span class="w"> </span>nano<span class="w"> </span>/etc/kibana/kibana.yml
+</span></code></pre></div>
+y de nuevo </p>
+<p><div class="language-js highlight"><pre><span></span><code><span id="__span-45-1"><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a><span class="nx">server</span><span class="p">.</span><span class="nx">host</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;0.0.0.0&quot;</span>
+</span></code></pre></div>
+y después habilitamos e iniciamos el servicio (o lo reiniciamos si ya esta activo)</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-46-1"><a id="__codelineno-46-1" name="__codelineno-46-1" href="#__codelineno-46-1"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>kibana.service<span class="w"> </span>
+</span><span id="__span-46-2"><a id="__codelineno-46-2" name="__codelineno-46-2" href="#__codelineno-46-2"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>kibana.service<span class="w"> </span>
+</span></code></pre></div>
+<p>Una vez realizado esto ya podemos acceder al servicio mediante el puerto 5601</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-47-1"><a id="__codelineno-47-1" name="__codelineno-47-1" href="#__codelineno-47-1"></a>http://localhost:5601
+</span></code></pre></div>
+<p>La primera vez que lo ejecutemos, nos pide que enlacemos ELK, por lo tanto primero nos pide que introduzcamos el <code>token</code> que generamos mediante el comando: </p>
+<p><div class="language-bash highlight"><pre><span></span><code><span id="__span-48-1"><a id="__codelineno-48-1" name="__codelineno-48-1" href="#__codelineno-48-1"></a>sudo<span class="w"> </span>/usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token<span class="w"> </span>-s<span class="w"> </span>kibana
+</span></code></pre></div>
+Posteriormente nos solicita un código de identificación de Kibana, que se genera al ejecutar: </p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-49-1"><a id="__codelineno-49-1" name="__codelineno-49-1" href="#__codelineno-49-1"></a>sudo<span class="w"> </span>/usr/share/kibana/bin/kibana-verification-code<span class="w"> </span>
+</span></code></pre></div>
+<p>Al introducir estos datos, ya nos permite entrar en el sistema, para lo cual nos pide el usuario: <code>elastic</code> y la contraseña, la que hemos obtenido tras las instalación de <code>Elastisearch</code></p>
+<h4 id="instalacion-de-logstash">instalación de <code>Logstash</code></h4>
+<p>Siguiendo lo realzado en los puntos anteriores: </p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-50-1"><a id="__codelineno-50-1" name="__codelineno-50-1" href="#__codelineno-50-1"></a>sudo<span class="w"> </span>apt-get<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>logstash
+</span></code></pre></div>
+<p>para probar logstash, podemos hacerlo de la siguiente forma: básicamente, la entrada se replica en la salida:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-51-1"><a id="__codelineno-51-1" name="__codelineno-51-1" href="#__codelineno-51-1"></a>sudo<span class="w"> </span>/usr/share/logstash/bin/logstash<span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;input { stdin { } } output { stdout {} }&#39;</span>
+</span></code></pre></div>
+<p>Con esto, nos sale un terminal que replica las teclas que pulsemos.</p>
+<h4 id="instalacion-de-filebeat">Instalación de <code>Filebeat</code></h4>
+<p>Filebeat se encuenta dento de lo que sería <code>Beats</code>, y para enviar registros y datos a <em>Elasticsearch</em> o Logstash para su posterior indexación, análisis y visualización</p>
+<p><a href="https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-installation-configuration.html">Quick start and installation</a></p>
+<p>Para su instalación: </p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-52-1"><a id="__codelineno-52-1" name="__codelineno-52-1" href="#__codelineno-52-1"></a>curl<span class="w"> </span>-L<span class="w"> </span>-O<span class="w"> </span>https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-8.12.0-amd64.deb
+</span><span id="__span-52-2"><a id="__codelineno-52-2" name="__codelineno-52-2" href="#__codelineno-52-2"></a>sudo<span class="w"> </span>dpkg<span class="w"> </span>-i<span class="w"> </span>filebeat-8.12.0-amd64.deb
+</span></code></pre></div>
+<p>Puede ser interesante su instalación para cierto tipo de ingestión de datos.</p>
+<h2 id="comprendiendo-los-conceptos-de-cluster-indices-y-shards">Comprendiendo los conceptos de cluster, indices y shards</h2>
+<p>En <em>Elasticsearch</em>, existen varios conceptos clave que son fundamentales para comprender su funcionamiento. Estos incluyen:</p>
+<ol>
+<li><strong>Cluster:</strong></li>
+<li>Un cluster de <em>Elasticsearch</em> consiste en un conjunto de uno o más nodos que trabajan juntos para almacenar y procesar datos.</li>
+<li>Los nodos en un cluster de <em>Elasticsearch</em> se comunican entre sí para compartir información sobre el estado del cluster y coordinar las operaciones, como la indexación y la búsqueda de datos.</li>
+<li>
+<p>Los clusters están diseñados para ser altamente disponibles y escalables, lo que significa que pueden manejar grandes volúmenes de datos y continuar funcionando incluso si algunos nodos fallan.</p>
+</li>
+<li>
+<p><strong>Índices:</strong></p>
+</li>
+<li>En <em>Elasticsearch</em>, un índice es una colección lógica de documentos que comparten características similares.</li>
+<li>Cada documento en un índice es un objeto JSON que contiene datos.</li>
+<li>Los índices se utilizan para almacenar y organizar datos de manera eficiente para su posterior búsqueda y análisis.</li>
+<li>
+<p>Los nombres de índice son únicos dentro de un cluster de <em>Elasticsearch</em> y se utilizan para identificar y acceder a los datos almacenados en ellos.</p>
+</li>
+<li>
+<p><strong>Shards:</strong></p>
+</li>
+<li>Un shard es una parte de un índice de <em>Elasticsearch</em> que contiene una porción del conjunto total de datos.</li>
+<li><em>Elasticsearch</em> divide los datos de un índice en múltiples shards para distribuirlos y paralelizar las operaciones de indexación y búsqueda.</li>
+<li>Los shards pueden ser primarios o réplicas. Cada índice tiene un conjunto de shards primarios y opcionalmente un conjunto de shards réplicas que proporcionan redundancia y alta disponibilidad.</li>
+<li>La distribución de shards en un cluster de <em>Elasticsearch</em> permite escalar horizontalmente la capacidad de almacenamiento y la capacidad de procesamiento de datos.</li>
+</ol>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK37.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK37.png" alt="ELK" width="50%" /></a>
+</div>
+
+<p>Podemos comprobar los <strong>indices</strong> que tenemos en el cluster </p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-53-1"><a id="__codelineno-53-1" name="__codelineno-53-1" href="#__codelineno-53-1"></a>curl<span class="w"> </span>--cacert<span class="w"> </span>http_ca.crt<span class="w"> </span>-u<span class="w"> </span>elastic:<span class="nv">$ELASTIC_PASSWORD</span><span class="w"> </span>-XGET<span class="w"> </span><span class="s1">&#39;https://localhost:9200/_cat/indices?v&#39;</span>
+</span></code></pre></div>
+<p>Podemos comprobar los diferentes <strong>shards</strong> de cada uno de los índices que hay en el sistema </p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-54-1"><a id="__codelineno-54-1" name="__codelineno-54-1" href="#__codelineno-54-1"></a>curl<span class="w"> </span>--cacert<span class="w"> </span>http_ca.crt<span class="w"> </span>-u<span class="w"> </span>elastic:<span class="nv">$ELASTIC_PASSWORD</span><span class="w"> </span>-XGET<span class="w"> </span><span class="s1">&#39;https://localhost:9200/_cat/shards?v&#39;</span>
+</span></code></pre></div>
+<p>Ahora vamos a crear un índice llamado <em>test</em>, especificando que queremos almacenar los datos en dos <strong>shards</strong> primarios y tener una replica por <em>shard</em>:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-55-1"><a id="__codelineno-55-1" name="__codelineno-55-1" href="#__codelineno-55-1"></a>curl<span class="w"> </span>--cacert<span class="w"> </span>http_ca.crt<span class="w"> </span>-u<span class="w"> </span>elastic:<span class="nv">$ELASTIC_PASSWORD</span><span class="w"> </span>-XPUT<span class="w"> </span>https://localhost:9200/test<span class="w"> </span>-d<span class="s1">&#39; { &quot;settings&quot;: { &quot;number_of_shards&quot;: 2, &quot;number_of_replicas&quot;:1 }}&#39;</span><span class="w"> </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span>
+</span></code></pre></div>
+<p>Podemos comprobar la distribución del índice <em>test</em> dentro de los nodos con el comando:</p>
+<p><div class="language-bash highlight"><pre><span></span><code><span id="__span-56-1"><a id="__codelineno-56-1" name="__codelineno-56-1" href="#__codelineno-56-1"></a>curl<span class="w"> </span>--cacert<span class="w"> </span>http_ca.crt<span class="w"> </span>-u<span class="w"> </span>elastic:<span class="nv">$ELASTIC_PASSWORD</span><span class="w"> </span>-XGET<span class="w"> </span>https://localhost:9200/_cat/shards/test?v
+</span></code></pre></div>
+El resultado puede ser similar a :</p>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK38.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK38.png" alt="ELK" width="70%" /></a>
+</div>
+
+<p>En esta imagen podemos ver que hemos utilizado tenemos dos shards primarios en dos de los nodos y que además en cada uno de estos nodos hay una replica. En este caso, como el cluster esta formado por los tres nodos, los datos de este índice distribuidos entre los 3 nodos de forma que tenemos shards primarios en los nodos 1 y 2 y tenemos replicas en los nodos 3 y 1, puesto que se indica que haya una replica de cada <em>shard</em></p>
+<p>Así pues 
+- <code>number_of_shards</code> especifica el número de fragmentos en los que se dividirá el índice. Un fragmento es una parte de los datos de un índice y cada fragmento es un índice de <em>Lucene</em> independiente que puede estar alojado en un nodo diferente del clúster de Elasticsearch.
+   - <em>Elasticsearch</em> distribuye los datos entre los fragmentos según una función hash del identificador del documento. Cuantos más fragmentos haya, mayor será la distribución de los datos y más capacidad de escalabilidad tendrá el índice.
+   - Sin embargo, el exceso de fragmentos puede tener un impacto negativo en el rendimiento y en los recursos del clúster, por lo que es importante encontrar un equilibrio.</p>
+<ul>
+<li><code>number_of_replicas</code> especifica el número de réplicas de cada fragmento que se crearán en el clúster. Las réplicas son copias idénticas de los fragmentos primarios que se utilizan para garantizar la disponibilidad y la tolerancia a fallos.</li>
+<li>Las réplicas se distribuyen en los nodos del clúster de <em>Elasticsearch</em> de manera que estén balanceadas y garantizan que cada fragmento tenga sus réplicas en diferentes nodos.</li>
+<li>Al tener réplicas, si un nodo falla, <em>Elasticsearch</em> puede continuar sirviendo las consultas utilizando las réplicas disponibles, lo que mejora la disponibilidad del sistema.</li>
+<li>Sin embargo, el aumento del número de réplicas también aumenta el consumo de recursos, como almacenamiento y uso de CPU, por lo que es importante considerar estos aspectos al configurar las réplicas.</li>
+</ul>
+<p>Para que quede más claro, vamos a generar un nuevo índice llamado <em>test_shards</em> donde vamos a repartir los datos entre 3 <em>shards</em> y además le pedimos dos replicas en cada uno de los <em>shards</em>.</p>
+<p>El comando para generar el índice sería:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-57-1"><a id="__codelineno-57-1" name="__codelineno-57-1" href="#__codelineno-57-1"></a>curl<span class="w"> </span>--cacert<span class="w"> </span>http_ca.crt<span class="w"> </span>-u<span class="w"> </span>elastic:<span class="nv">$ELASTIC_PASSWORD</span><span class="w"> </span>-XPUT<span class="w"> </span>https://localhost:9200/test_shards<span class="w"> </span>-d<span class="s1">&#39; { &quot;settings&quot;: { &quot;number_of_shards&quot;: 3, &quot;number_of_replicas&quot;:2 }}&#39;</span><span class="w"> </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span>
+</span></code></pre></div>
+<p>y el resultado obtenido sería como sigue:</p>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK39.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK39.png" alt="ELK" width="70%" /></a>
+</div>
+
+<p>Se puede observar que estamos utilizando los 3 nodos para almacenar el índice, de forma que en todos ellos tenemos un <em>shard</em> principal (<code>p</code>) y otos dos de replica (<code>r</code>)</p>
+<p>Ahora, si añadimos datos al índice, estos deben almacenarse en los 3 <em>shards</em>. Vamos a insertar datos y veremos que es así: </p>
+<p>Ejecutamos la orden siguiente que introduce dos documentos en el índice <em>test_shards</em>:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-58-1"><a id="__codelineno-58-1" name="__codelineno-58-1" href="#__codelineno-58-1"></a>curl<span class="w"> </span>--cacert<span class="w"> </span>http_ca.crt<span class="w"> </span>-u<span class="w"> </span>elastic:<span class="nv">$ELASTIC_PASSWORD</span><span class="w"> </span>-XPOST<span class="w"> </span>https://localhost:9200/test_shards/_bulk?pretty<span class="w"> </span>-d<span class="s1">&#39;</span>
+</span><span id="__span-58-2"><a id="__codelineno-58-2" name="__codelineno-58-2" href="#__codelineno-58-2"></a><span class="s1">{ &quot;index&quot; : {} }</span>
+</span><span id="__span-58-3"><a id="__codelineno-58-3" name="__codelineno-58-3" href="#__codelineno-58-3"></a><span class="s1">{ &quot;num&quot;: &quot;2015/56&quot;, &quot;cliente&quot;: 13, &quot;importe&quot;:189 }</span>
+</span><span id="__span-58-4"><a id="__codelineno-58-4" name="__codelineno-58-4" href="#__codelineno-58-4"></a><span class="s1">{ &quot;index&quot; : {} }</span>
+</span><span id="__span-58-5"><a id="__codelineno-58-5" name="__codelineno-58-5" href="#__codelineno-58-5"></a><span class="s1">{ &quot;num&quot;: &quot;2015/57&quot;, &quot;cliente&quot;: 45, &quot;importe&quot;:190 }</span>
+</span><span id="__span-58-6"><a id="__codelineno-58-6" name="__codelineno-58-6" href="#__codelineno-58-6"></a><span class="s1">&#39;</span><span class="w"> </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span>
+</span></code></pre></div>
+<p>y el resultado que tenemos de la inserción nos indica que se ha incluido en 3 shards: </p>
+<div align="center">
+    <a class="glightbox" href="../../images/ELK/ELK40.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img src="../../images/ELK/ELK40.png" alt="ELK" width="40%" /></a>
+</div>
+
+<p>En la imagen anterior: 
+1. Vemos que hay una sección de detalla dos datos de los <em>shards</em> de índice.
+2. En nuestro caso nos indica que se han insertado de forma exitosa en 3 <em>shards</em>
+3. <strong>Pero</strong> en esta imagen también podemos ver que tenemos una penalización en cuento a tiempo, puesto que ha tardado 31 ms en realizar la inserción. En teoría, el hecho de insertar en mas de un nodo beneficia la velocidad, sobre todo si se trata de una cantidad importante de datos puesto que se dividen entre todos ellos, pero en este caso real, recordemos que tenemos 3 nodos trabajando sobre la misma máquina y los datos son mínimos por lo tanto en este caso se puede ver perjudicado.</p>
+<blockquote>
+<p>El término "took" en las respuestas de <em>Elasticsearch</em> indica el tiempo total en milisegundos que tomó ejecutar la consulta. Esta métrica incluye el tiempo de procesamiento de la consulta en <em>Elasticsearch</em>, así como cualquier tiempo adicional dedicado a la comunicación de red, procesamiento en el cliente, etc.</p>
+</blockquote>
+<p>Por último, si realizamos un búsqueda de los datos, también nos dirá que se encuentran en los 3 <em>shards</em></p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-59-1"><a id="__codelineno-59-1" name="__codelineno-59-1" href="#__codelineno-59-1"></a>curl<span class="w"> </span>--cacert<span class="w"> </span>http_ca.crt<span class="w"> </span>-u<span class="w"> </span>elastic:<span class="nv">$ELASTIC_PASSWORD</span><span class="w"> </span>-XGET<span class="w"> </span>https://localhost:9200/test_shards/_search?pretty
+</span></code></pre></div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.indexes", "navigation.instant", "navigation.instant.progress", "toc.follow", "navigation.top", "content.code.copy"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+    
+  <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(() => { lightbox.reload() });
+</script></body>
+</html>
